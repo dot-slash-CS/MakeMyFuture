@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MakeMyFuture Experimental</title>
+        
+        <!-- Import Scripts -->
+        <script src = "driver.js"></script>
+        <script src = "Form.js"></script>
+        <script src = "IGETCTable.js"></script>
+        <script src = "ScheduleBuilder.js"></script>
+        <script src = "Analytics.js"></script>
+        <script src = "utility.js"></script>
+        <link rel = "stylesheet" href = "style.css">
+        <link rel = "stylesheet" href = "table_style.css">
+
+        <!-- Disable Caching Meta Tags -->
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+    </head>
+
+    <body>
+        <h1>Welcome to ./MakeMyFuture!</h1>
+        <form id="IGETCForm">
+            <label for="nameInput">Name:</label><br>
+            <input type="text" id="nameInput" name="nameInput"><br>
+            <label for="semesterInput">You have completed <span>1</span> semester at Ohlone.</label><br>
+            <input type="range" min="1" max="10" value="1" class="slider" id="semesterInput"><br>
+            <label for="majorInput">Intended Major:</label><br>
+            <input type="text" id="majorInput" name="majorInput"><br><br>
+            <!-- Styling in style.css  -->
+            <div class="menu" id="universityMenu">
+                <input type="text" id="universitySearch" placeholder="Search your university..."></input>
+                <ul>
+                    <li><div>UC Davis</div></li>
+                </ul>
+            </div>
+        </form>
+
+
+        <br><br>
+        <table id = "IGETCTable">
+            <tr>
+              <th>Area</th>
+              <th>Classes</th>
+            </tr>
+          </table>
+
+        <br><br>
+
+        <table id = "ScheduleBuilder">
+            <tr>
+                <th>Semester 1</th>
+                <th>Semester 2</th>
+                <th>Semester 3</th>
+                <th>Semester 4</th>
+                <th>Selected Classes</th>
+            </tr>
+            <tr>
+                
+            </tr>
+            <tr>
+
+            </tr>
+        </table>
+
+
+        <br><br>
+    </body>
+</html>
