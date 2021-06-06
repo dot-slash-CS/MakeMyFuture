@@ -12,18 +12,22 @@
  * 
  * @author Pirjot Atwal
  * @file driver.js
- * @version 04/03/2021
+ * @version 06/06/2021
  */
 
 console.log("MakeMyFuture Driver Loaded");
 
-var table, form, builder;
+let form, table, builder;
 
+/** driver_run
+ * 
+ * Initialize the Form, Table, and ScheduleBuilder Classes.
+ */
 function driver_run()
 {
-    form = new Form("IGETCForm");
-    table = new IGETCTable("IGETCTable");
     builder = new ScheduleBuilder("ScheduleBuilder");
+    form = new Form("IGETCForm", builder);
+    table = new IGETCTable("IGETCTable", builder);
 }
 
 //Runs driver on DOMContentLoaded

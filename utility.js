@@ -5,7 +5,7 @@
  * 
  * @author Pirjot Atwal
  * @file utility.js
- * @version 04/03/2021
+ * @version 06/06/2021
  */
 
 /**  collect_to_arr
@@ -20,12 +20,12 @@ function collect_to_arr(collection)
 
 //Drag Drop Utility
 
-/** Allowing Drag Drop Ability.
+/** Allowing Drag Drop Ability:
  * Set the element to be dragged around to have the following
  * attributes:
  * 
  * draggable = "true"
- * ondragstart = "drag(event)" (drag function)
+ * ondragstart = "drag(event)" (drag function) (dragstart event with listeners)
  * id must be set.
  * 
  * Example:
@@ -33,8 +33,8 @@ function collect_to_arr(collection)
  * 
  * The to and from drag nodes must have the following attributes:
  * 
- * ondrop = "drop(event)" (drop function)
- * ondragover = "allowDrop(event)" (allowDrop function)
+ * ondrop = "drop(event)" (drop function) (drop event with listeners)
+ * ondragover = "allowDrop(event)" (allowDrop function) (dragover event with listeners)
  * id must be set.
  * 
  * Example:
@@ -44,14 +44,20 @@ function collect_to_arr(collection)
 function allowDrop(evt) {
     evt.preventDefault();
 }
-  
+
+/** drag
+ *  Refer to allowDrop documentation.
+ */  
 function drag(evt) {
     evt.dataTransfer.setData("id", evt.target.id);
 }
   
+/** drop
+ *  Refer to allowDrop documentation.
+ */  
 function drop(evt) {
     evt.preventDefault();
-    var data = evt.dataTransfer.getData("id");
+    let data = evt.dataTransfer.getData("id");
     evt.target.appendChild(document.getElementById(data));
 }
 
@@ -60,15 +66,16 @@ function drop(evt) {
  * and returns the node.
  * @param {String} text 
  * @param {String} id 
+ * @param {Function} drag_start
  * @returns Button
  */
-function gen_drag_button(text, id)
+function gen_drag_button(text, id, drag_start = (evt) => drag(evt))
 {
     //Generate button, set its id, make it draggable
-    var new_button = document.createElement("button");
-    new_button.text = text;
+    let new_button = document.createElement("button");
+    new_button.textContent = text;
     new_button.id = id;
     new_button.draggable = "true";
-    new_button.addEventListener("ondragstart", (evt) => drag(evt));
+    new_button.addEventListener("dragstart", (evt) => drag_start(evt));
     return new_button;
 }

@@ -24,7 +24,7 @@
         <form id="IGETCForm">
             <label for="nameInput">Name:</label><br>
             <input type="text" id="nameInput" name="nameInput"><br>
-            <label for="semesterInput">You have completed <span>1</span> semester at Ohlone.</label><br>
+            <label for="semesterInput">You will have completed <span id = "semesterSpan">1</span> semester(s) when transferring out of Ohlone.</label><br>
             <input type="range" min="1" max="10" value="1" class="slider" id="semesterInput"><br>
             <label for="majorInput">Intended Major:</label><br>
             <input type="text" id="majorInput" name="majorInput"><br><br>
@@ -49,17 +49,10 @@
         <br><br>
 
         <table id = "ScheduleBuilder">
-            <tr>
-                <th>Semester 1</th>
-                <th>Semester 2</th>
-                <th>Semester 3</th>
-                <th>Semester 4</th>
-                <th>Selected Classes</th>
+            <tr id = "builderHeader" >
+
             </tr>
-            <tr>
-                
-            </tr>
-            <tr>
+            <tr id = "builderRows">
 
             </tr>
         </table>
