@@ -115,13 +115,22 @@ class ScheduleBuilder
             //Set drag functions
             unselected.addEventListener("drop", (evt) => {
                 let orig_parent_id = evt.dataTransfer.getData("orig_parent_id");
-                
-                if(evt.target.id != orig_parent_id && evt.target.localName == "td") //Only allow buttons to be dropped into tds
+                let target = evt.target;
+
+                //If the user is dropping into the "No classes selected" span, set the evt.target to be its parent instead
+                if (target.localName != "td")
                 {
-                    //Clear the td's text content
-                    evt.target.childNodes[0].textContent = "";
+                    target = target.parentElement;
+                }
+
+                if(target.id != orig_parent_id && target.localName == "td") //Only allow buttons to be dropped into tds that aren't its current parent
+                {
+                    //Clear the td's text content in its span
+                    target.childNodes[0].textContent = "";
                     //Drop First to avoid getElementById collision.
-                    drop(evt);
+                    evt.preventDefault();
+                    let data = evt.dataTransfer.getData("id");
+                    target.appendChild(document.getElementById(data));
 
                     //Set the original td's span's text content
                     let orig_td = document.getElementById(orig_parent_id);
@@ -137,8 +146,12 @@ class ScheduleBuilder
             this.builderRows.appendChild(unselected);
         }
 
+        //Clear currentlySelected and all classes back again
+        let copiedArray = this.currentlySelected;
+        this.currentlySelected = [];
+
         //Add values based on currentlySelected
-        for (let x of this.currentlySelected)
+        for (let x of copiedArray)
         {
             this.add_class(x);
         }
@@ -159,11 +172,12 @@ class ScheduleBuilder
         //Clear the text content of the area
         button_area.childNodes[0].textContent = "";
 
-        //Already exists
+        //Already exists (All class names must be unique)
         if (this.currentlySelected.indexOf(clas) != -1)
         {
             return;
         }
+
         //Append to currently selected
         this.currentlySelected.push(clas);
 
@@ -205,7 +219,6 @@ class ScheduleBuilder
                     sem.removeChild(c);
                     //Remove it from the currentlySelected array
                     this.currentlySelected.splice(this.currentlySelected.indexOf(clas), 1);
-                    
                     //If the semester has only its span left, change the span to "No classes selected"
                     if (sem.childNodes.length == 1)
                     {
