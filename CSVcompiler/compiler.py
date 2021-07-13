@@ -102,7 +102,7 @@ while len(data) > 0:
     misc = ""
 
     # The rest of the information of the class goes until the line with a (GR) or (CR)
-    gr_cr_regex = re.compile(r'\(GR\)|\(CR\)')
+    gr_cr_regex = re.compile(r'\(GR\)|\(CR\)|\(GC\)|\(NG\)')
     gr_cr_index = next_regex(data[1:], gr_cr_regex, False) + 1
 
     for i in range(3, min(gr_cr_index + 1, len(data))):
