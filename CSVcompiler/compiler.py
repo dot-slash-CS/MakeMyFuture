@@ -11,7 +11,7 @@ except Exception as e:
 
 """
 We assume that the class name is in the REGEX form of 
-r'\w+-\d+'. Thus, everything from a class name to a class name
+r'[A-Z]+\-\d+\w* '. Thus, everything from a class name to a class name
 is determined to be a class' information. 
 """
 
@@ -80,7 +80,7 @@ def next_regex(data, regex, start = True):
 
 orig_data = data
 data = data[next_regex(data, class_pattern):]
-# An array of dictinaries
+# An array of dictionaries
 mapped_data = []
 
 

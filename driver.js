@@ -19,12 +19,14 @@ console.log("MakeMyFuture Driver Loaded");
 
 let form, table, builder;
 
+//TODO: Make everything static
+
 /** driver_run
- * 
  * Initialize the Form, Table, and ScheduleBuilder Classes.
  */
 function driver_run()
 {
+    ClassRepo.initialize("demo_data.json");
     builder = new ScheduleBuilder("ScheduleBuilder");
     form = new Form("IGETCForm", builder);
     table = new IGETCTable("IGETCTable", builder);

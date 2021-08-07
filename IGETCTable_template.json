@@ -2,25 +2,13 @@
     {
         "area": "English Communication",
         "classes": [
-            "ENGL 101A",
-            "ENGL 101C",
-            "COMM 111"
+            "ENGL-101C"
         ]
     },
     {
         "area": "Mathematical Concepts and Quantiative Reasoning",
         "classes": [
-            "MATH 101A",
-            "MATH 101B",
-            "MATH 101C",
-            "MATH 103",
-            "MATH 104",
-            "MATH 156",
-            "MATH 159",
-            "MATH 167",
-            "MATH 186",
-            "MATH 187",
-            "MATH 188"
+            "MATH-101C"
         ]
     }
 ]

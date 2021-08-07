@@ -9,7 +9,7 @@
  * 
  * @author Pirjot Atwal
  * @file IGETCTable.js
- * @version 06/06/2021
+ * @version 08/07/2021
  */
 
 class IGETCTable
@@ -138,21 +138,36 @@ class IGETCTable
             newButton.textContent = contents[i];
             newButton.selected = false;
             
-            //Set Button Selectability, attach to this.selectedClasses array and the builder
+            //If my class is selected elsewhere, change the style of the button
+            document.addEventListener("Class Selected", (evt) => { // The choice of Select Class over Selected Class is intentional
+                if (evt.acr == newButton.textContent) {
+                    newButton.style.background = "red";
+                }
+            });
+            //The same for if the class was unselected elsewhere
+            document.addEventListener("Class Unselected", (evt) => {
+                if (evt.acr == newButton.textContent) {
+                    newButton.style.background = "";
+                }
+            });
+
+            //Set Button Selectability, Dispatches corresponding event
             newButton.addEventListener("click", (evt) => {
+                let new_event = document.createEvent("HTMLEvents");
+                new_event.acr = newButton.textContent;
+                new_event.from = "IGETC";
                 if (newButton.selected) // Unselect the button
                 {
-                    newButton.selected = false;
-                    newButton.style.background = "";
-                    builder.remove_class(newButton.textContent);
+                    // Send Unselect Event to ClassRepo
+                    new_event.initEvent("Unselect Class", true, true);
                 }
-                else // Select the button, set it to red
+                else // Select the button
                 {
-                    newButton.selected = true;
-                    newButton.style.background = "red";
-                    builder.add_class(newButton.textContent);
+                    //Send Select Event
+                    new_event.initEvent("Select Class", true, true);
                 }
-                
+                newButton.selected = !newButton.selected;
+                document.dispatchEvent(new_event);
             });
             //Push the button into the this.buttons array
             this.buttons.push(newButton);
@@ -183,3 +198,4 @@ class IGETCTable
         }
     }
 }
+
