@@ -14,30 +14,30 @@
 
 class IGETCTable
 {
-    /** IGETCTable constructor
+    /** IGETCTable Initialize
      * 
      * Construct an IGETCTable based on the provided values.
      * 
      * @param {String} id The ID of the table which will hold the IGETCTable
      * @param {ScheduleBuilder} builder The ScheduleBuilder (to link the buttons to)
      */
-    constructor(id, builder)
+    static initialize(id, builder)
     {
-        this.id = id;
-        //Each area in this.areas is an array with element 0 equal to the 
+        IGETCTable.id = id;
+        //Each area in IGETCTable.areas is an array with element 0 equal to the 
         // area name and the rest of the elements being the classes tied 
         // to that area.
-        this.areas = [];
-        //An array of all buttons (where some are this.selected and some are not)
-        this.buttons = [];
+        IGETCTable.areas = [];
+        //An array of all buttons (where some are IGETCTable.selected and some are not)
+        IGETCTable.buttons = [];
         
-        this.instance = document.getElementById(id);
-        this.body = this.instance.getElementsByTagName("tbody")[0];
+        IGETCTable.instance = document.getElementById(id);
+        IGETCTable.body = IGETCTable.instance.getElementsByTagName("tbody")[0];
         
-        this.initialize();
+        IGETCTable.initializeContent();
     }
 
-    /*  initialize()
+    /**  initializeContent()
 
         Initialize with the table's content.
 
@@ -45,7 +45,7 @@ class IGETCTable
         and "Classes." Adds the areas and their classes by reading from the 
         IGETCTable_template.json file.
     */
-    async initialize()
+    static async initializeContent()
     {
         //The data is an array of JSON objects with the following format:
         /**
@@ -58,23 +58,23 @@ class IGETCTable
                 ]
             }
          */
-        await this.retrieveInfo("IGETCTable_template.json");
+        await IGETCTable.retrieveInfo("IGETCTable_template.json");
         
-        //Construct rows using this.areas (as selectable buttons)
-        this.construct_rows();
+        //Construct rows using IGETCTable.areas (as selectable buttons)
+        IGETCTable.construct_rows();
     }
 
     /** retrieveInfo
      * 
      *  Asynchronously fetches the class data from the
      *  provided JSON file and inserts each class data
-     *  into its respective area in this.areas. Each
-     *  element in this.areas is an array where the first
+     *  into its respective area in IGETCTable.areas. Each
+     *  element in IGETCTable.areas is an array where the first
      *  element is the name of the area and the rest of
      *  the elements are the classes that pertain to that area.
      *  @param {String} file_name the file to fetch the class data from
      */
-    async retrieveInfo(file_name = "IGETCTable_template.json")
+    static async retrieveInfo(file_name = "IGETCTable_template.json")
     {
         let areas = await (await fetch(file_name)).json();
         for (let area of areas)
@@ -84,7 +84,7 @@ class IGETCTable
             {
                 area_array.push(c);
             }
-            this.areas.push(area_array);
+            IGETCTable.areas.push(area_array);
         }
     }
 
@@ -94,7 +94,7 @@ class IGETCTable
      * formed into a body of comma-separated strings
      * @param {Array} contents - An array containing strings
      */
-    add_row_string (contents)
+    static add_row_string (contents)
     {
         let newRow = document.createElement("tr");
         for (let content of contents)
@@ -103,19 +103,19 @@ class IGETCTable
             newElem.textContent = content;
             newRow.appendChild(newElem);
         }
-        this.body.appendChild(newRow);
+        IGETCTable.body.appendChild(newRow);
     }
 
     /** add_row_button
      * 
      *  Add a row to the table body (where the content is strings),
      *  formed into a body of selectable buttons. Adds all selectable buttons
-     *  to this.buttons.
+     *  to IGETCTable.buttons.
      * 
      * @param {Array} contents - An array containing strings (the first element will be the string in the first column and 
      * the rest will be buttons in the second column)
      */
-    add_row_button(contents)
+    static add_row_button(contents)
     {
         //Contents length must be > 0
         if (contents.length == 0)
@@ -134,7 +134,7 @@ class IGETCTable
         {
             //Create new button
             let newButton = document.createElement("button");
-            newButton.id = "class_button" + this.buttons.length;
+            newButton.id = "class_button" + IGETCTable.buttons.length;
             newButton.textContent = contents[i];
             newButton.selected = false;
             
@@ -169,8 +169,8 @@ class IGETCTable
                 newButton.selected = !newButton.selected;
                 document.dispatchEvent(new_event);
             });
-            //Push the button into the this.buttons array
-            this.buttons.push(newButton);
+            //Push the button into the IGETCTable.buttons array
+            IGETCTable.buttons.push(newButton);
 
             //Append the new button to the new area in column 2
             col2.appendChild(newButton);
@@ -181,20 +181,20 @@ class IGETCTable
         newRow.appendChild(col2);
 
         //Add new row to table body
-        this.body.appendChild(newRow);
+        IGETCTable.body.appendChild(newRow);
     }
 
     /** construct_rows
      * 
-     *  Constructs the rows formed in this.areas and adds
+     *  Constructs the rows formed in IGETCTable.areas and adds
      *  rows using add_row_button.
      */
-    construct_rows()
+    static construct_rows()
     {
         //Add all rows to the table
-        for (let row of this.areas)
+        for (let row of IGETCTable.areas)
         {
-            this.add_row_button(row);
+            IGETCTable.add_row_button(row);
         }
     }
 }

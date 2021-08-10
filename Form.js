@@ -17,7 +17,7 @@
 
 class Form
 {
-    /** Form Constructor
+    /** Form Initialize
      * 
      * Initializes the Form based on the provided attributes
      * 
@@ -28,33 +28,32 @@ class Form
      * @param {*} semesterInputID 
      * @param {*} majorInputID 
      */
-    constructor(id, builder, nameInputID = "nameInput", semeseterSpanID = "semesterSpan", semesterInputID = "semesterInput", majorInputID = "majorInput")
+    static initialize(id, nameInputID = "nameInput", semeseterSpanID = "semesterSpan", semesterInputID = "semesterInput", majorInputID = "majorInput")
     {
-        this.id = id;
-        this.builder = builder;
-        this.instance = document.getElementById(id);
+        Form.id = id;
+        Form.instance = document.getElementById(id);
         //Name Input Textbox
-        this.nameInput = document.getElementById(nameInputID);
+        Form.nameInput = document.getElementById(nameInputID);
         //Semester Input display (number span), attached to slider below
-        this.semesterSpan = document.getElementById(semeseterSpanID);
+        Form.semesterSpan = document.getElementById(semeseterSpanID);
         //Semester Input Slider
-        this.semesterInput = document.getElementById(semesterInputID);
+        Form.semesterInput = document.getElementById(semesterInputID);
         //Major Input Textbox
-        this.majorInput = document.getElementById(majorInputID);
+        Form.majorInput = document.getElementById(majorInputID);
 
-        this.initialize();
+        Form.initializeContent();
     }
 
-    /** initialize
+    /** initializeContent
      * 
      * TODO: Build on initialization to read values
      * Link the semester input bar to the semester span.
      * 
      */
-    initialize()
+    static initializeContent()
     {
         //Link semester input slider to semester span
-        this.linkInputSlider();
+        Form.linkInputSlider();
     }
 
     /** linkInputSlider
@@ -64,12 +63,12 @@ class Form
      * Also, change it in the semeseter builder.
      * 
      */
-    linkInputSlider()
+    static linkInputSlider()
     {
-        this.semesterInput.addEventListener("change", (evt) =>
+        Form.semesterInput.addEventListener("change", (evt) =>
         {
-            this.semesterSpan.textContent = this.semesterInput.value;
-            this.builder.update_header(parseInt(this.semesterInput.value));
+            Form.semesterSpan.textContent = Form.semesterInput.value;
+            ScheduleBuilder.update_header(parseInt(Form.semesterInput.value));
         });
     }
 

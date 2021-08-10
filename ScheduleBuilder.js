@@ -15,27 +15,27 @@
 
 class ScheduleBuilder
 {
-    constructor (id, builderHeader = "builderHeader", builderRows = "builderRows")
+    static initialize(id, builderHeader = "builderHeader", builderRows = "builderRows")
     {
-        this.id = id;
-        this.instance = document.getElementById(id);
-        this.body = this.instance.getElementsByTagName("tbody")[0];
-        this.builderHeader = document.getElementById(builderHeader);
-        this.builderRows = document.getElementById(builderRows);
-        this.columns = 1;
+        ScheduleBuilder.id = id;
+        ScheduleBuilder.instance = document.getElementById(id);
+        ScheduleBuilder.body = ScheduleBuilder.instance.getElementsByTagName("tbody")[0];
+        ScheduleBuilder.builderHeader = document.getElementById(builderHeader);
+        ScheduleBuilder.builderRows = document.getElementById(builderRows);
+        ScheduleBuilder.columns = 1;
         //Array of arrays with class instances
-        this.semesters = [];
-        this.initialize();
+        ScheduleBuilder.semesters = [];
+        ScheduleBuilder.initializeContent();
     }
 
-    /** initialize
+    /** initializeContent
      * 
-     * Initializes this schedule builder's header and its contents
-     * to an empty table based on the current value of this.columns (by default 1)
-     * and adds all classes located in this.urrentlySelected.
+     * Initializes ScheduleBuilder schedule builder's header and its contents
+     * to an empty table based on the current value of 
+     * ScheduleBuilder.columns (by default 1)
      * 
      */
-    initialize()
+    static initializeContent()
     {
         //The Schedule Builder assumes that the given table instance
         //has two rows by default (ids by "builderHeader" and "builderRows")
@@ -55,37 +55,37 @@ class ScheduleBuilder
         // Event Listeners to Add/Remove Classes
         document.addEventListener("Class Selected", async (evt) => {
             let clas = await ClassRepo.get_class(evt.acr);
-            this.add_class(clas);
+            ScheduleBuilder.add_class(clas);
         });
 
         document.addEventListener("Class Unselected", async (evt) => {
             let clas = await ClassRepo.get_class(evt.acr);
-            this.remove_class(clas);
+            ScheduleBuilder.remove_class(clas);
         });
 
-        this.update_header(this.columns);
+        ScheduleBuilder.update_header(ScheduleBuilder.columns);
     }
 
     /** update_header
      * 
-     * Updates this table's header to be
+     * Updates ScheduleBuilder table's header to be
      * "Semester 1 | Semester 2 | ... | Selected Classes"
      * where the number of semesters is equivalent to the number
-     * of columns passed in. Sets this.columns to the passed in number.
+     * of columns passed in. Sets ScheduleBuilder.columns to the passed in number.
      * 
      * @param {Number} columns an integer, equivalent to the number of semesters
      */
-    update_header(columns)
+    static update_header(columns)
     {
         if (columns <= 0) //Columns must be > 0
         {
             return;
         }
 
-        this.columns = columns;
+        ScheduleBuilder.columns = columns;
         //Change the header row to "Semester 1 | Semester 2 | ... | Selected Classes"
         //Clear the header
-        this.builderHeader.innerHTML = "";
+        ScheduleBuilder.builderHeader.innerHTML = "";
         for (let i = 1; i < columns + 2; i++)
         {
             let newSemester = document.createElement("th");
@@ -93,25 +93,25 @@ class ScheduleBuilder
             if (i == columns + 1) { // Last column is bank
                 newSemester.textContent = "Selected Classes";
             }
-            this.builderHeader.appendChild(newSemester);
+            ScheduleBuilder.builderHeader.appendChild(newSemester);
         }
 
-        this.fill_entries();
+        ScheduleBuilder.fill_entries();
     }
 
     /** fill_entries
      * 
-     * Clears this table's second row entries
+     * Clears ScheduleBuilder table's second row entries
      * and adds all the classes in currently selected
      * into the bank.
      * 
      */
-    async fill_entries()
+    static async fill_entries()
     {
         //Clear the rows
-        this.builderRows.innerHTML = "";
+        ScheduleBuilder.builderRows.innerHTML = "";
         //Create columns for each semester
-        for (let i = 0; i < this.columns + 1; i++)
+        for (let i = 0; i < ScheduleBuilder.columns + 1; i++)
         {
             let unselected = document.createElement("td");
             unselected.id = "builderNode" + i;
@@ -151,12 +151,12 @@ class ScheduleBuilder
                     }
 
                     //Update the semesters array (for generating the schedule)
-                    this.update_semesters();
+                    ScheduleBuilder.update_semesters();
                 }
             });
             unselected.addEventListener("dragover", (evt) => {allowDrop(evt);});
 
-            this.builderRows.appendChild(unselected);
+            ScheduleBuilder.builderRows.appendChild(unselected);
         }
         while (ClassRepo.ready == false) {
             await delay(500);
@@ -164,7 +164,7 @@ class ScheduleBuilder
 
         //Add all classes currently in the ClassRepo bank
         for (let clas of ClassRepo.selected) {
-            this.add_class(clas);
+            ScheduleBuilder.add_class(clas);
         }
     }
 
@@ -175,10 +175,10 @@ class ScheduleBuilder
      * 
      * @param {JSON} clas - The new class to add to the bank
      */
-    add_class(clas)
+    static add_class(clas)
     {   
         //Get the last column of the second row
-        let semesters = collect_to_arr(this.builderRows.getElementsByTagName("td"));
+        let semesters = collect_to_arr(ScheduleBuilder.builderRows.getElementsByTagName("td"));
         let button_area = semesters[semesters.length - 1];
         //Clear the text content of the area (span element)
         button_area.childNodes[0].textContent = "";
@@ -200,10 +200,10 @@ class ScheduleBuilder
      * 
      * @param {JSON} clas - The class to remove from the table.
      */
-    remove_class(clas)
+    static remove_class(clas)
     {
         //Find the column that the button is in
-        let semesters = collect_to_arr(this.builderRows.getElementsByTagName("td"));
+        let semesters = collect_to_arr(ScheduleBuilder.builderRows.getElementsByTagName("td"));
         let semester = null;
         for (let sem of semesters) //For every semester (including the bank) in the second row
         {
@@ -232,10 +232,10 @@ class ScheduleBuilder
         }
     }
 
-    async update_semesters() {
+    static async update_semesters() {
         console.log("UPDATE!");
-        this.semesters = [];
-        let semesters = collect_to_arr(this.builderRows.getElementsByTagName("td"));
+        ScheduleBuilder.semesters = [];
+        let semesters = collect_to_arr(ScheduleBuilder.builderRows.getElementsByTagName("td"));
         for (let sem of semesters) //For every semester (including the bank) in the second row
         {
             let sem_arr = [];
@@ -243,13 +243,13 @@ class ScheduleBuilder
             {
                 sem_arr.push(await ClassRepo.get_class(c.acr)); 
             }
-            this.semesters.push(sem_arr);
+            ScheduleBuilder.semesters.push(sem_arr);
         }
     }
 
     //TODO: Improve, move to Analytics probably
-    save_schedule() {
-        let data = JSON.stringify(this.semesters);
+    static save_schedule() {
+        let data = JSON.stringify(ScheduleBuilder.semesters);
         let filename = "schedule.json";
         let type = "json";
         var file = new Blob([data], {type: type});
