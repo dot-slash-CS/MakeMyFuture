@@ -79,3 +79,6 @@ function gen_drag_button(text, id, drag_start = (evt) => drag(evt))
     new_button.addEventListener("dragstart", (evt) => drag_start(evt));
     return new_button;
 }
+
+//Delay utility for async functions
+const delay = (ms = 500) => new Promise(res => setTimeout(res, ms));

@@ -20,14 +20,15 @@ console.log("MakeMyFuture Driver Loaded");
 let form, table, builder;
 
 /** driver_run
- * 
  * Initialize the Form, Table, and ScheduleBuilder Classes.
  */
 function driver_run()
 {
-    builder = new ScheduleBuilder("ScheduleBuilder");
-    form = new Form("IGETCForm", builder);
-    table = new IGETCTable("IGETCTable", builder);
+    ClassRepo.initialize("demo_data.json");
+    ScheduleBuilder.initialize("ScheduleBuilder");
+    Form.initialize("IGETCForm");
+    IGETCTable.initialize("IGETCTable", builder);
+    Analytics.initialize();
 }
 
 //Runs driver on DOMContentLoaded
