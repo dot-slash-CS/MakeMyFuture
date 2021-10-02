@@ -22,13 +22,18 @@ class Form
      * Initializes the Form based on the provided attributes
      * 
      * @param {String} id The id of the form DOM element
-     * @param {ScheduleBuilder} builder The ScheduleBuilder for linking the semester amount input to
      * @param {*} nameInputID 
      * @param {*} semeseterSpanID 
      * @param {*} semesterInputID 
      * @param {*} majorInputID 
      */
-    static initialize(id, nameInputID = "nameInput", semeseterSpanID = "semesterSpan", semesterInputID = "semesterInput", majorInputID = "majorInput")
+    static initialize(id, 
+        nameInputID = "nameInput", 
+        semeseterSpanID = "semesterSpan", 
+        semesterInputID = "semesterInput", 
+        majorInputID = "majorInput",
+        creditInputID = "creditInput",
+        creditSpanID = "creditSpan")
     {
         Form.id = id;
         Form.instance = document.getElementById(id);
@@ -40,36 +45,62 @@ class Form
         Form.semesterInput = document.getElementById(semesterInputID);
         //Major Input Textbox
         Form.majorInput = document.getElementById(majorInputID);
+        //Credit Input
+        Form.creditInput = document.getElementById(creditInputID);
+        //Credit Span
+        Form.creditSpan = document.getElementById(creditSpanID);
+        //Credits variable (For Analytics)
+        Form.credits = parseInt(Form.creditInput.value);
 
         Form.initializeContent();
     }
 
     /** initializeContent
      * 
-     * TODO: Build on initialization to read values
      * Link the semester input bar to the semester span.
      * 
      */
     static initializeContent()
     {
-        //Link semester input slider to semester span
-        Form.linkInputSlider();
+        Form.semesterInput.addEventListener("change", Form.linkSemesterSlider);
+        Form.creditInput.addEventListener("change", Form.linkCreditSlider);
     }
 
-    /** linkInputSlider
+    /** linkSemesterSlider
      * 
      * Add an event listener to the semester input
      * to change to value on release of the input bar.
-     * Also, change it in the semeseter builder.
+     * Execute a Change Semesters Event.
      * 
+     * @param {Event} event
      */
-    static linkInputSlider()
+    static linkSemesterSlider (event)
     {
-        Form.semesterInput.addEventListener("change", (evt) =>
-        {
-            Form.semesterSpan.textContent = Form.semesterInput.value;
-            ScheduleBuilder.update_header(parseInt(Form.semesterInput.value));
-        });
+        Form.semesterSpan.textContent = Form.semesterInput.value;
+
+        let new_event = document.createEvent("HTMLEvents");
+        new_event.semesters = parseInt(Form.semesterInput.value);
+        new_event.initEvent("Change Semesters", true, true);
+        document.dispatchEvent(new_event);
+    }
+
+    /** linkCreditSlider
+     * 
+     * Add an event listener to the credit input
+     * to change to value on release of the input bar.
+     * 
+     * Execute a Credit Change Semester.
+     * 
+     * @param {Event} event 
+     */
+    static linkCreditSlider(event) {
+        Form.creditSpan.textContent = Form.creditInput.value;
+        Form.credits = parseInt(Form.creditInput.value);
+
+        let new_event = document.createEvent("HTMLEvents");
+        new_event.semesters = parseInt(Form.semesterInput.value);
+        new_event.initEvent("Change Credits", true, true);
+        document.dispatchEvent(new_event);
     }
 
     //Under development

@@ -13,6 +13,11 @@
  * @version 08/07/2021
  */
 
+//TODO: Add a "Move All to Bank" Button which moves all classes to the bank (update_headers)
+//TODO: Add a "Clear all button" which unselects all classes currently selected
+//TODO: Add a display to see classes/units per semester as provided by Analytics
+//TODO: Restyle Rows (Do this in a way so that backend is easy to change)
+
 class ScheduleBuilder
 {
     static initialize(id, builderHeader = "builderHeader", builderRows = "builderRows")
@@ -166,6 +171,7 @@ class ScheduleBuilder
         for (let clas of ClassRepo.selected) {
             ScheduleBuilder.add_class(clas);
         }
+        ScheduleBuilder.update_semesters();
     }
 
     /** add_class
@@ -176,7 +182,7 @@ class ScheduleBuilder
      * @param {JSON} clas - The new class to add to the bank
      */
     static add_class(clas)
-    {   
+    {
         //Get the last column of the second row
         let semesters = collect_to_arr(ScheduleBuilder.builderRows.getElementsByTagName("td"));
         let button_area = semesters[semesters.length - 1];
@@ -233,7 +239,6 @@ class ScheduleBuilder
     }
 
     static async update_semesters() {
-        console.log("UPDATE!");
         ScheduleBuilder.semesters = [];
         let semesters = collect_to_arr(ScheduleBuilder.builderRows.getElementsByTagName("td"));
         for (let sem of semesters) //For every semester (including the bank) in the second row
@@ -245,6 +250,12 @@ class ScheduleBuilder
             }
             ScheduleBuilder.semesters.push(sem_arr);
         }
+        //Remove the classes from the bank
+        ScheduleBuilder.semesters.splice(ScheduleBuilder.semesters.length - 1);
+
+        let new_event = document.createEvent("HTMLEvents");
+        new_event.initEvent("Semester Update", true, true);
+        document.dispatchEvent(new_event);
     }
 
     //TODO: Improve, move to Analytics probably
@@ -269,3 +280,8 @@ class ScheduleBuilder
         }
     }
 }
+
+//From Form
+document.addEventListener("Change Semesters", (evt) => {
+    ScheduleBuilder.update_header(evt.semesters);
+});

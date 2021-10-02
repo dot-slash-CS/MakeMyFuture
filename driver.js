@@ -28,6 +28,7 @@ function driver_run()
     ScheduleBuilder.initialize("ScheduleBuilder");
     Form.initialize("IGETCForm");
     IGETCTable.initialize("IGETCTable", builder);
+    Analytics.initialize();
 }
 
 //Runs driver on DOMContentLoaded

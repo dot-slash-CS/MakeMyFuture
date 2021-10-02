@@ -94,3 +94,20 @@
     font-size: 20px;
     margin-bottom: 12px;
 }
+
+#analytics-header {
+    text-align: center;
+    margin: auto;
+    width: 70%;
+    background-color: rgb(165, 165, 165);
+    padding: 15px;
+}
+
+#analytics-div {
+    padding-left: 30px;
+    width: 70%;
+    margin: auto;
+    border-style: solid;
+    background-color: lightgray;
+}
+
