@@ -1,0 +1,19 @@
+/* table_style.css
+   Styling for IGETCTable items.
+   @author Pirjot Atwal
+*/
+/* Set size of table */
+table {
+    margin: auto;
+    width: 90%;
+}
+
+/* Make borders apparent */
+table, th, td {
+    border: 1px solid black;
+}
+
+/* Center Table Elements */
+td {
+    text-align: center;
+}

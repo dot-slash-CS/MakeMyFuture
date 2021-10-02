@@ -1,0 +1,95 @@
+Notes on Data Management
+
+Throughout the client's use of the online tool they will interact with
+three types of JS objects.
+
+The Student Object
+The Student object keeps track of student personal information.
+
+The Class Object
+The Class Object keeps track of class information.
+
+The Schedule Object
+The Schedule Object keeps track of a list of semesters
+
+
+
+Along with these three simple datatypes there is also a Restrictions object
+which details the criteria by which a Schedule Object must be made. That is,
+the Schedule Object encapsulates a Student Object, multiple Class Objects, and
+a Restrictions object.
+
+The Restrictions Object
+The Restrictions Object details the certain restrictions a student must meet
+based off their specific Pathway. For example, the IGETC details restrictions
+on how many Math Classes must be taken by the last semester of community college
+and how many credits must be fulfilled by that time for transfer to UCs.
+
+
+Thus, for development, MakeMyFuture must be able to generate the Student Object
+from the Form class, the Class Objects from a repository and stored in the the
+IGETCTable class, the Restrictions Object from the Student selected pathway,
+and the Schedule Object from the ScheduleBuilder.
+
+
+
+To move towards this goal at a good pace, the look of the GUI will be placed
+as a last concern and emphasis should be placed on the backend of the system.
+
+
+Firstly, ensure that a repository of classes is available.
+
+Each of these classes should have necessary information tied to them, for starters
+the following should be available for EVERY class:
+
+Class Object Example Necessary Information:
+    Full Name of Class
+    Division (MATH, PHYS, ENGL, CS ...)
+    Number (1 - 1000)
+    Letter ("" or ABC)
+    ID (Combination of Category, Number, and Letter like MATH-103, ENGL-101C)
+    Credits (Positive Number)
+    CSU/UC-Transferable
+    Necessary Prereqs
+
+Class Object Example Supplementary Information:
+    Class Description
+    Advisories (For Prereqs)
+    Hours of Lecture/Lab
+    Location
+    Professors
+    Times
+    Cost
+    Ways for Students to gain more information on the class
+
+
+Secondly, provide the ability for the student to choose ANY amount of
+classes from the ENTIRE list of classes, organize them semester by semester
+and output a schedule of these classes.
+
+
+Thirdly, implement the restrictions system. Allow the student to choose
+what restrictions they would like.
+
+For Restrictions/Settings, simply check for a maximum amount of classes per semester 
+(Attempt to determine if the schedule is possible in the given amount of semesters before
+the user starts to build the schedule),
+minimum amount of summed units, 
+Satisfied Select Classes (SAVE FOR LATER)
+(dependent on Prerequisites, Major Requirements, General ED Requirements, 
+IGETC Requirements) (REQUIRES ADVANCED ALGORITHM, (Accounts for order of classes etc.)).
+
+Implement a Account Authentication Procedure with Database of Schedules made
+
+Implement multiple majors and colleges (The user should be able to choose multiple majors at one time
+and have multiple schedules to their name)
+
+Implement a readable database (You should be able to see schedules of people
+who have the same major/college combos)
+
+Next, Do the following steps:
+1. Implement Supplementary Information for Classes
+2. Make a Nice Looking GUI
+3. Refine, Refine, Refine
+4. Deploy
+5. Push to Ohlone Populus
