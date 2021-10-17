@@ -1,0 +1,45 @@
+/** 
+    This CSS file holds styling that applies for the topbar
+    navigation that exists on every page of the site.
+
+    @file: css/topnav.css
+    @authors: Pirjot Atwal, 
+    @version 10/17/2021
+*/
+
+.topnav {
+    min-height:100px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    background-color: green;
+}
+
+.topnav-logo {
+    width: 25%;
+    margin: .5%;
+    margin-left: 5%;
+
+    text-align: center;
+    font-size: 14px;
+    background-color: blueviolet;
+    border: 10px solid black;
+}
+
+.topnav-buttons {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    row-gap: 20px;
+    align-items:center;
+    
+    border: 10px solid pink;
+    margin: .5%;
+    background-color: red;
+}
+
+.topnav-buttons a {
+    font-size: 32px;
+    margin: 0px 20px;
+    border: 2px solid blue;
+}

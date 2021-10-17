@@ -1,2 +1,10 @@
+# Ignore all node_modules
+npm_modules
+
+
+
+
+
+
 .DS_Store
 concept_build/CSVcompiler/20202021catalog-allpages.pdf

@@ -1,0 +1,92 @@
+<!-- ./MakeMyFuture Builder Page Design
+    This HTML page holds the Page Source for ./MakeMyFuture's builder
+    page, allowing the user to build their schedule using custom tools
+    powered by JS.
+
+    File: builder.html
+    Contributors: Pirjot Atwal,
+    Version: 10/17/2021
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>./MakeMyFuture</title>
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/hero.css">
+        <link rel="stylesheet" href="css/topnav.css">
+        <link rel="stylesheet" href="css/section.css">
+        <link rel="stylesheet" href="css/builder.css">
+    </head>
+    <body>
+        <!-- START TOPNAV, styling in topnav.css -->
+        <div class="topnav">
+            <div class="topnav-logo">
+                <h1>Logo</h1>
+            </div>
+
+            <div class="topnav-buttons"> 
+                <a href="index.html">Home</a>
+                <a href="builder.html">Builder</a>
+                <a href="">Page3</a>
+                <a href="">Sign Up</a>
+                <a href="">Login</a>
+            </div>
+        </div>
+        <!-- END TOPNAV -->
+
+        <!-- START HERO, styling in hero.css-->
+        <div class="hero" style="height:250px">
+            <h1> Welcome to the Schedule Builder! </h1>
+        </div>
+        <!-- END HERO -->
+
+        <div class="builder">
+            <div class="tools">
+                Tools
+                <div class="menu">
+                    <button>Catalog</button>
+                    <button>Database</button>
+                </div>
+                <div class="catalog">
+                    <button>Allied Health</button>
+                    <button>American Sign Language</button>
+                    <button>Anthropology</button>
+                    <button>Arabic</button>
+                    <button>Art</button>
+                    <button>Astronomy</button>
+                    <button>Athletics</button>
+                </div>
+                <div class="catalog-content">
+                    <input type = "text" placeholder="Search your class..." style="margin: 6px 5px"><br>
+                    <input type="checkbox" name="Administration of Justice"><label>AJ-101: Administration of Justice</label><br>
+                    <input type="checkbox" name="Criminal Law"><label>AJ-102: Criminal Law</label><br>
+                    <input type="checkbox" name="Criminal Evidence"><label>AJ-104: Criminal Evidence</label><br>
+                </div>
+            </div>
+            <div class="schedule">
+                Schedule
+                <div class="semester">
+                    <div class="semester-title">
+                        <h3>Fall 2021</h3>
+                    </div>
+                    <div class="semester-classes">
+                        <div class="semester-class"> <p>Class ACR</p> <p>Class Name</p> <p> Units </p> </div>
+                        <div class="semester-class"> <p>Class ACR</p> <p>Class Name</p> <p> Units </p> </div>
+                        <div class="semester-class"> <p>Class ACR</p> <p>Class Name</p> <p> Units </p> </div>
+                    </div>
+                </div>
+                <div class="semester">
+                    <div class="semester-title">
+                        <h3>Fall 2021</h3>
+                    </div>
+                    <div class="semester-classes">
+                        <div class="semester-class"> <p>Class ACR</p> <p>Class Name</p> <p> Units </p> </div>
+                        <div class="semester-class"> <p>Class ACR</p> <p>Class Name</p> <p> Units </p> </div>
+                        <div class="semester-class"> <p>Class ACR</p> <p>Class Name</p> <p> Units </p> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

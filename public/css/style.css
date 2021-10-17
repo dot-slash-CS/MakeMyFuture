@@ -1,0 +1,33 @@
+/**
+    This CSS file holds styling that applies universally for
+    nodes across all pages on the site.
+
+    @file: css/style.css
+    @authors: Pirjot Atwal, 
+    @version 10/17/2021
+*/
+
+sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top:0;
+}
+
+* {
+    color: black;
+}
+
+body {
+    margin: 0px;
+}
+
+.button {
+    background-color: green;
+    font-size: 20px;
+    text-transform: uppercase;
+    border: 3px solid black;
+}
+
+button:hover {
+    cursor: pointer;
+}
