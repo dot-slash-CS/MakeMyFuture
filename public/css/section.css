@@ -1,0 +1,55 @@
+/** 
+    This CSS file holds the styling for sections on the homepage
+    and other pages on the website.
+
+    @file: css/section.css
+    @authors: Pirjot Atwal, 
+    @version 10/17/2021
+*/
+
+/* For Section 1 */
+.section {
+    /* One way to center elements in a div
+    (except you don't always get vert-align): 
+    display: block;
+    margin: auto; */
+
+    /* Another way: */
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+
+    height: 400px;
+    padding: 0 25%;
+    background-color: sienna;
+    border: 20px dashed greenyellow;
+    text-align: center;
+}
+
+/* For Section Style 2 */
+.img-div-section {
+    display: grid;
+    grid-template-columns: 50% 50%; /*Sets the size of every column*/
+
+    height: 400px;
+    background-color: violet;
+    border: 20px dashed cornflowerblue;
+    text-align: center;
+}
+
+.img-div-section img {
+    display: block;
+    margin: auto;
+    max-height: 75%;
+    max-width: 75%;
+    border: 10px solid black;
+}
+
+.img-div-section div {
+    display: block;
+    margin: auto;
+    max-height: 75%;
+    max-width: 75%;
+    border: 10px solid darkgreen;
+}

@@ -1,0 +1,26 @@
+{
+  "name": "makemyfuture",
+  "version": "1.0.0",
+  "description": "./MakeMyFuture is an online schedule builder for Ohlone students.",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dot-slash-CS/MakeMyFuture.git"
+  },
+  "keywords": [
+    "schedule",
+    "builder",
+    "project",
+    "ohlone",
+    "student-made"
+  ],
+  "author": "Dot-Slash Computer Science",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dot-slash-CS/MakeMyFuture/issues"
+  },
+  "homepage": "https://github.com/dot-slash-CS/MakeMyFuture#readme"
+}

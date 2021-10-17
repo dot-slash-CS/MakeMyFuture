@@ -1,0 +1,137 @@
+/** 
+    This CSS file holds the styling for the Schedule Builder
+    page on ./MakeMyFuture (builder.html) and its respective
+    tools.
+
+    @file: css/builder.css
+    @authors: Pirjot Atwal, 
+    @version 10/17/2021
+*/
+
+/* START BUILDER (the root element) */
+.builder {
+    display: grid;
+    grid-template-columns: 70% 30%;
+
+    height: 95vh;
+    background-color: bisque;
+    border: 30px solid magenta;
+}
+/* END BUILDER */
+
+/* START TOOLS (located in the left section of the builder) */
+.tools {
+    margin: 20px;
+    padding: 5px;
+
+    background-color: cornflowerblue;
+    border: 5px solid red;
+}
+/* END TOOLS */
+
+/* START MENU (located at top of tools) */
+.menu {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-items: flex-start;
+
+    min-height: 40px;
+    max-height: 60px;
+    padding: 5px 3px;
+    margin-bottom: 10px;
+    background-color: salmon;
+}
+
+.menu button {
+    margin: 0px 5px;
+}
+/* END MENU */
+
+/* START CATALOG CSS (Is a tool, holds the buttons, content is a separate node from the main .catalog) */
+.catalog {
+    float: left;
+    border: 1px solid black;
+    background-color: chocolate;
+    height: 60%;
+    width: 30%;
+    margin: auto;
+    overflow:auto;
+    white-space: nowrap;
+}
+
+.catalog button {
+    width: 100%;
+    display: block;
+    color: black;
+    padding: 22px 16px;
+    background-color: darkturquoise;
+    border: 2px solid black;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+.catalog button:hover {
+    background-color: #ddd;
+}
+
+.catalog-content {
+    float: left;
+    border: 1px solid #ccc;
+    width: 69%;
+    height: 60%;
+    overflow:auto;
+    background-color: indianred;
+}
+/* END CATALOG CSS */
+
+/* START SCHEDULE (located in the right section of the builder)*/
+.schedule {
+    margin: 20px;
+    padding: 5px;
+
+    background-color: darkgoldenrod;
+    border: 5px solid blue;
+}
+
+.semester {
+    padding-top: 5px;
+    padding-bottom: 20px;
+    margin: 0 3%;
+    background-color: darkcyan;
+    border: 5px solid purple;
+}
+
+.semester-title {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    
+    color: white;
+    padding-left: 3px;
+    margin: 10px 10px;
+    margin-bottom: 0px;
+    background-color: blue;
+}
+
+.semester-classes {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+
+    margin: 0 10px;
+    padding-left: 10%;
+    color: white;
+    background-color: yellow;
+    transition: 3s;
+    /* To hide the classes for this semester, set max-height = 0 and ensure that overflow is on hidden */
+    overflow: hidden;
+}
+
+.semester-class {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* END SCHEDULE */
