@@ -132,6 +132,8 @@
 .semester-class {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+
+    border: 3px solid black;
 }
 
 /* END SCHEDULE */
