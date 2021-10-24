@@ -27,6 +27,18 @@
     background-color: cornflowerblue;
     border: 5px solid red;
 }
+
+.tools-menu {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-items: flex-start;
+
+    min-height: 40px;
+    max-height: 60px;
+    padding: 5px 3px;
+    margin-bottom: 10px;
+    background-color: salmon;
+}
 /* END TOOLS */
 
 /* START BUILDER (the standard builder, CSS based off transferology) */
