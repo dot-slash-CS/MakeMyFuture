@@ -1,5 +1,5 @@
 {
-    "AREAS": [{
+    "DIVISIONS": [{
         "Social Sciences": ["AJ", "CHS", "ECS", "ENVS", "FT", "WS", "GEOG", "HIST", "IS", "LE", "PHIL", "PS", "PSY", "SOC"]
     }, {
         "Health Sciences": ["AH", "NUR", "PTA", "RT"]
@@ -18,7 +18,7 @@
     }, {
         "Counseling, Student Support, and Success": ["LSP", "PD"]
     }],
-    "DIVISIONS": [{
+    "AREAS": [{
         "AJ": "Administration of Justice"
     }, {
         "AH": "Allied Health"
@@ -212,9 +212,10 @@
         "HOURS": 54.0,
         "MISC": " Cross-referenced Course: PS-106 Advisory: Eligible for ENGL-101A Accepted For Credit: CSU This course examines the development of judicial review and the evolving role of the U.S. Supreme Court through analysis of landmark decisions of the Court. In particular, this course will focus on a theoretical discussion exploring the plurality of methods of constitutional interpretation used by justices in the past and present. (GC)"
     }, {
-        "DIVISION": "AJ",
+        "AREA": "AJ",
         "NAME": "Terrorism",
         "NUMBER": "123",
+        "ACR": "AJ-123",
         "UNITS": 3.0,
         "HOURS": 54.0,
         "MISC": " Advisory: ENGL-101A Accepted For Credit: CSU This course examines basic information about the structure and nature of domestic and international terrorism, and the roles of state and local law enforcement in national defense. This course is designed for Administration of Justice majors and those interested in becoming a police officer or working within Homeland Security. (GR)"

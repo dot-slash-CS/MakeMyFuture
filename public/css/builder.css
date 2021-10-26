@@ -5,13 +5,13 @@
 
     @file: css/builder.css
     @authors: Pirjot Atwal, 
-    @version 10/17/2021
+    @version 10/24/2021
 */
 
 /* START BUILDER (the root element) */
 .builder {
     display: grid;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 60% 40%;
 
     height: 95vh;
     background-color: bisque;
@@ -27,10 +27,8 @@
     background-color: cornflowerblue;
     border: 5px solid red;
 }
-/* END TOOLS */
 
-/* START MENU (located at top of tools) */
-.menu {
+.tools-menu {
     display: flex;
     flex-flow: row nowrap;
     justify-items: flex-start;
@@ -41,50 +39,49 @@
     margin-bottom: 10px;
     background-color: salmon;
 }
+/* END TOOLS */
 
-.menu button {
-    margin: 0px 5px;
-}
-/* END MENU */
-
-/* START CATALOG CSS (Is a tool, holds the buttons, content is a separate node from the main .catalog) */
-.catalog {
-    float: left;
-    border: 1px solid black;
-    background-color: chocolate;
-    height: 60%;
-    width: 30%;
-    margin: auto;
-    overflow:auto;
-    white-space: nowrap;
-}
-
-.catalog button {
+/* START BUILDER (the standard builder, CSS based off transferology) */
+.menu-flex {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
     width: 100%;
-    display: block;
-    color: black;
-    padding: 22px 16px;
-    background-color: darkturquoise;
-    border: 2px solid black;
-    text-align: left;
-    cursor: pointer;
-    transition: 0.3s;
-    font-size: 17px;
 }
 
-.catalog button:hover {
-    background-color: #ddd;
+.menu-flex select {
+    height: 30px;
+    width: 40%;
 }
 
-.catalog-content {
-    float: left;
-    border: 1px solid #ccc;
-    width: 69%;
-    height: 60%;
-    overflow:auto;
-    background-color: indianred;
+.menu-classes {
+    background-color: blueviolet;
+    height: 350px;
+    width: 97%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    padding: 5px;
 }
-/* END CATALOG CSS */
+
+.menu-classes-table {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 20px;
+    grid-template-rows: 1fr 1fr;
+    grid-column-gap: 4px;
+
+    padding: 10px;
+}
+
+.menu-classes-table * {
+    border: 1px black solid;
+    background-color: white;
+}
+
+.menu-classes-table a {
+    margin: auto;
+    color: red;
+}
 
 /* START SCHEDULE (located in the right section of the builder)*/
 .schedule {

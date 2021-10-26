@@ -19,3 +19,12 @@ from.
  ```
  python3 compiler.py data.csv data.json
  ```
+
+ Continue the compilation by running a cleaner to make the data into a usable format for the website.
+ Run 
+ ```
+ python3 cleaner.py data.json cleaned_data.json.
+ ```
+ The above line will require input from you through the terminal to describe the full name of every division and class area. It's simple! Just check out the pdf you were compiling originally. Take note of the "Class Area", for example "AJ" for Administration of Justice. Your job is that, when the computer asks for the full name of one of these area, you just input it correctly. Then, if this area is new provide the division that it belongs in. If it belongs in a new division, give the name to that division.
+
+ Use the cleaned_data.json as needed (by placing it in the website's data folder).

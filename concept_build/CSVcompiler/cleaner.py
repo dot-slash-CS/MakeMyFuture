@@ -25,8 +25,8 @@ with open(filename) as jsonfile:
 
 # Set up the mapped_data
 mapped_data = {
-    "AREAS": [], # An array of Maps mapping Division Area Full names to Division Acronyms
-    "DIVISIONS": [], # An array of Maps mapping Division Acronyms to Division Full names
+    "DIVISIONS": [], # An array of Maps mapping Division to Arrays holding Area Acronyms
+    "AREAS": [], # An array of Maps mapping Area Acronyms to their Area Full Names
     "CLASSES": [] # An array of Maps which map class information
 }
 
@@ -37,54 +37,61 @@ for i in range(len(raw_data)):
     #Grab the id, the rest is the name
     class_pattern = re.compile(r'[A-Z]+\-\d+\w*')
     matches = class_pattern.finditer(next_class["CLASS"])
-    class_id = list(matches)[0].group()
-    class_division = class_id[:class_id.index('-')]
-    class_number = class_id[class_id.index('-') + 1:]
-    class_name = next_class["CLASS"][len(class_id) + 1:]
+    class_id = list(matches)[0].group() #Grab the entire ID/ACR as in MATH-101C Calculus with Analytic Geometry
+    class_area = class_id[:class_id.index('-')] #Grab the Area-ACR as in MATH
+    class_number = class_id[class_id.index('-') + 1:] #Grab the number as in 101C
+    class_name = next_class["CLASS"][len(class_id) + 1:] #Get the Class name as in Calculus with Analytic Geometry
 
     number_pattern = re.compile(r'[0-9]+\.[0-9]*')
     #Grab the amount of hours (sum all matches of numbers together)
     matches = list(number_pattern.finditer(next_class["HOURS"]))
     total_hours = sum([float(x.group()) for x in matches])
     
-    #Grab the amount of units
+    #Grab the amount of units (Summed)
     matches = list(number_pattern.finditer(next_class["UNITS"]))
     total_units = sum([float(x.group()) for x in matches])
     
-    #Determine Division Name
-    division_acronyms = [list(division.keys())[0] for division in mapped_data["DIVISIONS"]]
-    if class_division not in division_acronyms:
-        new_division_name = input("New Division Found, Provide a name for " + class_division + ": ")
-        mapped_data["DIVISIONS"].append({class_division: new_division_name})
+    #Determine Area Full Name MATH -> Mathematics
+    class_acronyms = [list(area.keys())[0] for area in mapped_data["AREAS"]]
+    if class_area not in class_acronyms: #MATH not in [AJ, AH, PHYS] (All Area Acronyms)
+        new_area_name = input("New Area Found, Provide a name for " + class_area + ": ")
+        mapped_data["AREAS"].append({class_area: new_area_name})
 
-    #Determine if the class' division already exists in an area
-    found_area = False
-    for area in mapped_data["AREAS"]:
-        area_name = list(area.keys())[0]
-        found_area = found_area or class_division in area[area_name]
+    #Determine if the class' area already exists in an division
+    class_division = ""
+    for division in mapped_data["DIVISIONS"]:
+        division_name = list(division.keys())[0]
+        if class_area in division[division_name]: # If MATH is in "Science, Engineering, and Mathematics": ["ANTH", "ASTR", "BIOL", "BIOT", "CHEM"]...
+            class_division = division_name
+            break
 
-    # Add the division to the corresponding area
-    if not found_area:
-        print("Please select an area for the division " + class_division + ":")
-        for j in range(len(mapped_data["AREAS"])):
-            print(str(j + 1) + ". " + list(mapped_data["AREAS"][j].keys())[0])
-        print(str(len(mapped_data["AREAS"]) + 1) + ". New Division")
+    # Add the area to the corresponding division (if the division doesn't exist yet, add it)
+    if not class_division:
+        print("Please select a division for the area " + class_area + ":")
+        for j in range(len(mapped_data["DIVISIONS"])):
+            print(str(j + 1) + ". " + list(mapped_data["DIVISIONS"][j].keys())[0]) #Print a menu for selection
+        print(str(len(mapped_data["DIVISIONS"]) + 1) + ". New Division") #Lastly, print an option for a new division
         new_input = input("Provide your selection: ")
         try: 
             index = int(new_input) - 1
         except Exception as e:
-            index = len(mapped_data["AREAS"])
-        if index < len(mapped_data["AREAS"]):
-            mapped_data["AREAS"][index][list(mapped_data["AREAS"][index].keys())[0]].append(class_division)
+            index = len(mapped_data["DIVISIONS"]) # By Default, choose one more than the last index.
+        if index < len(mapped_data["DIVISIONS"]):
+            mapped_data["DIVISIONS"][index][list(mapped_data["DIVISIONS"][index].keys())[0]].append(class_area)
+            class_division = list(mapped_data["DIVISIONS"][index].keys())[0]
         else:
-            new_area = input("Provide the new area name: ")
-            mapped_data["AREAS"].append({new_area: [class_division]})
+            index = len(mapped_data["DIVISIONS"])
+            new_division = input("Provide the new division name: ")
+            mapped_data["DIVISIONS"].append({new_division: [class_area]})
+            class_division = new_division
 
     # Append the class to the classes array
     mapped_data["CLASSES"].append({
         "DIVISION": class_division,
+        "AREA": class_area,
         "NAME": class_name,
         "NUMBER": class_number,
+        "AREA-ACR": class_area + "-" + class_number,
         "UNITS": total_units,
         "HOURS": total_hours,
         "MISC": next_class["MISC"]

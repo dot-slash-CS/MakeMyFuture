@@ -1,0 +1,42 @@
+/** 
+    This CSS file holds the styling for the Signup and Login
+    pages on ./MakeMyFuture (signup.html/login.html).
+
+    @file: css/signup_login.css
+    @authors: Pirjot Atwal, 
+    @version 10/24/2021
+*/
+
+body {
+    height:100%;
+    background-color:mediumseagreen;
+}
+
+.logo {
+    width: 25%;
+    margin-right: auto;
+    margin-left: auto;
+
+    text-align: center;
+    font-size: 14px;
+    background-color: blueviolet;
+    border: 10px solid black;
+}
+
+.main-box {
+    height: 450px;
+    width: 350px;
+    background-color: white;
+    margin:auto;
+    border-radius: 20px;
+}
+
+.title {
+    text-align: center;
+    text-decoration: underline;
+    padding-top:40px;
+}
+
+.form {
+    padding-left:30px;
+}
