@@ -1,8 +1,8 @@
 # Ignore all node_modules
 node_modules
 
-
-
+# Ignore the .env file, .env-git can be used as a template
+.env
 
 
 

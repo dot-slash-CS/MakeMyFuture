@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/dot-slash-CS/MakeMyFuture#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongodb": "^4.1.3"
   }
 }
