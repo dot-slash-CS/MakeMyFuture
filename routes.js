@@ -11,11 +11,15 @@
  */
 
 //NEEDED REQUIREMENTS (INCLUDE NEW MODULES AS NEEDED)
-const mongo = require("./mongodb-library.js");
+// const mongo = require("./mongodb-library.js");
 
 
 function main(req, res) {
     res.send({data: "This is from the main route!"});
+}
+
+function post_schedule(req, res) {
+    
 }
 
 module.exports = {

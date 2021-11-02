@@ -11,9 +11,8 @@
 // Import mongodb (make sure you do npm install mongodb first)
 const { MongoClient } = require('mongodb');
 // Build a uri, user and password settings are configured on the website
-// MAKE SURE TO REPLACE THE FOLLOWING WITH YOUR OWN URI (using .env as needed)
-let uri = "";
-uri = "mongodb+srv://" + process.env.MONGO_KEY + "@mongodbtest.v5yrf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+let uri = ""; //Set this to your mongo uri
+// uri = "mongodb+srv://" + process.env.MONGO_KEY + "@mongodbtest.v5yrf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 // Configure client, pass in uri and options
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });

@@ -29,7 +29,7 @@ require('dotenv').config();
 
 //Import local modules
 const routes = require('./routes.js');
-const mongo = require('./mongodb-library.js')
+// const mongo = require('./mongodb-library.js')
 
 
 //MIDDLEWARE FUNCTIONS
@@ -38,7 +38,7 @@ app.use(express.static('public'));
 //Parse incoming JSON body requests
 app.use(express.json());
 //Attempt connection to mongo
-mongo.connectClient();
+// mongo.connectClient();
 
 
 
