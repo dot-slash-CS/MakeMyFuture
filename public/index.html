@@ -4,11 +4,12 @@
     pages.
 
     File: index.html
-    Contributors: Pirjot Atwal,
+    Contributors: Pirjot Atwal, Jia Jun
     Version: 10/17/2021
 -->
 <!DOCTYPE html>
 <html>
+    <script src="js/banner.js"></script>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>./MakeMyFuture</title>
@@ -16,6 +17,7 @@
         <link rel="stylesheet" href="css/topnav.css">
         <link rel="stylesheet" href="css/hero.css">
         <link rel="stylesheet" href="css/section.css">
+        <link rel = "stylesheet" href="css/banner.css">
     </head>
     <body>
         <!-- START TOPNAV, styling in topnav.css -->
@@ -41,6 +43,48 @@
         </div>
         <!-- END HERO -->
 
+        <!-- Start Banner, styling in banner.css, script in banner.js-->
+        <section class= "banner_section">
+       
+        <!-- banner container -->
+        <div class="banner-container" >
+
+            <!-- banner Images-->
+            <div class="my_banner fade">
+                <img src="assets/img/banner_1.jpg" class="ban_img" alt="banner">
+            </div>
+        
+            <div class="my_banner fade">
+                <img src="assets/img/banner_2.jpg" class="ban_img" alt="banner">
+            </div>
+        
+            <div class="my_banner fade">
+                <img src="assets/img/banner_3.jpg" class="ban_img" alt="banner"> 
+            </div>
+            <div class="my_banner fade">
+                <img src="assets/img/banner_2.jpg" class="ban_img" alt="banner">
+            </div>
+        
+            <!-- Next and previous buttons -->
+            <a id="prev" onclick="next_prev(-1)" onclick= "loop_reset()">&#10094;</a>
+            <a id="next" onclick="next_prev(1)" onclick= "loop_reset()">&#10095;</a>
+
+            <!-- The dots/circles -->
+            <div class="dot_container" style="text-align:left">
+                <span class="dot" onclick="currentBanner(1)"></span>
+                <span class="dot" onclick="currentBanner(2)"></span>
+                <span class="dot" onclick="currentBanner(3)"></span>
+                <span class="dot" onclick="currentBanner(4)"></span>
+            </div>
+
+        </div>
+        </section>
+        <!--End Banner-->
+
+
+
+
+
         <!-- START SECTION 1, styling in section.css -->
         <div class="section">
             <h3 style="border: 10px solid teal">Section Content</h3>
@@ -50,12 +94,13 @@
 
         <!-- START SECTION 2, styling in section.css -->
         <div class="img-div-section">
-            <img src = "assets/img/placeholder.png"></img>
+            <img src = "assets/img/placeholder.png" alt="testimg"></img>
             <div>
                 <h3>Section Content</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
         </div>
         <!-- END SECTION 2 -->
+    
     </body>
 </html>
