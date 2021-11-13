@@ -114,15 +114,7 @@ async function sign_up(username, password) {
         };
         //Send the data to the database (Accounts/accounts collection)
         new_account = await mongo.add_data(saveMe, "Accounts", "accounts");
-        //Create a new spot in the data database for this account (Accounts/data collection)
         user_id = new_account["insertedId"].toString();
-
-        let data = {
-            "user_id": user_id,
-            "data": "", //The user's data
-            "signed_in_count": 1 //Amount of times this user has signed in
-        };
-        await mongo.add_data(data, "Accounts", "data");
     }
 
     return {
@@ -159,8 +151,6 @@ async function login(username, password) {
         user_id = accounts[0]["_id"].toString();
         message = "LOGIN SUCCESSFUL";
         loggedIn = true;
-
-        await mongo.update_docs({"user_id": user_id}, {$inc: {"signed_in_count": 1}}, "Accounts", "data");
     }
     return {
         info: message,
@@ -195,51 +185,6 @@ async function get_id_username(username) {
     try {
         return (await mongo.get_data({"username": username}, "Accounts", "accounts"))[0]["_id"].toString();
     } catch(error) {}
-}
-
-/**
- * Update a user's special data string.
- * 
- * @param {String} user_id
- * @param {String} data
- * @returns {JSON} of the structure
- * {
- *      info: "SUCCESSFUL" / "UNSUCCESSFUL"
- *      success: true / false
- * }
- */
-async function update_data(user_id, data) {
-    let info = "UNSUCCESSFUL";
-    let success = false;
-
-    try {
-        response = await mongo.update_docs({user_id: user_id}, {$set: {"data": data}}, "Accounts", "data");
-        //TODO Check if response acknowledged correct document
-        info = "SUCCESSFUL";
-        success = true;
-    } catch (error) {}
-
-    return {
-        info,
-        success
-    };
-}
-
-/**
- * Fetch a user's data.
- * 
- * @param {*} user_id 
- * @returns {String} the user's data as a string
- */
-async function get_data(user_id) {
-    let response = "";
-
-    try {
-        let user_doc = await mongo.get_data({user_id: user_id}, "Accounts", "data");
-        response = user_doc[0]["data"];
-    } catch (error) {}
-
-    return response;
 }
 
 /**
@@ -323,5 +268,5 @@ async function verify_session(hash) {
 
 module.exports = {
     sign_up, login, get_account_username, get_id_username,
-    update_data, get_data, issue_session, verify_session
+    issue_session, verify_session
 }

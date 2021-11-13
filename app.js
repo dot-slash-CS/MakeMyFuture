@@ -55,8 +55,6 @@ let listener = app.listen(3000, () => {
 //Logout of the account
 app.get('/logout', (req, res) => routes.logout(req, res));
 
-//Fetch the user's data (requires logged in)
-app.get('/fetch_data', (req, res) => routes.get_account_data(req, res));
 
 //On every page load, verify if the user is signed in and if so, who they are signed is as.
 app.get('/verify-session', (req, res) => routes.verify_session(req, res));
@@ -69,8 +67,6 @@ app.post('/sign_up', (req, res) => routes.sign_up(req, res));
 //Login to an account
 app.post('/login', (req, res) => routes.login(req, res));
 
-//Set the data of an account (requires logged in)
-app.post('/set_data', (req, res) => routes.set_account_data(req, res));
 
 
 //On server/process closing, perform cleanup functions
