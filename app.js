@@ -67,7 +67,7 @@ app.post('/sign_up', (req, res) => routes.sign_up(req, res));
 //Login to an account
 app.post('/login', (req, res) => routes.login(req, res));
 
-
+app.post('/post-schedule', (req, res) => routes.post_schedule(req, res));
 
 //On server/process closing, perform cleanup functions
 process.on('SIGINT', () => {
