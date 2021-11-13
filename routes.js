@@ -120,32 +120,32 @@ async function set_account_data(req, res) {
     res.send(update_response);
 }
 
-/**
- * Get a user's data.
- * 
- * @param {*} req 
- * @param {*} res of the following structure
- * {
- *      success: true / false
- *      data: [STRING]
- * }
- */
-async function get_account_data(req, res) {
-    try {
-        let verify_response = await accounts.verify_session(req.cookies["session"]);
-        let get_response = {success: false, data: ""};
+// /**
+//  * Get a user's data.
+//  * 
+//  * @param {*} req 
+//  * @param {*} res of the following structure
+//  * {
+//  *      success: true / false
+//  *      data: [STRING]
+//  * }
+//  */
+// async function get_account_data(req, res) {
+//     try {
+//         let verify_response = await accounts.verify_session(req.cookies["session"]);
+//         let get_response = {success: false, data: ""};
 
-        if (verify_response["valid"]) {
-            let user_data = await accounts.get_data(verify_response["user_id"]);
-            get_response.success = true;
-            get_response.data = user_data;
-        }
+//         if (verify_response["valid"]) {
+//             let user_data = await accounts.get_data(verify_response["user_id"]);
+//             get_response.success = true;
+//             get_response.data = user_data;
+//         }
 
-        res.send(get_response);
-    } catch (error) {
-        res.send({success: false, error: error.message});
-    }
-}
+//         res.send(get_response);
+//     } catch (error) {
+//         res.send({success: false, error: error.message});
+//     }
+// }
 
 /**
  * A function meant to be run on every page load, verifying if the user's session
@@ -178,5 +178,5 @@ async function verify_session(req, res) {
 }
 
 module.exports = {
-    sign_up, login, logout, set_account_data, get_account_data, verify_session
+    sign_up, login, logout, verify_session
 }
