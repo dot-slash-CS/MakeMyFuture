@@ -31,9 +31,11 @@ require('dotenv').config();
 //Import local modules
 const routes = require('./routes.js');
 const mongo = require('./mongodb-library.js')
-
+const cookieParser = require('cookie-parser');
 
 //MIDDLEWARE FUNCTIONS
+//Parse the user's cookies
+app.use(cookieParser());
 //Serve the static files located in the public folder
 app.use(express.static('public'));
 //Parse incoming JSON body requests
