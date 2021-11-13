@@ -99,22 +99,24 @@ async function logout(req, res) {
 }
 
 /**
- * Set a user's data to the data they pass in the body.
+ * Post a user's schedule to the database.
  * @param {*} req A request object with a body of the following structure:
  * {
- *      data: [STRING]
+ *      schedule: SCHEDULE STRUCTURE
  * }
  * @param {*} res 
  * {
  *      success: true / false
  * }
  */
-async function set_account_data(req, res) {
+async function post_schedule(req, res) {
     let verify_response = await accounts.verify_session(req.cookies["session"]);
     let update_response = {success: false};
 
     if (verify_response["valid"]) {
-        update_response = await accounts.update_data(verify_response["user_id"], req.body.data);
+        req.body.schedule.user_id = verify_response.user_id;
+        req.body.schedule.time_created = (new Date()).getTime();
+        update_response = await accounts.upload_schedule(verify_response["user_id"], req.body.schedule);
     }
 
     res.send(update_response);
@@ -178,5 +180,5 @@ async function verify_session(req, res) {
 }
 
 module.exports = {
-    sign_up, login, logout, verify_session
+    sign_up, login, logout, verify_session, post_schedule
 }

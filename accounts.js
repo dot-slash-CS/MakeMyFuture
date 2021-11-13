@@ -175,6 +175,15 @@ async function get_account_username(user_id) {
     return username;
 }
 
+async function upload_schedule(user_id, schedule) {
+    let success = false;
+    try {
+        let response = await mongo.add_data(schedule, "Accounts", "schedules");
+        success = true;
+    } catch (error) {}
+    return {success};
+}
+
 /**
  * Gets the id of a user from their username.
  * 
@@ -268,5 +277,5 @@ async function verify_session(hash) {
 
 module.exports = {
     sign_up, login, get_account_username, get_id_username,
-    issue_session, verify_session
+    issue_session, verify_session, upload_schedule
 }
