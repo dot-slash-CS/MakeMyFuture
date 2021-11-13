@@ -11,6 +11,7 @@
  * express
  * dotenv
  * mongodb
+ * crypto
  * 
  * @file app.js
  * @authors Pirjot Atwal,
@@ -41,7 +42,6 @@ app.use(express.json());
 mongo.connectClient();
 
 
-
 //SERVER SETUP AND ROUTES
 //Begin listening for connections and print status to console
 let listener = app.listen(3000, () => {
@@ -50,8 +50,28 @@ let listener = app.listen(3000, () => {
 
 //Begin all app routes
 
-//Main Route (Template)
-app.get("/main", (req, res) => routes.main(req, res));
+//BEGIN ALL GET ROUTES
+
+//Logout of the account
+app.get('/logout', (req, res) => routes.logout(req, res));
+
+//Fetch the user's data (requires logged in)
+app.get('/fetch_data', (req, res) => routes.get_account_data(req, res));
+
+//On every page load, verify if the user is signed in and if so, who they are signed is as.
+app.get('/verify-session', (req, res) => routes.verify_session(req, res));
+
+//BEGIN ALL POST ROUTES
+
+//Sign up for an account
+app.post('/sign_up', (req, res) => routes.sign_up(req, res));
+
+//Login to an account
+app.post('/login', (req, res) => routes.login(req, res));
+
+//Set the data of an account (requires logged in)
+app.post('/set_data', (req, res) => routes.set_account_data(req, res));
+
 
 //On server/process closing, perform cleanup functions
 process.on('SIGINT', () => {

@@ -24,3 +24,4 @@ npm install
 node app.js
 ```
 7. Open a new browser tab/window and go to localhost:3000 to see the webpage! Check out the files in the folder to see what sort of code already exists.
+NOTE: If you receive a MongoParseError that reads Invalid connection string go to mongodb-library.js and change the uri to your uri on MongoDB. (Uncomment the mongo.connectClient() line in app.js and the require('mongodb-library.js') lines in both app.js and routes.js.
