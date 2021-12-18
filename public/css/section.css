@@ -20,14 +20,39 @@
     align-items: center;
     justify-content: center;
 
-    height: 400px;
     padding: 0 25%;
-    background-color: sienna;
-    border: 20px dashed greenyellow;
+    padding-top: 50px;
+    padding-bottom: 50px;
     text-align: center;
+
+    background-color: #21B19A;
 }
 
-/* For Section Style 2 */
+/* Useful Links Section */
+.useful-links-section {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 25%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    text-align: center;
+
+    background-color: #23948E;
+}
+
+.useful-links-section div {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 50px;
+
+    margin-top: 30px;
+}
+
+/* Img + Div Section Style */
 .img-div-section {
     display: grid;
     grid-template-columns: 50% 50%; /*Sets the size of every column*/
