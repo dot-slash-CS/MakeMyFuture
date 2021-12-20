@@ -13,6 +13,7 @@
 //NEEDED REQUIREMENTS (INCLUDE NEW MODULES AS NEEDED)
 const mongo = require('./mongodb-library.js');
 const accounts = require('./accounts.js')
+const fs = require('fs');
 
 /**
  * Sign up an account, manipulating the user's cookies to store their special session ID.
@@ -179,6 +180,42 @@ async function verify_session(req, res) {
     res.send(response);
 }
 
+/**
+ * Using the query object in the body, return some data from the catalog json file.
+ * If the query was not recognized, return the entire file.
+ * 
+ * @param {JSON} req A JSON object with a body equivalent to the following:
+ * {
+ *      query: [STRING], 
+ *             "AREAS" = The AREAS array, holding JSON objects that point each AREA ACR to its full name.
+ *             "CLASSES" = The CLASSES array, expecting the acr to also be attached in the acr property.
+ * }
+ * @param {*} res An object of the form:
+ * {
+ *      result: [OF VARYING TYPE DEPENDING ON QUERY]
+ * }
+ */
+async function query_data(req, res) {
+    // Get the data
+    let data = JSON.parse(fs.readFileSync("2021_2022_class_data.json"));
+    let query = req.body.query;
+
+    if (query == "AREAS") {
+        res.send(data["AREAS"]);
+    } else if (query == "CLASSES") {
+        // Select all classes that match acr.
+        let classes = [];
+        for (let course of data["CLASSES"]) {
+            if (course["AREA"] == req.body.acr) {
+                classes.push(course);
+            }
+        }
+        res.send(classes);
+    } else {
+        res.send(data);
+    }
+}
+
 module.exports = {
-    sign_up, login, logout, verify_session, post_schedule
+    sign_up, login, logout, verify_session, post_schedule, query_data
 }

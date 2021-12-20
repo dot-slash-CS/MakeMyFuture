@@ -54,25 +54,29 @@ let listener = app.listen(3000, () => {
 
 //BEGIN ALL GET ROUTES
 
-//Logout of the account
+// Logout of the account
 app.get('/logout', (req, res) => routes.logout(req, res));
 
-
-//On every page load, verify if the user is signed in and if so, who they are signed is as.
+// On every page load, verify if the user is signed in and if so, who they are signed is as.
 app.get('/verify-session', (req, res) => routes.verify_session(req, res));
 
 //BEGIN ALL POST ROUTES
 
-//Sign up for an account
-app.post('/sign_up', (req, res) => routes.sign_up(req, res));
+// Sign up for an account
+app.post('/sign-up', (req, res) => routes.sign_up(req, res));
 
-//Login to an account
+// Login to an account
 app.post('/login', (req, res) => routes.login(req, res));
 
+// Post a schedule and save it to the database.
 app.post('/post-schedule', (req, res) => routes.post_schedule(req, res));
+
+// Query data from the catalog and return it
+app.post('/query-data', (req, res) => routes.query_data(req, res));
 
 //On server/process closing, perform cleanup functions
 process.on('SIGINT', () => {
-    console.log("\nClosing down ./MakeMyFuture server...")
+    mongo.closeClient();
+    console.log("\nClosing down ./MakeMyFuture server...");
     process.exit(0);
 });
