@@ -62,6 +62,7 @@
     margin-right: auto;
     margin-top: 30px;
     padding: 5px;
+    overflow-y: scroll;
 }
 
 .menu-classes-table {
@@ -118,7 +119,6 @@
     grid-template-rows: auto;
 
     margin: 0 10px;
-    padding-left: 10%;
     color: white;
     background-color: yellow;
     transition: 3s;
@@ -128,9 +128,20 @@
 
 .semester-class {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-
+    grid-template-columns: 1fr 2fr 4fr 1fr;
+    grid-gap: 10px;
     border: 3px solid black;
+}
+
+.semester-class * {
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    overflow-x: hidden;
+}
+
+.semester-class p {
+    margin-left: 0;
 }
 
 /* END SCHEDULE */

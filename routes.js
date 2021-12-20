@@ -211,6 +211,14 @@ async function query_data(req, res) {
             }
         }
         res.send(classes);
+    } else if (query == "CLASS") {
+        let course = null;
+        for (let object of data["CLASSES"]) {
+            if (object["AREA-ACR"] == req.body.acr) {
+                course = object;
+            }
+        }
+        res.send(course);
     } else {
         res.send(data);
     }
