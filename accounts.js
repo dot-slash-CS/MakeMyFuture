@@ -64,6 +64,17 @@ async function username_exists(username) {
 }
 
 /**
+ * Determine if an account with the given email already exists.
+ * @param {String} email 
+ * @returns {Boolean}
+ */
+async function email_exists(email) {
+    try {
+        return (await mongo.get_data({"email": email}, "Accounts", "accounts")).length > 0;
+    } catch (error) {}
+}
+
+/**
  * Determine if a username and password combination meets security standards.
  * 
  * Security Standards to satisfy:
@@ -86,7 +97,7 @@ function valid_user_pass_combo(username, password) {
  * @param {String} password TODO: ADD REQUIREMENTS
  * @return A JSON Object TODO: ADD INFO THAT GETS SENT BACK IN JSON
  */
-async function sign_up(username, password) {
+async function sign_up(username, password, email) {
     let createAccount = true;
     let message = "CREATE ACCOUNT FAILED";
     let user_id = 0;
@@ -99,6 +110,9 @@ async function sign_up(username, password) {
     else if (!valid_user_pass_combo(username, password)) { //Secure username and password needed
         message = "BAD USERNAME PASSWORD";
         createAccount = false;
+    } else if (await email_exists(email)) {
+        message = "EMAIL TAKEN";
+        createAccount = false;
     }
     if (createAccount) {
         message = "ACCOUNT CREATED";
@@ -109,8 +123,9 @@ async function sign_up(username, password) {
         let saveMe = {
             time: (new Date()).getTime(),
             username: username,
+            email: email,
             hash: hashSalt.hash,
-            salt: hashSalt.salt
+            salt: hashSalt.salt,
         };
         //Send the data to the database (Accounts/accounts collection)
         new_account = await mongo.add_data(saveMe, "Accounts", "accounts");

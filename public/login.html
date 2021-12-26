@@ -10,20 +10,23 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="js/login.js"></script>
         <link rel="stylesheet" href="css/signup_login.css"></href>
     </head>
     <body>
         <div class="logo">
-            <h1>Logo</h1>
+            <h1>./MakeMyFuture</h1>
         </div>
-        <div class="main-box">
+        <div style="text-align:center" class="main-box">
             <h1 class="title">Login</h1>
+            <a href = "signup.html">Click here to sign up instead.</a><br><br>
             <form class="form">
-                <label>Username/Email: </label>
-                <input placeholder="Username/Email"><br><br>
+                <label>Username: </label>
+                <input id = "user" autocomplete="username" placeholder="Username"><br><br>
                 <label>Password: </label>
-                <input placeholder="Password"><br><br>
-                <button>Login</button>
+                <input id = "pass" autocomplete="current-password" type = "password" placeholder="Password"><br><br>
+                <span id = "message"></span><br><br>
+                <button id = "login">Login</button>
             </form>
         </div>
     </body>

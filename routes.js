@@ -21,7 +21,8 @@ const fs = require('fs');
  * @param {*} req expects req.body to be equivalent to a JSON of the following structure
  * {
  *      username: {STRING},
- *      password: {STRING}
+ *      password: {STRING},
+ *      email: {STRING}
  * }
  * @param {*} res 
  * @returns a response on whether the user's request was successful. If it was, 
@@ -35,9 +36,10 @@ async function sign_up(req, res) {
     //TODO: Perform some error checking possibly, parsing, cleaning up,etc.
     let username = req.body.username;
     let password = req.body.password;
+    let email = req.body.email;
 
     //Sign up the account
-    let sign_up_response = await accounts.sign_up(username, password);
+    let sign_up_response = await accounts.sign_up(username, password, email);
 
     if (sign_up_response["account_created"]) {
         //Issue a new session using the account's _id
@@ -65,9 +67,9 @@ async function login(req, res) {
     //TODO: Perform some error checking possibly, parsing, cleaning up,etc.
     let username = req.body.username;
     let password = req.body.password;
-    
+    let login_response = {info: "FAILED", "loggedIn": false}
     try {
-        let login_response = await accounts.login(username, password);
+        login_response = await accounts.login(username, password);
 
         if (login_response["loggedIn"]) {
             //Issue a new session using the account's _id
@@ -75,7 +77,7 @@ async function login(req, res) {
             
             res.cookie("session", session_response["hash"], { maxAge: 5 * 24 * 60 * 60 * 1000, httpOnly: true });
         }
-    } catch(error) {}
+    } catch(error) {console.log("An Error Occurred in the Login Function...");}
 
     res.send({"info": login_response["info"], "loggedIn": login_response["loggedIn"]});
 }
