@@ -60,6 +60,9 @@ app.get('/logout', (req, res) => routes.logout(req, res));
 // On every page load, verify if the user is signed in and if so, who they are signed is as.
 app.get('/verify-session', (req, res) => routes.verify_session(req, res));
 
+// Get all schedules that belong to the user (under the user id)
+app.get('/get-user-schedules', (req, res) => routes.get_user_schedules(req, res));
+
 //BEGIN ALL POST ROUTES
 
 // Sign up for an account
@@ -73,6 +76,18 @@ app.post('/post-schedule', (req, res) => routes.post_schedule(req, res));
 
 // Query data from the catalog and return it
 app.post('/query-data', (req, res) => routes.query_data(req, res));
+
+// Create a new schedule for the user
+app.post('/create-schedule', (req, res) => routes.create_schedule(req, res));
+
+// Fetch the schedule matching the given name/data
+app.post('/fetch-schedule', (req, res) => routes.fetch_schedule(req, res));
+
+// TODO: EDIT SCHEDULE
+
+// TODO: DELETE SCHEDULE
+app.post('/delete-schedule', (req, res) => routes.delete_schedule(req, res));
+
 
 //On server/process closing, perform cleanup functions
 process.on('SIGINT', () => {

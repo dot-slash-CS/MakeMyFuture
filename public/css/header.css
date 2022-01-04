@@ -1,3 +1,11 @@
+/** 
+    This CSS file holds the styling for the header on
+    all pages.
+
+    @file: css/header.css
+    @authors: Pirjot Atwal, 
+    @version 01/03/2022
+*/
 .header-blue {
     background: linear-gradient(135deg, #172a74, #21a9af);
     background-color: #184e8e;

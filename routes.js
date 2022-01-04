@@ -44,10 +44,16 @@ async function sign_up(req, res) {
     if (sign_up_response["account_created"]) {
         //Issue a new session using the account's _id
         let session_response = await accounts.issue_session(sign_up_response["user_id"]);
-        
-        res.cookie("session", session_response["hash"], { maxAge: 5 * 24 * 60 * 60 * 1000, httpOnly: true });
+
+        res.cookie("session", session_response["hash"], {
+            maxAge: 5 * 24 * 60 * 60 * 1000,
+            httpOnly: true
+        });
     }
-    res.send({"info": sign_up_response["info"], "account_created": sign_up_response["account_created"]});
+    res.send({
+        "info": sign_up_response["info"],
+        "account_created": sign_up_response["account_created"]
+    });
 }
 
 /**
@@ -57,29 +63,39 @@ async function sign_up(req, res) {
  *      username: {STRING},
  *      password: {STRING}
  * }
- * @param {*} res The result is a JSON object of the following structure:
+ * @param {*} res The result is a JS object of the following structure:
  * {
  *      loggedIn: true / false,
  *      info: {STRING},
  * }
  */
 async function login(req, res) {
-    //TODO: Perform some error checking possibly, parsing, cleaning up,etc.
+    //TODO: Perform some error checking possibly, parsing, cleaning up, etc.
     let username = req.body.username;
     let password = req.body.password;
-    let login_response = {info: "FAILED", "loggedIn": false}
+    let login_response = {
+        info: "FAILED",
+        "loggedIn": false
+    }
     try {
         login_response = await accounts.login(username, password);
 
         if (login_response["loggedIn"]) {
             //Issue a new session using the account's _id
             let session_response = await accounts.issue_session(login_response["user_id"]);
-            
-            res.cookie("session", session_response["hash"], { maxAge: 5 * 24 * 60 * 60 * 1000, httpOnly: true });
+            res.cookie("session", session_response["hash"], {
+                maxAge: 5 * 24 * 60 * 60 * 1000,
+                httpOnly: true
+            });
         }
-    } catch(error) {console.log("An Error Occurred in the Login Function...");}
+    } catch (error) {
+        console.log("An Error Occurred in the Login Function...");
+    }
 
-    res.send({"info": login_response["info"], "loggedIn": login_response["loggedIn"]});
+    res.send({
+        "info": login_response["info"],
+        "loggedIn": login_response["loggedIn"]
+    });
 }
 
 /**
@@ -94,11 +110,15 @@ async function logout(req, res) {
     try {
         let x = req.cookies["session"];
     } catch (error) {
-        res.send({"info": "You're not signed in."});
+        res.send({
+            "info": "You're not signed in."
+        });
         return;
     }
     res.clearCookie("session");
-    res.send({"info": "You have been logged out."});
+    res.send({
+        "info": "You have been logged out."
+    });
 }
 
 /**
@@ -114,7 +134,9 @@ async function logout(req, res) {
  */
 async function post_schedule(req, res) {
     let verify_response = await accounts.verify_session(req.cookies["session"]);
-    let update_response = {success: false};
+    let update_response = {
+        success: false
+    };
 
     if (verify_response["valid"]) {
         req.body.schedule.user_id = verify_response.user_id;
@@ -124,33 +146,6 @@ async function post_schedule(req, res) {
 
     res.send(update_response);
 }
-
-// /**
-//  * Get a user's data.
-//  * 
-//  * @param {*} req 
-//  * @param {*} res of the following structure
-//  * {
-//  *      success: true / false
-//  *      data: [STRING]
-//  * }
-//  */
-// async function get_account_data(req, res) {
-//     try {
-//         let verify_response = await accounts.verify_session(req.cookies["session"]);
-//         let get_response = {success: false, data: ""};
-
-//         if (verify_response["valid"]) {
-//             let user_data = await accounts.get_data(verify_response["user_id"]);
-//             get_response.success = true;
-//             get_response.data = user_data;
-//         }
-
-//         res.send(get_response);
-//     } catch (error) {
-//         res.send({success: false, error: error.message});
-//     }
-// }
 
 /**
  * A function meant to be run on every page load, verifying if the user's session
@@ -169,16 +164,22 @@ async function post_schedule(req, res) {
  * }
  */
 async function verify_session(req, res) {
+    let response = {
+        isSignedIn: false,
+        username: null,
+        data: null
+    };
+    if (req.cookies["session"] == undefined) {
+        res.send(response);
+        return;
+    }
+    
     let verify_response = await accounts.verify_session(req.cookies["session"]);
-
-    let response = {isSignedIn: false, username: null, data: null};
-
     if (verify_response["valid"]) {
         response.isSignedIn = true;
         response.username = await accounts.get_account_username(verify_response["user_id"]);
         // response.data = await accounts.get_data(verify_response["user_id"]);
     }
-
     res.send(response);
 }
 
@@ -186,11 +187,12 @@ async function verify_session(req, res) {
  * Using the query object in the body, return some data from the catalog json file.
  * If the query was not recognized, return the entire file.
  * 
- * @param {JSON} req A JSON object with a body equivalent to the following:
+ * @param {JSON} req A JS object with a body equivalent to the following:
  * {
  *      query: [STRING], 
- *             "AREAS" = The AREAS array, holding JSON objects that point each AREA ACR to its full name.
+ *             "AREAS" = The AREAS array, holding JS objects that point each AREA ACR to its full name.
  *             "CLASSES" = The CLASSES array, expecting the acr to also be attached in the acr property.
+ *             "CLASS" = A CLASS object, matching the provided acr.
  * }
  * @param {*} res An object of the form:
  * {
@@ -226,6 +228,122 @@ async function query_data(req, res) {
     }
 }
 
+/**
+ * Get the schedules that belong to the user. Returns the schedules as
+ * an array. If the user is not logged in, returns null.
+ * 
+ * @param {JSON} req Assumes this is a get method.
+ * @param {JSON} res Returns a JS object of the following format:
+ * {
+ *      success: true / false,
+ *      data: [{SCHEDULE FORMAT}] / null
+ * }
+ */
+async function get_user_schedules(req, res) {
+    try {
+        let verify_response = await accounts.verify_session(req.cookies["session"]);
+        let get_response = {success: false, data: null};
+
+        if (verify_response["valid"]) {
+            let user_data = await accounts.get_user_schedules(verify_response["user_id"]);
+            get_response.success = true;
+            get_response.data = user_data;
+        }
+        res.send(get_response);
+    } catch (error) {
+        res.send({success: false, error: error.message});
+    }
+}
+
+/**
+ * Create a new template schedule in the accounts database
+ * given the provided information.
+ * @param {JSON} req A JS Object with a body of the following structure
+ * {
+ *      majors: Array of Strings,
+ *      universities: Array of Strings,
+ *      name: String,
+ * }
+ * @param {JSON} res A JS object with an info property.
+ */
+async function create_schedule(req, res) {
+    try {
+        let verify_response = await accounts.verify_session(req.cookies["session"]);
+        if (verify_response["valid"]) {
+            await accounts.create_schedule(verify_response["user_id"], req.body.majors, req.body.universities, req.body.name);
+            res.send({"info": "SUCCESS"});
+            return;
+        } else {
+            res.send({"info": "THE USER IS NOT SIGNED IN."});
+            return;
+        }
+    } catch (error) {
+        console.log("AN ERROR OCCURRED IN SCHEDULE CREATION.");
+    }
+    res.send({"info": "AN ERROR OCCURRED IN SCHEDULE CREATION."});
+}
+
+/**
+ * Delete a schedule with a given name.
+ * 
+ * @param {JSON} req A JS Object with a body of the following type
+ * {
+ *      name: [STRING]
+ * }
+ * @param {*} res 
+ */
+async function delete_schedule(req, res) {
+    try {
+        let verify_response = await accounts.verify_session(req.cookies["session"]);
+        if (verify_response["valid"]) {
+            await accounts.delete_schedule(verify_response["user_id"], req.body.name);
+            res.send({"info": "SUCCESS"});
+            return;
+        } else {
+            res.send({"info": "THE USER IS NOT SIGNED IN."});
+            return;
+        }
+    } catch (error) {
+        console.log("AN ERROR OCCURRED IN SCHEDULE DELETION.");
+    }
+    res.send({"info": "AN ERROR OCCURRED IN SCHEDULE DELETION."});
+}
+
+/**
+ * Fetch a schedule for a provided name.
+ * 
+ * @param {JSON} req A JS object with a body of the following structure:
+ * {
+ *      name: [STRING]
+ * }
+ * @param {JSON} res The Schedule Object in schedule notation
+ * @returns 
+ */
+async function fetch_schedule(req, res) {
+    try {
+        let verify_response = await accounts.verify_session(req.cookies["session"]);
+        if (verify_response["valid"]) {
+            res.send(await accounts.fetch_schedule(verify_response["user_id"], req.body.name));
+            return;
+        } else {
+            res.send({"info": "THE USER IS NOT SIGNED IN."});
+            return;
+        }
+    } catch (error) {
+        console.log("AN ERROR OCCURRED IN SCHEDULE FETCHING.");
+    }
+    res.send({"info": "AN ERROR OCCURRED IN SCHEDULE FETCHING."});
+}
+
 module.exports = {
-    sign_up, login, logout, verify_session, post_schedule, query_data
+    sign_up,
+    login,
+    logout,
+    verify_session,
+    post_schedule,
+    query_data,
+    get_user_schedules,
+    create_schedule,
+    delete_schedule,
+    fetch_schedule
 }

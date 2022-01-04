@@ -162,7 +162,7 @@ async function login(username, password) {
         message = "ACCOUNT DOES NOT EXIST";
     } else if (!validPassword(password, accounts[0]["hash"], accounts[0]["salt"])) { //If password isn't right
         message = "INCORRECT PASSWORD";
-    } else { //Account is good, issue a new session
+    } else { //Account is good
         user_id = accounts[0]["_id"].toString();
         message = "LOGIN SUCCESSFUL";
         loggedIn = true;
@@ -215,7 +215,7 @@ async function get_id_username(username) {
  * "Issue" a session for a given user id. If the session for the ID already exists
  * refresh its time.
  * 
- * A session is a document the following properties:
+ * A session is a document with the following properties:
  * {
  *      user_id: The user id.
  *      hash: The hash to decrypt the encrypted_session, passed back to the client
@@ -231,7 +231,7 @@ async function issue_session(user_id) {
     try {
         let matching_sessions = await mongo.get_data({"user_id": user_id}, "Accounts", "sessions");
         if (matching_sessions.length != 0) { //Just refresh the session if the user already has one
-            await mongo.update_docs({"user_id": user_id}, {$set: {issue_time: (new Date()).getTime()}});
+            await mongo.update_docs({"user_id": user_id}, {$set: {issue_time: (new Date()).getTime()}}, "Accounts", "sessions");
         } else { //Issue a new session
             let hashSalt = genPassword(user_id);
             let new_doc = {
@@ -271,26 +271,88 @@ async function verify_session(hash) {
         try {
             let my_session = sessions[0];
             let issue_time = my_session["issue_time"];
-            if (((new Date()).getTime() - issue_time) / 1000 / 60 / 60 / 24 > 1) { //Calculate issue_time, can't be greater than a day
-                info = "EXPIRED";
+            if (((new Date()).getTime() - issue_time) / 1000 / 60 / 60 / 24 > 1) { // Calculate issue_time, can't be greater than a day
+                info = "EXPIRED";              
             } else if (validPassword(my_session["user_id"], hash, my_session["salt"])) { //Check decryption
                 user_id = my_session["user_id"];
                 info = "VALID";
                 valid = true;
             }
-        } catch (error) {}
+        } catch (error) {console.log("ERROR OCCURRED IN SESSION VERIFICATION " + error.message);}
         return {
             info: info,
             valid: valid,
             user_id: user_id
         };
-    } catch(error) {}
+    } catch(error) {console.log("ERROR OCCURRED IN SESSION VERIFICATION " + error.message);}
     return {
         valid: false
     };
 }
 
+/**
+ * Fetch all the schedules that belong under a certain user id.
+ * @param {String} user_id
+ * @returns An array with all schedules that belong under the user
+ */
+async function get_user_schedules(user_id) {
+    let schedules = await mongo.get_data({"user_id": user_id}, "Accounts", "schedules");
+    // Trim _id and user_id
+    for (let i = 0; i < schedules.length; i++) {
+        delete schedules[i]["_id"];
+        delete schedules[i]["user_id"];
+    }
+    return schedules;
+}
+
+/**
+ * Create a new schedule in the Accounts database for a user.
+ * @param {String} user_id 
+ * @param {Array} majors 
+ * @param {Array} universities 
+ * @param {String} name 
+ */
+function create_schedule(user_id, majors, universities, name) {
+    mongo.add_data({
+        user_id: user_id,
+        "SEMESTERS": [],
+        "MAJORS": majors,
+        "UNIVERSITIES": universities,
+        "CREDITS": 0.0,
+        "NAME": name,
+        "created": (new Date()).getTime()
+    }, "Accounts", "schedules");
+}
+
+/**
+ * Delete the schedule with the given name and user_id.
+ * @param {*} user_id 
+ * @param {*} name 
+ */
+async function delete_schedule(user_id, name) {
+    await mongo.delete_docs_q({user_id: user_id, "NAME": name}, "Accounts", "schedules")
+}
+
+/**
+ * Fetch the schedule with a given user id and name.
+ * @param {String} user_id 
+ * @param {String} name 
+ * @returns the schedule object, if not found then an empty array
+ */
+async function fetch_schedule(user_id, name) {
+    let schedules = await mongo.get_data({"user_id": user_id, "NAME": name}, "Accounts", "schedules");
+    if (schedules.length == 0) {
+        return {"info": "DOES NOT EXIST", valid: false};
+    }
+    // Trim _id and user_id
+    let return_me = schedules[0];
+    delete return_me["_id"];
+    delete return_me["user_id"];
+    return return_me;
+}
+
 module.exports = {
     sign_up, login, get_account_username, get_id_username,
-    issue_session, verify_session, upload_schedule
+    issue_session, verify_session, upload_schedule, get_user_schedules,
+    create_schedule, delete_schedule, fetch_schedule
 }

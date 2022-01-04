@@ -6,18 +6,24 @@
  * @file signup.js
  */
 
+/**
+ * Make a request to the server with a certain route and body
+ * if needed and return the response asynchronously.
+ * @param {String} route 
+ * @param {JSON} body 
+ * @returns {JSON} Some JSON object or array.
+ */
 async function makeRequest(route, body=null) {
-    let method = 'POST';
-    if (body == null) {
-        method = 'GET';
-    }
     let options = {
-        'method': method,
+        method: 'GET',
         headers: {
             'Content-Type': "application/json"
         },
-        'body': JSON.stringify(body)
     };
+    if (body != null) {
+        options.method = 'POST';
+        options.body = JSON.stringify(body)
+    }
     let res = await (await fetch(route, options)).json();
     return res;
 }

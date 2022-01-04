@@ -1,11 +1,10 @@
-<!-- ./MakeMyFuture Builder Page Design
-    This HTML page holds the Page Source for ./MakeMyFuture's builder
-    page, allowing the user to build their schedule using custom tools
-    powered by JS.
+<!-- ./MakeMyFuture ___ PAGE
+    DESCRIPTION
+    Use this template for any new static pages that are added to the website.
 
-    File: builder.html
-    Contributors: Pirjot Atwal,
-    Version: 10/17/2021
+    File: FILE.html
+    Contributors: 
+    Version: ??/??/????
 -->
 <!DOCTYPE html>
 <html>
@@ -16,10 +15,10 @@
         <link rel="stylesheet" href="css/header.css">
         <link rel="stylesheet" href="css/section.css">
         <link rel="stylesheet" href="css/bootstrap.css">
-        <link rel="stylesheet" href="css/builder.css">
+        <link rel="stylesheet" href="css/builder_entry.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="js/builder.js"></script>
+        <script src="js/builder_entry.js"></script>
         <script src="js/signed_in.js"></script>
     </head>
     <body>
@@ -43,80 +42,39 @@
         </header>
         <!-- END NAV -->
 
-        <h1 style="text-align: center; margin: 100px 0px" id="not-signed-in">Please Sign In and select a schedule first...</h1>
-        <h1 style="text-align: center; margin: 100px 0px" id="no-schedule">Please select a schedule to edit from the entry page first...</h1>
-        <h1 style="text-align: center; margin: 100px 0px" id="schedule-no-exist">The schedule selected does not exist.</h1>
-
-        <div class="builder">
-            <div class="tools">
-                Tools
-                <div class="tools-menu">
-                    <button>Catalog</button>
-                    <button>Database</button>
+        <!-- Message if user is not signed in -->
+        <h1 style="text-align:center; margin: 100px 0px;" id="not_signed_in_message">Please Sign In first by using the Sign up or Login Buttons above...</h1>
+        
+        <!-- If not, display current schedules. -->
+        <div style="padding:50px" id="menu_area">
+            <h1>Your Schedules:</h1><br>
+            <h1 style="border:3px solid black; text-align: center;" id="no_schedule_message">You have no schedules made so far... Create a new one below!</h1>
+            <div id="schedule_grid">
+                <div class="schedule_item">
+                    <div class="schedule_fields">
+                        <p>Major: Computer Science</p>
+                        <p>University: UC Davis</p>
+                        <p>Name: Main Schedule</p>
+                    </div>
+                    <button>Edit this Schedule</button>
                 </div>
-                <div class="menu">
-                    <h3>Taken When?</h3>
-                    <div class="menu-flex">
-                        <select>
-                            <option value="01">Winter</option>
-                            <option value="02">Spring</option>
-                            <option value="03">Summer</option>
-                            <option value="04">Fall</option>
-                        </select>
-                        <select>
-                            <option value="01">2022</option>
-                            <option value="02">2021</option>
-                            <option value="03">2020</option>
-                            <option value="04">2019</option>
-                        </select>
+                <div class="schedule_item">
+                    <div style="text-align: initial;" class="schedule_fields">
+                        <p>Major: Computer Science</p>
+                        <p>University: UC Davis</p>
+                        <p>Name: Main Schedule</p>
                     </div>
-                    <h3>Department:</h3>
-                    <select id="department" style="width:87%;margin-left:6.5%;margin-right:auto;height:30px">
-                        <option value="01">PHYS - PHYSICS</option>
-                        <option value="02">GEOL - GEOLOGY</option>
-                        <option value="03">MATH - MATHEMATICS</option>
-                        <option value="04">GEOG - GEOGRAPHY</option>
-                    </select>
-                    <div class="menu-classes">
-                        <div class="menu-classes-table">
-                            <p>Courses</p>
-                            <p>Title</p>
-                            <p>Units</p>
-                            <p></p>
-                            <p>MATH-101C</p>
-                            <p>Mathematics with Analytic Geometry</p>
-                            <p>3</p>
-                            <a>+</a>
-                        </div>
-                    </div>
-                </div>
-                
-                
-            </div>
-            <div class="schedule">
-                Schedule
-                <div class="semester">
-                    <div class="semester-title">
-                        <h3>Fall 2021</h3>
-                    </div>
-                    <div class="semester-classes">
-                        <div class="semester-class"> <a>-</a> <p>Class ACR</p> <p>Class Name</p> <p>Units</p> </div>
-                        <div class="semester-class"> <a>-</a> <p>Class ACR</p> <p>Class Name</p> <p>Units</p> </div>
-                        <div class="semester-class"> <a>-</a> <p>Class ACR</p> <p>Class Name</p> <p>Units</p> </div>
-                    </div>
-                </div>
-                <div class="semester">
-                    <div class="semester-title">
-                        <h3>Fall 2021</h3>
-                    </div>
-                    <div class="semester-classes">
-                        <div class="semester-class"> <a>-</a> <p>Class ACR</p> <p>Class Name</p> <p>Units</p> </div>
-                        <div class="semester-class"> <a>-</a> <p>Class ACR</p> <p>Class Name</p> <p>Units</p> </div>
-                        <div class="semester-class"> <a>-</a> <p>Class ACR</p> <p>Class Name</p> <p>Units</p> </div>
-                    </div>
+                    <button>Edit this Schedule</button>
                 </div>
             </div>
         </div>
+        <form id="create_schedule_form">
+            <h1>Create a New Schedule</h1>
+            <label>Major:</label><input id="major_input" type="text"><br>
+            <label>University:</label><input id="university_input" type="text"><br>
+            <label>Name:</label><input id="name_input" type="text"><br>
+            <button id="schedule_create">Create</button>
+        </form>
 
         <!-- START FOOTER -->
         <footer class="page-footer dark">
@@ -161,5 +119,6 @@
             </div>
         </footer>
         <!-- END FOOTER -->
+
     </body>
 </html>

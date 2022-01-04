@@ -1,0 +1,44 @@
+/** 
+    This CSS file holds the styling for the Schedule Builder
+    Entry page on ./MakeMyFuture (builder_entry.html) and its respective
+    tools.
+
+    @file: css/builder_entry.css
+    @authors: Pirjot Atwal, 
+    @version 01/03/2022
+*/
+
+#schedule_grid {
+    background-color: blueviolet;
+
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.schedule_item {
+    padding: 10px 20px;
+    border: 3px solid black;
+    border-radius: 20%;
+
+    text-align: center;
+}
+
+.schedule_fields {
+    text-align: initial;
+}
+
+#create_schedule_form {
+    background-color: green;
+    
+    width: 450px;
+    padding: 50px;
+    margin: auto;
+
+    text-align: center;
+
+    margin-bottom: 100px;
+}
+
+#create_schedule_form label {
+    margin-right: 8px;
+}

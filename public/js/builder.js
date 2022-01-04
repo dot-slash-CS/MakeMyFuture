@@ -11,18 +11,17 @@
  * @param {String} route the route to make the call on
  * @param {JSON} body the body to stringify and send, if not supplied then call type is GET
  */
- async function makeRequest(route, body=null) {
-    let method = 'POST';
-    if (body == null) {
-        method = 'GET';
-    }
+async function makeRequest(route, body=null) {
     let options = {
-        'method': method,
+        method: 'GET',
         headers: {
             'Content-Type': "application/json"
         },
-        'body': JSON.stringify(body)
     };
+    if (body != null) {
+        options.method = 'POST';
+        options.body = JSON.stringify(body)
+    }
     let res = await (await fetch(route, options)).json();
     return res;
 }
@@ -36,32 +35,35 @@ class CatalogManager {
         CatalogManager.scheduleDiv = document.getElementsByClassName(id)[0];
         CatalogManager.currentSchedule = {};
 
-        await CatalogManager.updateSchedule();
+        // If no name path provided, select a schedule
+        if (await CatalogManager.updateSchedule()) {
+            return false;
+        }
+
+        // If schedule doesn't exist, select a schedule
+        if (CatalogManager.currentSchedule.valid == false) {
+            return false;
+        }
+        
         await CatalogManager.updateDisplay();
     }
 
     /**
      * Update the currentSchedule of the catalog by making a request to the server.
+     * @returns true if the schedule is invalid
      */
     static async updateSchedule() {
-        CatalogManager.currentSchedule = {
-            "SEMESTERS": [{
-                    "SEASON": "Fall",
-                    "YEAR": "2021",
-                    "CLASSES": ["AJ-229A4", "TD-123"]
-                }, 
-                {
-                    "SEASON": "Spring",
-                    "YEAR": "2022",
-                    "CLASSES": ["CNET-137"]
-                }],
-            "MAJORS": ["Computer Science", "Business"],
-            "UNIVERSITIES": ["UC Davis", "UC Riverside", "Stanford University"],
-            "USER_ID": "1234",
-            "CREDITS": 62,
-            "NAME": "Main Schedule",
-            "created": (new Date()).getTime()
-        };
+        // Retrieve the name of the schedule based on the url.
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        CatalogManager.scheduleName = params["name"];
+        if (CatalogManager.scheduleName == "") {
+            return true;
+        }
+
+        // Fetch the schedule matching the name from the server
+        CatalogManager.currentSchedule = await makeRequest('/fetch-schedule', {"name": CatalogManager.scheduleName});
+        
     }
 
     /**
@@ -181,15 +183,50 @@ async function displayClasses(acr) {
     }
 }
 
+/**
+ * 
+ * @returns true if the user is not signed in
+ */
+function checkSignInStatus() {
+    if (isSignedIn) {
+        document.getElementById("not-signed-in").style.display = "none";
+    } else {
+        document.getElementById("no-schedule").style.display = "none";
+        document.getElementsByClassName("builder")[0].style.display = "none";
+        return true;
+    }
+}
+
 // Queue all initialization calls and user interactions for builder.html on page load.
-document.addEventListener("DOMContentLoaded", async (evt) => {
+async function main_builder_func() {
     await initializeDepartments();
     setupDepartmentSelect();
     // Perform phony select request
     document.getElementById("department").dispatchEvent(new Event("change"));
 
-    // Initialize the Catalog
-    CatalogManager.initialize();
+    // Initial Signed In Check Status
+    if (checkSignInStatus()) {
+        return false;
+    }
+
+    // Initialize the Catalog with the current schedule (from the URL)
+    await CatalogManager.initialize();
+    if (CatalogManager.scheduleName == "") {
+        document.getElementsByClassName("builder")[0].style.display = "none";
+        document.getElementById("schedule-no-exist").style.display = "none";
+        return false;
+    } else {
+        document.getElementById("no-schedule").style.display = "none";
+    }
+
+    if (CatalogManager.currentSchedule.valid == false) {
+        document.getElementsByClassName("builder")[0].style.display = "none";
+        return false;
+    } else {
+        document.getElementById("schedule-no-exist").style.display = "none";
+    }
 
     console.log("The Builder Page Initialization was successful.");
-});
+}
+
+document.addEventListener("DOMContentLoaded", (evt) => {queue.push(main_builder_func);});
