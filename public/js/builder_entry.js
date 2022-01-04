@@ -34,6 +34,7 @@ function handle_display() {
     if (isSignedIn) {
         document.getElementById("not_signed_in_message").style.display = "none";
     } else {
+        console.log("HELLO");
         document.getElementById("menu_area").style.display = "none";
         document.getElementById("create_schedule_form").style.display = "none";
     }
@@ -95,9 +96,7 @@ async function displaySchedules() {
             item_div.appendChild(new_button2);
             grid.appendChild(item_div);
         }
-
     }
-    // TODO: Add simple helper funciton to edit buttons
 }
 
 function attachCreateScript() {

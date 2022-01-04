@@ -178,7 +178,6 @@ async function verify_session(req, res) {
     if (verify_response["valid"]) {
         response.isSignedIn = true;
         response.username = await accounts.get_account_username(verify_response["user_id"]);
-        // response.data = await accounts.get_data(verify_response["user_id"]);
     }
     res.send(response);
 }
@@ -317,7 +316,6 @@ async function delete_schedule(req, res) {
  *      name: [STRING]
  * }
  * @param {JSON} res The Schedule Object in schedule notation
- * @returns 
  */
 async function fetch_schedule(req, res) {
     try {
@@ -335,6 +333,34 @@ async function fetch_schedule(req, res) {
     res.send({"info": "AN ERROR OCCURRED IN SCHEDULE FETCHING."});
 }
 
+/**
+ * Edit a schedule by either removing or adding a class.
+ * @param {JSON} req A JS object with a body of the following type
+ * {
+ *      type: "ADD" / "REMOVE"
+        name: [STRING],
+        acr: [STRING],
+        season: [STRING],
+        year: [STRING]
+ * }
+ * @param {*} res 
+ */
+async function edit_schedule(req, res) {
+    try {
+        let verify_response = await accounts.verify_session(req.cookies["session"]);
+        if (verify_response["valid"]) {
+            res.send(await accounts.edit_schedule(verify_response["user_id"], req.body.type, req.body.name, req.body.acr, req.body.season, req.body.year));
+            return;
+        } else {
+            res.send({"info": "THE USER IS NOT SIGNED IN."});
+            return;
+        }
+    } catch (error) {
+        console.log("AN ERROR OCCURRED IN SCHEDULE EDITING. " + error.message);
+    }
+    res.send({"info": "AN ERROR OCCURRED IN SCHEDULE EDITING. " + error.message});
+}
+
 module.exports = {
     sign_up,
     login,
@@ -345,5 +371,6 @@ module.exports = {
     get_user_schedules,
     create_schedule,
     delete_schedule,
-    fetch_schedule
+    fetch_schedule,
+    edit_schedule
 }

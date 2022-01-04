@@ -83,9 +83,10 @@ app.post('/create-schedule', (req, res) => routes.create_schedule(req, res));
 // Fetch the schedule matching the given name/data
 app.post('/fetch-schedule', (req, res) => routes.fetch_schedule(req, res));
 
-// TODO: EDIT SCHEDULE
+// TODO: Edit a user's schedule (add or remove a class one at a time)
+app.post('/edit-schedule', (req, res) => routes.edit_schedule(req, res));
 
-// TODO: DELETE SCHEDULE
+// Delete a schedule for the user
 app.post('/delete-schedule', (req, res) => routes.delete_schedule(req, res));
 
 

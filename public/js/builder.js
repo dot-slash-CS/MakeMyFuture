@@ -63,7 +63,6 @@ class CatalogManager {
 
         // Fetch the schedule matching the name from the server
         CatalogManager.currentSchedule = await makeRequest('/fetch-schedule', {"name": CatalogManager.scheduleName});
-        
     }
 
     /**
@@ -97,6 +96,10 @@ class CatalogManager {
 
                 let minusSign = document.createElement("a");
                 minusSign.textContent = "-";
+                minusSign.addEventListener("click", (evt) => {
+                    evt.preventDefault();
+                    CatalogManager.removeClass(course, semester["SEASON"], semester["YEAR"]);
+                });
                 classDiv.append(minusSign);
 
                 let properties = ["AREA-ACR", "NAME", "UNITS"];
@@ -112,6 +115,42 @@ class CatalogManager {
             semesterDiv.appendChild(semesterClasses);
             CatalogManager.scheduleDiv.appendChild(semesterDiv);
         }
+    }
+
+    /**
+     * Add a class to the schedule for the selected acr, season and year.
+     * @param {String} acr 
+     * @param {String} season 
+     * @param {String} year 
+     */
+    static async addClass(acr, season, year) {
+        await makeRequest('/edit-schedule', {
+            type: "ADD",
+            name: CatalogManager.scheduleName,
+            acr: acr,
+            season: season,
+            year: year
+        });
+        await CatalogManager.updateSchedule();
+        await CatalogManager.updateDisplay();
+    }
+
+    /**
+     * Remove a class to the schedule for the selected acr, season and year.
+     * @param {String} acr 
+     * @param {String} season 
+     * @param {String} year 
+     */
+     static async removeClass(acr, season, year) {
+        await makeRequest('/edit-schedule', {
+            type: "REMOVE",
+            name: CatalogManager.scheduleName,
+            acr: acr,
+            season: season,
+            year: year
+        });
+        await CatalogManager.updateSchedule();
+        await CatalogManager.updateDisplay();
     }
 }
 
@@ -179,6 +218,12 @@ async function displayClasses(acr) {
         let newPlus = document.createElement("a");
         // Attach clicking script here
         newPlus.textContent = "+";
+        newPlus.addEventListener("click", (evt) => {
+            evt.preventDefault();
+            let season = document.getElementById("season-dropdown").selectedOptions[0].text;
+            let year = document.getElementById("year-dropdown").selectedOptions[0].text;
+            CatalogManager.addClass(course["AREA-ACR"], season, year);
+        });
         table.appendChild(newPlus);
     }
 }
@@ -192,6 +237,7 @@ function checkSignInStatus() {
         document.getElementById("not-signed-in").style.display = "none";
     } else {
         document.getElementById("no-schedule").style.display = "none";
+        document.getElementById("schedule-no-exist").style.display = "none";
         document.getElementsByClassName("builder")[0].style.display = "none";
         return true;
     }

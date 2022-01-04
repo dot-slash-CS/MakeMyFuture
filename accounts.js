@@ -20,6 +20,7 @@
 const mongo = require('./mongodb-library.js');
 //Import the crypto module, used for encrypting a given username and password
 const crypto = require('crypto');
+const fs = require('fs');
 const { ObjectId } = require('bson');
 const { match } = require('assert');
 
@@ -263,6 +264,11 @@ async function issue_session(user_id) {
  * }
  */
 async function verify_session(hash) {
+    if (hash == undefined) {
+        return {
+            valid: false
+        };
+    }
     try {
         let sessions = await mongo.get_data({"hash": hash}, "Accounts", "sessions");
         let info = "INVALID";
@@ -337,7 +343,7 @@ async function delete_schedule(user_id, name) {
  * Fetch the schedule with a given user id and name.
  * @param {String} user_id 
  * @param {String} name 
- * @returns the schedule object, if not found then an empty array
+ * @returns the schedule object, if not found then JSON object detailing validity
  */
 async function fetch_schedule(user_id, name) {
     let schedules = await mongo.get_data({"user_id": user_id, "NAME": name}, "Accounts", "schedules");
@@ -351,8 +357,90 @@ async function fetch_schedule(user_id, name) {
     return return_me;
 }
 
+/**
+ * Edit a schedule based on the type provided.
+ * @param {String} user_id 
+ * @param {String} type "ADD" / "REMOVE"
+ * @param {String} name 
+ * @param {String} acr 
+ * @param {String} season 
+ * @param {String} year 
+ */
+async function edit_schedule(user_id, type, name, acr, season, year) {
+    // First, fetch the schedule.
+    let schedule = await fetch_schedule(user_id, name);
+    if (schedule.valid == false) {
+        return;
+    }
+
+    // Make the change based on the type of change requested
+    if (type == "ADD") {
+        // First, check if the semester we are adding to already exists
+        let needNewSemester = true;
+        for (let i = 0; i < schedule["SEMESTERS"].length; i++) {
+            if (schedule["SEMESTERS"][i]["SEASON"] == season && schedule["SEMESTERS"][i]["YEAR"] == year) {
+                needNewSemester = false;
+                schedule["SEMESTERS"][i]["CLASSES"].push(acr);
+            }
+        }
+        if (needNewSemester) {
+            schedule["SEMESTERS"].push({
+                "SEASON": season,
+                "YEAR": year,
+                "CLASSES": [acr]
+            });
+        }
+    } else { // Remove the instance of the class acr for the semester/year chosen
+        for (let i = 0; i < schedule["SEMESTERS"].length; i++) {
+            if (schedule["SEMESTERS"][i]["SEASON"] == season && schedule["SEMESTERS"][i]["YEAR"] == year) {
+                let j = 0;
+                while (j < schedule["SEMESTERS"][i]["CLASSES"].length) {
+                    if (schedule["SEMESTERS"][i]["CLASSES"][j] == acr) {
+                        schedule["SEMESTERS"][i]["CLASSES"].splice(j, 1);
+                        break;
+                    }
+                    j++;
+                }
+            }
+        }
+    }
+
+    // Trim semesters with empty classes
+    let i = 0;
+    while (i < schedule["SEMESTERS"].length) {
+        if (schedule["SEMESTERS"][i]["CLASSES"].length == 0) {
+            schedule["SEMESTERS"].splice(i, 1);
+        }
+        i++;
+    }
+
+    // Calculate credits and set accordingly
+    let data = JSON.parse(fs.readFileSync("2021_2022_class_data.json"));
+    let credits = 0;
+    for (let i = 0; i < schedule["SEMESTERS"].length; i++) {
+        for (let j = 0; j < schedule["SEMESTERS"][i]["CLASSES"].length; j++) {
+            let course = schedule["SEMESTERS"][i]["CLASSES"][j];
+            for (let class_obj of data["CLASSES"]) {
+                if (class_obj["AREA-ACR"] == course) {
+                    credits += class_obj["UNITS"];
+                    break;
+                }
+            }
+        }
+    }
+    schedule["CREDITS"] = credits;
+    
+    // Update the Semesters and Credits Fields
+    await mongo.update_docs({
+        user_id: user_id,
+        "NAME": name
+    }, {$set: {"SEMESTERS": schedule["SEMESTERS"], "CREDITS": schedule["CREDITS"]},},
+    "Accounts", "schedules");
+    return schedule;
+}
+
 module.exports = {
     sign_up, login, get_account_username, get_id_username,
     issue_session, verify_session, upload_schedule, get_user_schedules,
-    create_schedule, delete_schedule, fetch_schedule
+    create_schedule, delete_schedule, fetch_schedule, edit_schedule
 }

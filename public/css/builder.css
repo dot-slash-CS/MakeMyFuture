@@ -144,3 +144,7 @@
 }
 
 /* END SCHEDULE */
+
+a:hover {
+    cursor: pointer
+}
