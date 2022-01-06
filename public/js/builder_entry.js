@@ -36,7 +36,6 @@ function handle_display() {
     } else {
         console.log("HELLO");
         document.getElementById("menu_area").style.display = "none";
-        document.getElementById("create_schedule_form").style.display = "none";
     }
 }
 
@@ -99,18 +98,181 @@ async function displaySchedules() {
     }
 }
 
+function initializeChecks(data, formDIV) {
+    formDIV = document.getElementById(formDIV);
+    // Clear the Form first
+    formDIV.innerHTML = "";
+    
+    // Fill the form with all checkboxes
+    for (let key of Object.keys(data)) {
+        for (let elem of data[key]) {
+            let newCheckbox = document.createElement("input");
+            newCheckbox.type = "checkbox";
+            newCheckbox.value = elem;
+            newCheckbox.category = key;
+
+            let newLabel = document.createElement("label");
+            newLabel.textContent = elem;
+            newLabel.value = elem;
+            newLabel.category = key;
+
+            let newBR = document.createElement("br");
+            newBR.value = elem;
+            newBR.category = key;
+
+            formDIV.appendChild(newCheckbox);
+            formDIV.appendChild(newLabel);
+            formDIV.appendChild(newBR);
+        }
+    }
+}
+
+/**
+ * Display the checkbox options for an array of options
+ * @param {String} category A category
+ * @param {String} formDIV The ID of a div on the website
+ */
+function displayFormHelper(category, formDIV) {
+    formDIV = document.getElementById(formDIV);
+
+    // Iterate through all checkboxes and display if category matches
+    for (let DOMelem of formDIV.children) {
+        if (DOMelem.category == category) {
+            DOMelem.style.display = "initial";
+        } else {
+            DOMelem.style.display = "none";
+        }
+    }
+}
+
+/**
+ * Display the checkbox options for some search terms.
+ * @param {String} searchTerms 
+ * @param {String} formDIV 
+ */
+function displaySearchHelper(searchTerms, formDIV) {
+    // Grab form div
+    formDIV = document.getElementById(formDIV);
+
+    // If no search terms, then display all
+    if (searchTerms == "") {
+        for (let DOMelem of formDIV.children) {
+            DOMelem.style.display = "initial";
+        }
+        return; 
+    }
+
+    // Display all elements with values that have the search terms as a substring
+    for (let DOMelem of formDIV.children) {
+        if (DOMelem.value.toLowerCase().includes(searchTerms)) {
+            DOMelem.style.display = "initial";
+        } else {
+            DOMelem.style.display = "none";
+        }
+    }
+}
+
+/**
+ * Setup a category/form/search div using the data provided.
+ * @param {JSON} categoryOBJ 
+ * @param {String} categoryDIV 
+ * @param {String} formDIV 
+ * @param {String} searchINPUT
+ */
+function prepareCategorySearch(categoryOBJ, categoryDIV, formDIV, searchINPUT) {
+    categoryDIV = document.getElementById(categoryDIV);
+
+    // Clear the category div of buttons
+    categoryDIV.innerHTML = "";
+    
+    // Initialize the Checkboxes
+    initializeChecks(categoryOBJ, formDIV);
+
+    // Initialize the category div with buttons and attach each of their scripts
+    for (let category of Object.keys(categoryOBJ)) {
+        let newButton = document.createElement("button");
+        newButton.textContent = category;
+        
+        // Initialize Clicking Event
+        newButton.addEventListener("click", (evt) => {
+            displayFormHelper(category, formDIV);
+        });
+        categoryDIV.appendChild(newButton);
+    }
+
+    searchINPUT = document.getElementById(searchINPUT);
+
+    // Initialize search terms
+    searchINPUT.addEventListener("keyup", (evt) => {
+        displaySearchHelper(searchINPUT.value, formDIV);
+    });
+}
+
+/**
+ * Fetch the data and prepare the category search DIVS on the page.
+ */
+async function prepareInputs() {
+    let data = await makeRequest('/fetch-major-colleges');
+    prepareCategorySearch(data["MAJORS"], "major-categories", "major-form", "major-search");
+    prepareCategorySearch(data["UNIVERSITIES"], "university-categories", "university-form", "university-search");
+}
+
+/**
+ * Returns the user selected major and universities in a two element array
+ * @param {String} universityForm The ID to university checkbox div
+ * @param {String} majorForm The ID to major checkbox div
+ * @returns A 2 element array containing two arrays.
+ */
+function getCategoryInputs(majorForm, universityForm) {
+    let selectedMajors = [];
+    let selectedUniversities = [];
+    
+    majorForm = document.getElementById(majorForm);
+    universityForm = document.getElementById(universityForm);
+    
+    for (let checkbox of majorForm.getElementsByTagName("input")) {
+        if (checkbox.checked) {
+            selectedMajors.push(checkbox.value);
+        }
+    }
+    for (let checkbox of universityForm.getElementsByTagName("input")) {
+        if (checkbox.checked) {
+            selectedUniversities.push(checkbox.value);
+        }
+    }
+
+    return [selectedMajors, selectedUniversities];
+}
+
 function attachCreateScript() {
     document.getElementById("schedule_create").addEventListener("click", async (evt) => {
-        evt.preventDefault();
+        // evt.preventDefault();
         //TODO: Extra checks for input (from a selected list of majors and universities in a checkbox input with search menu)
         //TODO: Ensure all names for schedules are unique
-        let majors = [document.getElementById("major_input").value];
-        let universities = [document.getElementById("university_input").value];
-        let name = document.getElementById("name_input").value;
-        console.log(name);
-        // Create a new template schedule, Refresh the Page
-        await makeRequest("/create-schedule", {majors, universities, name});
-        location.reload();
+        let inputted = getCategoryInputs("major-form", "university-form");
+        let majors = inputted[0];
+        let universities = inputted[1];
+
+        // Perform Checks TODO: Move this server-side
+        let name = document.getElementById("schedule-name").value;
+        let schedules = await makeRequest('/fetch-schedule', {name: name});
+        console.log(schedules);
+        if(inputted[0].length == 0 || inputted[1].length == 0) {
+            document.getElementById("no-majors-schedules").style.display = "initial";
+            document.getElementById("existing-schedule").style.display = "none";
+            document.getElementById("no-name").style.display = "none";
+        } else if (schedules.valid == undefined) {
+            document.getElementById("no-majors-schedules").style.display = "none";
+            document.getElementById("existing-schedule").style.display = "initial";
+            document.getElementById("no-name").style.display = "none";
+        } else if (name == "") {
+            document.getElementById("no-majors-schedules").style.display = "none";
+            document.getElementById("existing-schedule").style.display = "none";
+            document.getElementById("no-name").style.display = "initial";
+        } else {
+            await makeRequest("/create-schedule", {majors, universities, name});
+            location.reload();
+        }
     });
 }
 
@@ -124,6 +286,7 @@ async function builderEntryWrap() {
     handle_display();
     if (isSignedIn) {
         await displaySchedules();
+        await prepareInputs();
         attachCreateScript();
     }
 }

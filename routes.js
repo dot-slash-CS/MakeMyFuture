@@ -361,6 +361,16 @@ async function edit_schedule(req, res) {
     res.send({"info": "AN ERROR OCCURRED IN SCHEDULE EDITING. " + error.message});
 }
 
+/**
+ * Fetch the JSON file for majors and colleges. (Currently using global majors)
+ * @param {*} req 
+ * @param {*} res 
+ */
+async function fetch_major_colleges(req, res) {
+    let data = JSON.parse(fs.readFileSync("major_colleges.json"));
+    res.send(data);
+}
+
 module.exports = {
     sign_up,
     login,
@@ -372,5 +382,6 @@ module.exports = {
     create_schedule,
     delete_schedule,
     fetch_schedule,
-    edit_schedule
+    edit_schedule,
+    fetch_major_colleges
 }

@@ -63,6 +63,9 @@ app.get('/verify-session', (req, res) => routes.verify_session(req, res));
 // Get all schedules that belong to the user (under the user id)
 app.get('/get-user-schedules', (req, res) => routes.get_user_schedules(req, res));
 
+// Get all Majors and Universities Information
+app.get('/fetch-major-colleges', (req, res) => routes.fetch_major_colleges(req, res));
+
 //BEGIN ALL POST ROUTES
 
 // Sign up for an account

@@ -68,13 +68,54 @@
                 </div>
             </div>
         </div>
-        <form id="create_schedule_form">
+        <div style="margin:40px 10%; text-align:center;">
+            <h1 style="text-align:center">Create a new schedule</h1>
+            <h3 style="text-align: initial;">Choose your Majors</h3>
+            <div style="margin: auto; margin-bottom:50px; display:flex; flex-direction: row; gap: 20px">
+                <div id="major-categories" style="width: 35%; padding: 5px 2.5%; display:flex; flex-direction: column; background-color: lightgray; border: 3px black solid; max-height:300px; overflow:scroll">
+                    <button>CATEGORY</button>
+                    <button>CATEGORY</button>
+                </div>
+                <div style="width: 65%; display:flex; flex-direction: column; border: 3px black solid; padding: 10px; max-height: 300px; overflow: scroll">
+                    <input id="major-search" type="text" placeholder="SEARCH">
+                    <div id="major-form" style="text-align:initial">
+                        <input type="checkbox">
+                        <label>MAJOR</label><br>
+                        <input type="checkbox">
+                        <label>MAJOR</label>
+                    </div>
+                </div>
+            </div>
+            <h3 style="text-align: initial;">Choose your Universities</h3>
+            <div style="margin: auto; margin-bottom:50px; display:flex; flex-direction: row; gap: 20px">
+                <div id="university-categories" style="width: 35%; padding: 5px 2.5%; display:flex; flex-direction: column; background-color: lightgray;  border: 3px black solid; max-height: 300px; overflow: scroll">
+                    <button>CATEGORY</button>
+                    <button>CATEGORY</button>
+                </div>
+                <div style="width: 65%; display:flex; flex-direction: column;  border: 3px black solid; padding: 10px; max-height: 300px; overflow: scroll">
+                    <input id="university-search" type="text" placeholder="SEARCH">
+                    <div id="university-form" style="text-align:initial">
+                        <input type="checkbox">
+                        <label>MAJOR</label><br>
+                        <input type="checkbox">
+                        <label>MAJOR</label>
+                    </div>
+                </div>
+            </div>
+            <label>Give your schedule a name:</label>
+            <input id="schedule-name" type="text"><br>
+            <span style="display:none" id="no-majors-schedules">You need to provide atleast 1 major and 1 university!</span><br>
+            <span style="display:none" id="no-name">You must provide a name!</span><br>
+            <span style="display:none" id="existing-schedule">You already have a schedule with that name!</span><br>
+            <button id="schedule_create">Create</button>
+        </div>
+        <!-- <form id="create_schedule_form">
             <h1>Create a New Schedule</h1>
             <label>Major:</label><input id="major_input" type="text"><br>
             <label>University:</label><input id="university_input" type="text"><br>
             <label>Name:</label><input id="name_input" type="text"><br>
             <button id="schedule_create">Create</button>
-        </form>
+        </form> -->
 
         <!-- START FOOTER -->
         <footer class="page-footer dark">
