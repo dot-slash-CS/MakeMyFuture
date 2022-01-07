@@ -164,7 +164,7 @@ function displaySearchHelper(searchTerms, formDIV) {
 
     // Display all elements with values that have the search terms as a substring
     for (let DOMelem of formDIV.children) {
-        if (DOMelem.value.toLowerCase().includes(searchTerms)) {
+        if (DOMelem.value.toLowerCase().includes(searchTerms.toLowerCase())) {
             DOMelem.style.display = "initial";
         } else {
             DOMelem.style.display = "none";

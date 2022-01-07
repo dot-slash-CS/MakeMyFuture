@@ -1,10 +1,10 @@
-<!-- ./MakeMyFuture ___ PAGE
-    DESCRIPTION
-    Use this template for any new static pages that are added to the website.
+<!-- ./MakeMyFuture Builderd Entry PAGE
+    The page for users to select and create new schedules from a list of majors and
+    universities
 
-    File: FILE.html
-    Contributors: 
-    Version: ??/??/????
+    File: builder_entry.html
+    Contributors: Pirjot Atwal
+    Version: 01/06/2022
 -->
 <!DOCTYPE html>
 <html>
@@ -43,12 +43,12 @@
         <!-- END NAV -->
 
         <!-- Message if user is not signed in -->
-        <h1 style="text-align:center; margin: 100px 0px;" id="not_signed_in_message">Please Sign In first by using the Sign up or Login Buttons above...</h1>
+        <h1 id="not_signed_in_message">Please Sign In first by using the Sign up or Login Buttons above...</h1>
         
         <!-- If not, display current schedules. -->
-        <div style="padding:50px" id="menu_area">
+        <div id="menu_area">
             <h1>Your Schedules:</h1><br>
-            <h1 style="border:3px solid black; text-align: center;" id="no_schedule_message">You have no schedules made so far... Create a new one below!</h1>
+            <h1 id="no_schedule_message">You have no schedules made so far... Create a new one below!</h1>
             <div id="schedule_grid">
                 <div class="schedule_item">
                     <div class="schedule_fields">
@@ -59,7 +59,7 @@
                     <button>Edit this Schedule</button>
                 </div>
                 <div class="schedule_item">
-                    <div style="text-align: initial;" class="schedule_fields">
+                    <div class="schedule_fields">
                         <p>Major: Computer Science</p>
                         <p>University: UC Davis</p>
                         <p>Name: Main Schedule</p>
@@ -68,15 +68,15 @@
                 </div>
             </div>
         </div>
-        <div style="margin:40px 10%; text-align:center;">
+        <div id="creation-menu">
             <h1 style="text-align:center">Create a new schedule</h1>
             <h3 style="text-align: initial;">Choose your Majors</h3>
-            <div style="margin: auto; margin-bottom:50px; display:flex; flex-direction: row; gap: 20px">
-                <div id="major-categories" style="width: 35%; padding: 5px 2.5%; display:flex; flex-direction: column; background-color: lightgray; border: 3px black solid; max-height:300px; overflow:scroll">
+            <div class="outer-menu">
+                <div id="major-categories">
                     <button>CATEGORY</button>
                     <button>CATEGORY</button>
                 </div>
-                <div style="width: 65%; display:flex; flex-direction: column; border: 3px black solid; padding: 10px; max-height: 300px; overflow: scroll">
+                <div class="search-div">
                     <input id="major-search" type="text" placeholder="SEARCH">
                     <div id="major-form" style="text-align:initial">
                         <input type="checkbox">
@@ -87,12 +87,12 @@
                 </div>
             </div>
             <h3 style="text-align: initial;">Choose your Universities</h3>
-            <div style="margin: auto; margin-bottom:50px; display:flex; flex-direction: row; gap: 20px">
-                <div id="university-categories" style="width: 35%; padding: 5px 2.5%; display:flex; flex-direction: column; background-color: lightgray;  border: 3px black solid; max-height: 300px; overflow: scroll">
+            <div class="outer-menu">
+                <div id="university-categories">
                     <button>CATEGORY</button>
                     <button>CATEGORY</button>
                 </div>
-                <div style="width: 65%; display:flex; flex-direction: column;  border: 3px black solid; padding: 10px; max-height: 300px; overflow: scroll">
+                <div class="search-div">
                     <input id="university-search" type="text" placeholder="SEARCH">
                     <div id="university-form" style="text-align:initial">
                         <input type="checkbox">
@@ -109,13 +109,6 @@
             <span style="display:none" id="existing-schedule">You already have a schedule with that name!</span><br>
             <button id="schedule_create">Create</button>
         </div>
-        <!-- <form id="create_schedule_form">
-            <h1>Create a New Schedule</h1>
-            <label>Major:</label><input id="major_input" type="text"><br>
-            <label>University:</label><input id="university_input" type="text"><br>
-            <label>Name:</label><input id="name_input" type="text"><br>
-            <button id="schedule_create">Create</button>
-        </form> -->
 
         <!-- START FOOTER -->
         <footer class="page-footer dark">

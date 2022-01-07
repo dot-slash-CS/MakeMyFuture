@@ -35,7 +35,7 @@ class CatalogManager {
         CatalogManager.scheduleDiv = document.getElementsByClassName(id)[0];
         CatalogManager.currentSchedule = {};
 
-        // If no name path provided, select a schedule
+        // If no name path provided, ask the user to select a schedule
         if (await CatalogManager.updateSchedule()) {
             return false;
         }
@@ -254,6 +254,12 @@ async function main_builder_func() {
     if (checkSignInStatus()) {
         return false;
     }
+    // The user is guaranteed to be signed in past this point
+
+    //TODO: Build the database div
+    //TODO: Attach the database button, as in attach all tools buttons to each of their divs
+    // On click, hide the menu div (ID = "menu")
+    // Display the database div
 
     // Initialize the Catalog with the current schedule (from the URL)
     await CatalogManager.initialize();

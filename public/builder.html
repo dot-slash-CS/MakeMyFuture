@@ -50,18 +50,20 @@
         <div class="builder">
             <div class="tools">
                 Tools
+
                 <div class="tools-menu">
                     <button>Catalog</button>
                     <button>Database</button>
                 </div>
-                <div class="menu">
+
+                <!-- START CATALOG TOOL -->
+                <div class="menu" style="display:none">
                     <h3>Taken When?</h3>
                     <div class="menu-flex">
                         <select id="season-dropdown">
-                            <option value="01">Winter</option>
-                            <option value="02">Spring</option>
-                            <option value="03">Summer</option>
-                            <option value="04">Fall</option>
+                            <option value="01">Spring</option>
+                            <option value="02">Summer</option>
+                            <option value="03">Fall</option>
                         </select>
                         <select id="year-dropdown">
                             <option value="01">2022</option>
@@ -90,8 +92,90 @@
                         </div>
                     </div>
                 </div>
-                
-                
+                <!-- END CATALOG TOOL -->
+
+                <!-- BEGIN DATABASE TOOL -->
+                <div id = "database" style="padding:10px;background-color: green">
+                    <!-- BEGIN SEARCH SORT -->
+                    <div id = "database-search-sort" style="padding:10px;background-color:blue">
+                        <label>Search by: </label>
+                        <input type="text" placeholder="Username/Schedule Name"><br>
+                        <label>Sort By: </label>
+                        <select>
+                            <option>Author</option>
+                            <option>Major</option>
+                            <option>University</option>
+                            <option>Schedule Name</option>
+                            <option>Creation Date</option>
+                        </select><br>
+                        <input type="checkbox">
+                        <label>Show only schedules that match my selected majors and universities</label>
+                    </div>
+                    <!-- END SEARCH SORT -->
+                    <div id="database-schedules" style="padding:10px; background-color:red">
+                        <!-- EXAMPLE SCHEDULE -->
+                        <div class="database-schedule" style="margin-bottom:10px">
+                            <!-- PROFILE -->
+                            <div class="database-schedule-profile" style="display:flex;flex-direction:row;padding:10px; background-color:yellow">
+                                <div style="width:90%">
+                                    <p style="margin:3px"><span>NAME</span> by <span>AUTHOR</span></p>
+                                    <p style="margin:3px">Major</p>
+                                    <p style="margin:3px">Date</p>
+                                </div>
+                                <div style="margin:auto">
+                                    <i class="fa fa-angle-double-down fa-3x"></i>
+                                </div>
+                            </div>
+                            <!-- SCHEDULE PORTION -->
+                            <div class="database-schedule-dropdown" style="padding:10px;background-color:aqua">
+                                <h3>Fall 2022</h3>
+                                <div class="database-schedule-classes">
+                                    <p>CLASS ACR</p> <p>CLASS ACR</p> <p>CLASS ACR</p>
+                                </div>
+                                <h3>Fall 2022</h3>
+                                <div class="database-schedule-classes">
+                                    <p>CLASS ACR</p> <p>CLASS ACR</p> <p>CLASS ACR</p>
+                                </div>
+                                <h3>Fall 2022</h3>
+                                <div class="database-schedule-classes">
+                                    <p>CLASS ACR</p> <p>CLASS ACR</p> <p>CLASS ACR</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="database-schedule">
+                            <!-- PROFILE -->
+                            <div class="database-schedule-profile" style="display:flex;flex-direction:row;padding:10px; background-color:yellow">
+                                <div style="width:90%">
+                                    <p style="margin:3px"><span>NAME</span> by <span>AUTHOR</span></p>
+                                    <p style="margin:3px">Major</p>
+                                    <p style="margin:3px">Date</p>
+                                </div>
+                                <div style="margin:auto">
+                                    <i class="fa fa-angle-double-down fa-3x"></i>
+                                </div>
+                            </div>
+                            <!-- SCHEDULE PORTION -->
+                            <div class="database-schedule-dropdown" style="padding:10px;background-color:aqua">
+                                <h3>Fall 2022</h3>
+                                <div class="database-schedule-classes">
+                                    <p>CLASS ACR</p> <p>CLASS ACR</p> <p>CLASS ACR</p>
+                                </div>
+                                <h3>Fall 2022</h3>
+                                <div class="database-schedule-classes">
+                                    <p>CLASS ACR</p> <p>CLASS ACR</p> <p>CLASS ACR</p>
+                                </div>
+                                <h3>Fall 2022</h3>
+                                <div class="database-schedule-classes">
+                                    <p>CLASS ACR</p> <p>CLASS ACR</p> <p>CLASS ACR</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
             </div>
             <div class="schedule">
                 Schedule
