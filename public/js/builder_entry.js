@@ -34,7 +34,7 @@ function handle_display() {
     if (isSignedIn) {
         document.getElementById("not_signed_in_message").style.display = "none";
     } else {
-        console.log("HELLO");
+        document.getElementById("creation-menu").style.display = "none";
         document.getElementById("menu_area").style.display = "none";
     }
 }
@@ -248,7 +248,6 @@ function attachCreateScript() {
     document.getElementById("schedule_create").addEventListener("click", async (evt) => {
         // evt.preventDefault();
         //TODO: Extra checks for input (from a selected list of majors and universities in a checkbox input with search menu)
-        //TODO: Ensure all names for schedules are unique
         let inputted = getCategoryInputs("major-form", "university-form");
         let majors = inputted[0];
         let universities = inputted[1];

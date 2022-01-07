@@ -15,7 +15,7 @@
  * 
  * @file app.js
  * @authors Pirjot Atwal,
- * @version 11/01/2021
+ * @version 01/06/2022
  */
 
 console.log("Welcome to ./MakeMyFuture! Setting up the server...");
@@ -86,12 +86,14 @@ app.post('/create-schedule', (req, res) => routes.create_schedule(req, res));
 // Fetch the schedule matching the given name/data
 app.post('/fetch-schedule', (req, res) => routes.fetch_schedule(req, res));
 
-// TODO: Edit a user's schedule (add or remove a class one at a time)
+// Edit a user's schedule (add or remove a class one at a time)
 app.post('/edit-schedule', (req, res) => routes.edit_schedule(req, res));
 
 // Delete a schedule for the user
 app.post('/delete-schedule', (req, res) => routes.delete_schedule(req, res));
 
+// Fetch schedules in batch using a query
+app.post('/fetch-schedules-batch', (req, res) => routes.fetch_schedules_batch(req, res));
 
 //On server/process closing, perform cleanup functions
 process.on('SIGINT', () => {

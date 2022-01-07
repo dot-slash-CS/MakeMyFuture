@@ -7,7 +7,7 @@
  * 
  * @file routes.js
  * @authors Pirjot Atwal,
- * @version 11/08/2021
+ * @version 01/06/2022
  */
 
 //NEEDED REQUIREMENTS (INCLUDE NEW MODULES AS NEEDED)
@@ -371,6 +371,35 @@ async function fetch_major_colleges(req, res) {
     res.send(data);
 }
 
+/**
+ * Fetch all schedules in batch
+ * @param {*} req A JS object with a body of the following:
+ * {
+ *      input: [STRING],
+ *      sortOption: [STRING],
+ *      matching: [BOOLEAN],
+ *      page: [NUMBER],
+ *      majors: [ARRAY OF STRINGS],
+ *      universities: [ARRAY OF STRINGS]
+ * }
+ * @param {*} res An array of schedules
+ */
+async function fetch_schedules_batch(req, res) {
+    try {
+        let verify_response = await accounts.verify_session(req.cookies["session"]);
+        if (verify_response["valid"]) {
+            res.send(await accounts.fetch_schedules_batch(req.body.input, req.body.sortOption, req.body.matching, req.body.majors, req.body.universities, req.body.page));
+            return;
+        } else {
+            res.send({"info": "THE USER IS NOT SIGNED IN."});
+            return;
+        }
+    } catch (error) {
+        console.log("AN ERROR OCCURRED IN SCHEDULE BATCH FETCHING. " + error.message);
+    }
+    res.send({"info": "AN ERROR OCCURRED IN SCHEDULE BATCH FETCHING. " + error.message});
+}
+
 module.exports = {
     sign_up,
     login,
@@ -383,5 +412,6 @@ module.exports = {
     delete_schedule,
     fetch_schedule,
     edit_schedule,
-    fetch_major_colleges
+    fetch_major_colleges,
+    fetch_schedules_batch
 }

@@ -47,19 +47,19 @@
         <h1 style="text-align: center; margin: 100px 0px" id="no-schedule">Please select a schedule to edit from the entry page first...</h1>
         <h1 style="text-align: center; margin: 100px 0px" id="schedule-no-exist">The schedule selected does not exist.</h1>
 
-        <div class="builder">
+        <div id="builder">
             <div class="tools">
                 Tools
 
                 <div class="tools-menu">
-                    <button>Catalog</button>
-                    <button>Database</button>
+                    <button id="catalog-button">Catalog</button>
+                    <button id="database-button">Database</button>
                 </div>
 
                 <!-- START CATALOG TOOL -->
-                <div class="menu" style="display:none">
+                <div id="catalog">
                     <h3>Taken When?</h3>
-                    <div class="menu-flex">
+                    <div id="catalog-flex">
                         <select id="season-dropdown">
                             <option value="01">Spring</option>
                             <option value="02">Summer</option>
@@ -79,8 +79,8 @@
                         <option value="03">MATH - MATHEMATICS</option>
                         <option value="04">GEOG - GEOGRAPHY</option>
                     </select>
-                    <div class="menu-classes">
-                        <div class="menu-classes-table">
+                    <div id="catalog-classes">
+                        <div id="catalog-classes-table">
                             <p>Courses</p>
                             <p>Title</p>
                             <p>Units</p>
@@ -95,21 +95,22 @@
                 <!-- END CATALOG TOOL -->
 
                 <!-- BEGIN DATABASE TOOL -->
-                <div id = "database" style="padding:10px;background-color: green">
+                <div id = "database">
                     <!-- BEGIN SEARCH SORT -->
                     <div id = "database-search-sort" style="padding:10px;background-color:blue">
-                        <label>Search by: </label>
-                        <input type="text" placeholder="Username/Schedule Name"><br>
-                        <label>Sort By: </label>
-                        <select>
+                        <label>Search by Username: </label><br><br>
+                        <input type="text" style="width:100%" id="database-search-input" placeholder="Username"><br><br>
+                        <label>Sort By: </label><br><br>
+                        <select id="database-sort" style="width:100%">
                             <option>Author</option>
                             <option>Major</option>
                             <option>University</option>
                             <option>Schedule Name</option>
                             <option>Creation Date</option>
-                        </select><br>
-                        <input type="checkbox">
-                        <label>Show only schedules that match my selected majors and universities</label>
+                        </select><br><br>
+                        <input type="checkbox" checked="true" id="database-matching">
+                        <label>Show only schedules that match my selected majors and universities</label><br><br>
+                        <button id="database-search">Search</button><br><br>
                     </div>
                     <!-- END SEARCH SORT -->
                     <div id="database-schedules" style="padding:10px; background-color:red">
@@ -177,7 +178,7 @@
                 </div>
 
             </div>
-            <div class="schedule">
+            <div id="schedule">
                 Schedule
                 <div class="semester">
                     <div class="semester-title">

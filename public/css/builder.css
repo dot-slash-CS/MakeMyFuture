@@ -9,7 +9,7 @@
 */
 
 /* START BUILDER (the root element) */
-.builder {
+#builder {
     display: grid;
     grid-template-columns: 60% 40%;
 
@@ -38,33 +38,35 @@
     margin-bottom: 10px;
     background-color: salmon;
 }
+
+#catalog, #database {
+    padding: 10px;
+}
 /* END TOOLS */
 
 /* START BUILDER (the standard builder, CSS based off transferology) */
-.menu-flex {
+#catalog-flex {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-evenly;
     width: 100%;
 }
 
-.menu-flex select {
+#catalog-flex select {
     height: 30px;
     width: 40%;
 }
 
-.menu-classes {
+#catalog-classes {
     background-color: blueviolet;
     height: 350px;
     width: 97%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 30px;
+    margin: 20px auto;
     padding: 5px;
     overflow-y: scroll;
 }
 
-.menu-classes-table {
+#catalog-classes-table {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr 20px;
     grid-template-rows: 1fr 1fr;
@@ -73,18 +75,18 @@
     padding: 10px;
 }
 
-.menu-classes-table * {
+#catalog-classes-table * {
     border: 1px black solid;
     background-color: white;
 }
 
-.menu-classes-table a {
+#catalog-classes-table a {
     margin: auto;
     color: red;
 }
 
 /* START SCHEDULE (located in the right section of the builder)*/
-.schedule {
+#schedule {
     margin: 20px;
     padding: 5px;
 

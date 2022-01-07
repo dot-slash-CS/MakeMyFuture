@@ -11,7 +11,7 @@
  * contain a field containing the user_id as a string.
  * 
  * @file accounts.js
- * @version 11/08/21
+ * @version 01/06/22
  * @author Pirjot Atwal
  */
 
@@ -23,6 +23,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const { ObjectId } = require('bson');
 const { match } = require('assert');
+const e = require('express');
 
 /**
  * Decrypt the hash/salt using a password and return true if the password is correct.
@@ -318,9 +319,10 @@ async function get_user_schedules(user_id) {
  * @param {Array} universities 
  * @param {String} name 
  */
-function create_schedule(user_id, majors, universities, name) {
+async function create_schedule(user_id, majors, universities, name) {
     mongo.add_data({
         user_id: user_id,
+        "USERNAME": await get_account_username(user_id),
         "SEMESTERS": [],
         "MAJORS": majors,
         "UNIVERSITIES": universities,
@@ -439,8 +441,78 @@ async function edit_schedule(user_id, type, name, acr, season, year) {
     return schedule;
 }
 
+/**
+ * Fetch schedules using the provided options. Sorts, skips and limits.
+ * @param {*} input 
+ * @param {*} sortOption 
+ * @param {*} matching 
+ * @param {*} majors
+ * @param {*} universities
+ * @param {*} page 
+ */
+async function fetch_schedules_batch(input, sortOption, matching, majors, universities, page) {
+    // console.log(input, sortOption, matching, majors, universities, page);
+    let sort = {};
+    let schedules = [];
+    if (sortOption == "Author") {
+        sort = {"USERNAME": 1};
+    } else if (sortOption == "Major") {
+        sort = {"MAJORS.0": 1}; 
+    } else if (sortOption == "University") {
+        sort = {"UNIVERSITIES.0": 1};
+    } else if (sortOption == "Schedule Name") {
+        sort = {"NAME": 1};
+    } else {
+        sort = {"created": 1};
+    }
+
+    if (input == "") {
+        schedules = await mongo.get_data_paged({}, sort, "Accounts", "schedules", (page - 1) * 50, 50);
+    } else {
+        schedules = await mongo.get_data_paged({"USERNAME": RegExp(".*" + input + ".*", "i")}, sort, "Accounts", "schedules", (page - 1) * 50, 50);
+    }
+
+    if (matching) {
+        let i = 0;
+        while (i < schedules.length) {
+            let include = false;
+            let scheduleMajors = schedules[i]["MAJORS"];
+            let scheduleUniversities = schedules[i]["UNIVERSITIES"];
+            let majorSkip = false;
+            for (let major of majors) {
+                if (scheduleMajors.includes(major)) {
+                    majorSkip = true;
+                    break;
+                }
+            }
+            if (majorSkip) {
+                for (let university of universities) {
+                    if (scheduleUniversities.includes(university)) {
+                        include = true;
+                        break;
+                    }
+                }
+            }
+            //TODO: Remove the inputted schedule?
+            if (!include) { // Remove the schedule
+                schedules.splice(i, 1);
+            } else { // Keep the schedule
+                i++;
+            }
+        }
+    }
+
+    // Trim _id and user_id
+    for (let i = 0; i < schedules.length; i++) {
+        delete schedules[i]["_id"];
+        delete schedules[i]["user_id"];
+    }
+    return schedules;
+}
+
 module.exports = {
     sign_up, login, get_account_username, get_id_username,
     issue_session, verify_session, upload_schedule, get_user_schedules,
-    create_schedule, delete_schedule, fetch_schedule, edit_schedule
+    create_schedule, delete_schedule, fetch_schedule, edit_schedule,
+    fetch_schedules_batch
 }

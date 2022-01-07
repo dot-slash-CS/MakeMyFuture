@@ -68,7 +68,7 @@ async function add_data(value, database = "default", collection = "default") {
 }
 
 /**
- * Get all collections that match a query from the database collection.
+ * Get all documents that match a query from the database collection.
  * Note: provide an empty JSON Object if you would like to get all data.
  * 
  * @param {JSON} query Use an empty doc to select everything
@@ -78,6 +78,22 @@ async function add_data(value, database = "default", collection = "default") {
  */
 async function get_data(query = {}, database = "default", collection = "default") {
     let response = client.db(database).collection(collection).find(query);
+    return response.toArray();
+}
+
+/**
+ * Get all documents for a provided limit from a database collection sorted in the
+ * order provided.
+ * @param {JSON} query 
+ * @param {JSON} sort 
+ * @param {String} database 
+ * @param {String} collection 
+ * @param {Number} skipAmount 
+ * @param {Number} limit 
+ * @returns An array of the documents requested
+ */
+async function get_data_paged(query = {}, sort={}, database = "default", collection = "default", skipAmount=50, limit=50) {
+    let response = client.db(database).collection(collection).find(query).sort(sort).skip(skipAmount).limit(limit);
     return response.toArray();
 }
 
@@ -126,5 +142,5 @@ async function delete_docs_q(query, database = "default", collection = "default"
 
 module.exports = {
     client, isConnected:false, connectClient, closeClient, add_data, get_data, delete_doc_id,
-    delete_docs_q, update_docs
+    delete_docs_q, update_docs, get_data_paged
 };

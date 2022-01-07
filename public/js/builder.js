@@ -32,7 +32,7 @@ class CatalogManager {
      * @param {String} id The class of the schedule.
      */
     static async initialize(id="schedule") {
-        CatalogManager.scheduleDiv = document.getElementsByClassName(id)[0];
+        CatalogManager.scheduleDiv = document.getElementById(id);
         CatalogManager.currentSchedule = {};
 
         // If no name path provided, ask the user to select a schedule
@@ -202,7 +202,7 @@ function setupDepartmentSelect() {
  */
 async function displayClasses(acr) {
     // Get table on the table
-    let table = document.getElementsByClassName("menu-classes-table")[0];
+    let table = document.getElementById("catalog-classes-table");
     // Clear the table
     table.innerHTML = "<p>Courses</p><p>Title</p><p>Units</p><p></p>"
     // Fetch classes matching acr
@@ -229,7 +229,8 @@ async function displayClasses(acr) {
 }
 
 /**
- * 
+ * Check the sign in status of the user and change the display of elements
+ * on the screen if they are not signed in.
  * @returns true if the user is not signed in
  */
 function checkSignInStatus() {
@@ -238,33 +239,103 @@ function checkSignInStatus() {
     } else {
         document.getElementById("no-schedule").style.display = "none";
         document.getElementById("schedule-no-exist").style.display = "none";
-        document.getElementsByClassName("builder")[0].style.display = "none";
+        document.getElementById("builder").style.display = "none";
         return true;
     }
 }
 
+/**
+ * Set up the clicking events of the provided buttons to display
+ * or hide the corresponding provided divs (which are tools).
+ * Assumes both arrays are of the same size.
+ * @param {Array} buttonIDS 
+ * @param {Array} divIDS 
+ */
+function initializeToolsMenu(buttonIDS, divIDS) {
+    // Convert all to elements, display only the first one initially
+    for (let i = 0; i < buttonIDS.length; i++) {
+        buttonIDS[i] = document.getElementById(buttonIDS[i]);
+        divIDS[i] = document.getElementById(divIDS[i]);
+        if (i != 0) {
+            divIDS[i].style.display = "none";
+        }
+    }
+
+    for (let i = 0; i < buttonIDS.length; i++) {
+        buttonIDS[i].addEventListener("click", (evt) => {
+            divIDS[i].style.display = "block";
+            for (let j = 0; j < buttonIDS.length; j++) {
+                if (i != j) {
+                    divIDS[j].style.display = "none";
+                }
+            }
+        });
+    }
+}
+
+/**
+ * Display the database to the user based on the parameters
+ * they have selected.
+ * @param {*} state 
+ */
+function displayDatabase(schedules, formDIV) {
+    // Get the form
+    formDIV = document.getElementById(formDIV);
+    
+    // TODO: Program collapsable
+    // Iterate through the schedules and fill the form
+    console.log(schedules);
+}
+
+/**
+ * Initialize the search, sorting and matching events by tying
+ * each to their respective helper functions.
+ */
+function initializeDatabase() {
+    // Variables for DOM
+    let formDIVID = "database-schedules";
+    let searchInput = document.getElementById("database-search-input");
+    let searchButton = document.getElementById("database-search");
+    let sortInput = document.getElementById("database-sort");
+    let checkbox = document.getElementById("database-matching");
+
+    searchButton.addEventListener("click", async (evt) => {
+        let input = searchInput.value;
+        let sortOption = sortInput.value;
+        let matching = checkbox.checked;
+        let schedules = await makeRequest('/fetch-schedules-batch', {input: input, sortOption: sortOption, matching: matching, majors: CatalogManager.currentSchedule["MAJORS"], universities: CatalogManager.currentSchedule["UNIVERSITIES"], page: 1});
+        // TODO: Handle pagination at the bottom
+        displayDatabase(schedules, formDIVID);
+    });
+
+    // By default, show the schedules with the default options selected (perform phony request)
+    // TODO: Perform phony click on search
+}
+
 // Queue all initialization calls and user interactions for builder.html on page load.
 async function main_builder_func() {
-    await initializeDepartments();
-    setupDepartmentSelect();
-    // Perform phony select request
-    document.getElementById("department").dispatchEvent(new Event("change"));
-
     // Initial Signed In Check Status
     if (checkSignInStatus()) {
         return false;
     }
     // The user is guaranteed to be signed in past this point
 
-    //TODO: Build the database div
-    //TODO: Attach the database button, as in attach all tools buttons to each of their divs
-    // On click, hide the menu div (ID = "menu")
-    // Display the database div
+    // Initialize the tools menu buttons
+    initializeToolsMenu(["catalog-button", "database-button"], ["catalog", "database"]);
+
+    // Initialize the catalog tool
+    await initializeDepartments();
+    setupDepartmentSelect();
+    // Perform phony select request
+    document.getElementById("department").dispatchEvent(new Event("change"));
+
+    // Initialize the database
+    initializeDatabase();
 
     // Initialize the Catalog with the current schedule (from the URL)
     await CatalogManager.initialize();
     if (CatalogManager.scheduleName == "") {
-        document.getElementsByClassName("builder")[0].style.display = "none";
+        document.getElementById("builder").style.display = "none";
         document.getElementById("schedule-no-exist").style.display = "none";
         return false;
     } else {
@@ -272,7 +343,7 @@ async function main_builder_func() {
     }
 
     if (CatalogManager.currentSchedule.valid == false) {
-        document.getElementsByClassName("builder")[0].style.display = "none";
+        document.getElementById("builder").style.display = "none";
         return false;
     } else {
         document.getElementById("schedule-no-exist").style.display = "none";
