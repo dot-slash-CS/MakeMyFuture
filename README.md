@@ -23,5 +23,6 @@ git clone https://github.com/dot-slash-cs/MakeMyFuture
 npm install
 node app.js
 ```
+(You may need to add the password for the MongoKey in a .env file. For more information, send a message to Pirjot).
 7. Open a new browser tab/window and go to localhost:3000 to see the webpage! Check out the files in the folder to see what sort of code already exists.
 NOTE: If you receive a MongoParseError that reads Invalid connection string go to mongodb-library.js and change the uri to your uri on MongoDB. (Uncomment the mongo.connectClient() line in app.js and the require('mongodb-library.js') lines in both app.js and routes.js.
