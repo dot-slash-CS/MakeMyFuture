@@ -46,7 +46,7 @@ mongo.connectClient();
 
 //SERVER SETUP AND ROUTES
 //Begin listening for connections and print status to console
-let listener = app.listen(3000, () => {
+let listener = app.listen(process.env.PORT || 3000, () => {
     console.log("Starting to listen at localhost:" + listener.address().port);
 });
 
