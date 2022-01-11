@@ -10,10 +10,10 @@
 
 // Import mongodb (make sure you do npm install mongodb first)
 const { MongoClient } = require('mongodb');
+// DotENV
+require('dotenv').config(); //Load all variables in .env
 // Build a uri, user and password settings are configured on the website
-let uri = ""; //Set this to your mongo uri
-// THE FOLLOWING IS A TEMPLATE DATABASE (owned by Pirjot) AVAILABLE TO EVERYONE, Please replace this with your own URI
-uri = "mongodb+srv://test_user:test@mongodbtest.v5yrf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+let uri = "mongodb+srv://makemyfuture:" + process.env.MONGOPASSWORD + "@makemyfuture.nhtwi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"; //Set this to your mongo uri
 
 // Configure client, pass in uri and options
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });

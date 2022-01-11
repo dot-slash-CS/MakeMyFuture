@@ -85,6 +85,38 @@
     color: red;
 }
 
+/* START DATABASE TOOL */
+
+#database-schedules {
+    padding:10px; 
+    background-color:red
+}
+
+.database-schedule {
+    margin-bottom: 10px
+}
+
+.database-schedule-profile {
+    display:flex;
+    flex-direction:row;
+    padding:10px; 
+    background-color:yellow
+}
+
+.database-schedule-profile div p {
+    margin: 3px;
+}
+
+.database-schedule-dropdown {
+    background-color:aqua;
+    height: 0px;
+    overflow: hidden;
+    transition: height 1s ease-in-out,
+                padding 1s ease-in-out;
+}
+
+/* END DATABASE TOOL */
+
 /* START SCHEDULE (located in the right section of the builder)*/
 #schedule {
     margin: 20px;

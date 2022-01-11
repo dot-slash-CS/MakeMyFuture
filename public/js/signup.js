@@ -59,6 +59,9 @@ function attachButtonScript() {
             setMessage("An error occurred: " + createResponse.info);
         } else {
             setMessage("Your account has been created!");
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 1000);
         }
     });
 }

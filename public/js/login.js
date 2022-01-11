@@ -44,6 +44,9 @@ function attachButtonScript() {
         } else {
             setMessage("You were successfully logged in.");
             localStorage.setItem('session_id', loginResponse.session_id);
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 1000);
         }
     });
 }

@@ -278,20 +278,111 @@ function initializeToolsMenu(buttonIDS, divIDS) {
  * they have selected.
  * @param {*} state 
  */
-function displayDatabase(schedules, formDIV) {
-    // Get the form
+async function displayDatabase(schedules, formDIV) {
+    // Get the form, clear it
     formDIV = document.getElementById(formDIV);
-    
-    // TODO: Program collapsable
+    formDIV.innerHTML = "";
     // Iterate through the schedules and fill the form
-    console.log(schedules);
+    for (let schedule of schedules) {
+        let databaseSchedule = document.createElement("div");
+        databaseSchedule.classList.add("database-schedule");
+
+        // ADD Schedule Profile Div
+        let databaseScheduleProfile = document.createElement("div");
+        databaseScheduleProfile.classList.add("database-schedule-profile");
+
+        let profileFields = document.createElement("div");
+        profileFields.style.width = "90%";
+        /**
+         * Build a comma separated string for the given array
+         * and header and return it.
+         * @param header The start of the string
+         * @param array An array of strings for the content
+         * @returns A comma separated string list
+         */
+        function buildString(header, array) {
+            let builtString = header + ": ";
+            for (let i = 0; i < array.length; i++) {
+                builtString += array[i];
+                if (i < array.length - 1) {
+                    builtString += ", ";
+                }
+            }
+            return builtString;
+        }
+        
+        let majorString = buildString("Majors", schedule["MAJORS"]);
+        let universityString = buildString("Universities", schedule["UNIVERSITIES"]);
+
+        let fields = [schedule["NAME"] + " by " + schedule["USERNAME"], majorString, universityString, "Date: " + (new Date(schedule["created"])).toDateString()];
+        for (let field of fields) {
+            let newParagraph = document.createElement("p");
+            newParagraph.textContent = field;
+            profileFields.appendChild(newParagraph);
+        }
+
+        let iconDiv = document.createElement("div");
+        iconDiv.style.margin = "auto";
+        let icon = document.createElement("i");
+        icon.classList.add("fa", "fa-angle-double-down", "fa-3x");
+        // TODO: Program collapsable
+        iconDiv.appendChild(icon);
+
+        databaseScheduleProfile.appendChild(profileFields);
+        databaseScheduleProfile.appendChild(iconDiv);
+        
+        // Build Dropdown
+        let databaseScheduleDropdown = document.createElement("div");
+        databaseScheduleDropdown.classList.add("database-schedule-dropdown");
+        for (let semester of schedule["SEMESTERS"]) {
+            let header = document.createElement("h3");
+            header.textContent = semester["SEASON"] + " " + semester["YEAR"];
+
+            let classDiv = document.createElement("div");
+            classDiv.classList.add("database-schedule-classes");
+
+            for (let classACR of semester["CLASSES"]) {
+                let classInfo = await makeRequest('query-data', {query: "CLASS", acr: classACR});
+                let newParagraph = document.createElement("p");
+                newParagraph.textContent = classInfo["AREA-ACR"] + ": " + classInfo["NAME"];
+                classDiv.appendChild(newParagraph);
+            }
+            databaseScheduleDropdown.appendChild(header);
+            databaseScheduleDropdown.appendChild(classDiv);
+        }
+        if (schedule["SEMESTERS"].length == 0) {
+            let newHeader = document.createElement("h2");
+            newHeader.textContent = "This schedule has no semesters in it.";
+            newHeader.style.padding = "20px";
+            databaseScheduleDropdown.appendChild(newHeader);
+        }
+        let status = true;
+        iconDiv.addEventListener("click", (evt) => {
+            if (status) {
+                databaseScheduleDropdown.style.height = databaseScheduleDropdown.scrollHeight + "px";
+                databaseScheduleDropdown.style.padding = "10px";
+                status = !status;
+                icon.classList.remove("fa-angle-double-down");
+                icon.classList.add("fa-angle-double-up");
+            } else {
+                databaseScheduleDropdown.style.height = "0px";
+                databaseScheduleDropdown.style.padding = "0px";
+                status = !status;
+                icon.classList.remove("fa-angle-double-up");
+                icon.classList.add("fa-angle-double-down");
+            }
+        });
+        databaseSchedule.appendChild(databaseScheduleProfile);
+        databaseSchedule.appendChild(databaseScheduleDropdown);
+        formDIV.appendChild(databaseSchedule);
+    }
 }
 
 /**
  * Initialize the search, sorting and matching events by tying
  * each to their respective helper functions.
  */
-function initializeDatabase() {
+async function initializeDatabase() {
     // Variables for DOM
     let formDIVID = "database-schedules";
     let searchInput = document.getElementById("database-search-input");
@@ -309,7 +400,7 @@ function initializeDatabase() {
     });
 
     // By default, show the schedules with the default options selected (perform phony request)
-    // TODO: Perform phony click on search
+    searchButton.dispatchEvent(new Event("click"));
 }
 
 // Queue all initialization calls and user interactions for builder.html on page load.
@@ -329,9 +420,6 @@ async function main_builder_func() {
     // Perform phony select request
     document.getElementById("department").dispatchEvent(new Event("change"));
 
-    // Initialize the database
-    initializeDatabase();
-
     // Initialize the Catalog with the current schedule (from the URL)
     await CatalogManager.initialize();
     if (CatalogManager.scheduleName == "") {
@@ -348,6 +436,9 @@ async function main_builder_func() {
     } else {
         document.getElementById("schedule-no-exist").style.display = "none";
     }
+
+    // Initialize the database (requires that the CatalogManager is initialized)
+    await initializeDatabase();
 
     console.log("The Builder Page Initialization was successful.");
 }
