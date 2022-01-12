@@ -89,7 +89,7 @@ async function login(req, res) {
             });
         }
     } catch (error) {
-        console.log("An Error Occurred in the Login Function...");
+        console.log("An Error Occurred in the Login Function... " + error.message);
     }
 
     res.send({
@@ -277,7 +277,7 @@ async function create_schedule(req, res) {
             return;
         }
     } catch (error) {
-        console.log("AN ERROR OCCURRED IN SCHEDULE CREATION.");
+        console.log("AN ERROR OCCURRED IN SCHEDULE CREATION. " + error.message);
     }
     res.send({"info": "AN ERROR OCCURRED IN SCHEDULE CREATION."});
 }
@@ -303,7 +303,7 @@ async function delete_schedule(req, res) {
             return;
         }
     } catch (error) {
-        console.log("AN ERROR OCCURRED IN SCHEDULE DELETION.");
+        console.log("AN ERROR OCCURRED IN SCHEDULE DELETION. " + error.message);
     }
     res.send({"info": "AN ERROR OCCURRED IN SCHEDULE DELETION."});
 }
@@ -328,7 +328,7 @@ async function fetch_schedule(req, res) {
             return;
         }
     } catch (error) {
-        console.log("AN ERROR OCCURRED IN SCHEDULE FETCHING.");
+        console.log("AN ERROR OCCURRED IN SCHEDULE FETCHING. " + error.message);
     }
     res.send({"info": "AN ERROR OCCURRED IN SCHEDULE FETCHING."});
 }
