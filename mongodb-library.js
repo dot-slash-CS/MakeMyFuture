@@ -77,8 +77,13 @@ async function add_data(value, database = "default", collection = "default") {
  * @return {Array} An array of all documents.
  */
 async function get_data(query = {}, database = "default", collection = "default") {
-    let response = client.db(database).collection(collection).find(query);
-    return response.toArray();
+    try {
+        let response = client.db(database).collection(collection).find(query);
+        return response.toArray();
+    } catch (error) {
+        console.log("AN ERROR OCCURRED IN GET DATA: " + error.message);
+        return [];
+    }
 }
 
 /**
