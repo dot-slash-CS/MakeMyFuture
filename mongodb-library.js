@@ -16,7 +16,7 @@ require('dotenv').config(); //Load all variables in .env
 let uri = "mongodb+srv://makemyfuture:" + process.env.MONGOPASSWORD + "@makemyfuture.nhtwi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"; //Set this to your mongo uri
 
 // Configure client, pass in uri and options
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: false });
 
 /**
  * Begin connection to Mongo Database. Make sure to call closeClient at some point.
