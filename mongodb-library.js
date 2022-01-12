@@ -38,8 +38,7 @@ async function connectClient(req, res, next=()=>{}) {
             return false;
         }
     } catch (err) {
-        console.log("An error occured while connecting");
-        console.error(err.message);
+        console.log("An error occured while connecting: " + err.message);
     }
 
     next();
@@ -77,13 +76,8 @@ async function add_data(value, database = "default", collection = "default") {
  * @return {Array} An array of all documents.
  */
 async function get_data(query = {}, database = "default", collection = "default") {
-    try {
-        let response = client.db(database).collection(collection).find(query);
-        return response.toArray();
-    } catch (error) {
-        console.log("AN ERROR OCCURRED IN GET DATA: " + error.message);
-        return [];
-    }
+    let response = client.db(database).collection(collection).find(query);
+    return response.toArray();
 }
 
 /**
