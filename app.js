@@ -20,8 +20,8 @@
 
 console.log("Welcome to ./MakeMyFuture! Setting up the server...");
 
-//IMPORT MODULES
-//Setup the server by importing express and building the app.
+// IMPORT MODULES
+// Setup the server by importing express and building the app.
 const express = require('express');
 const app = express();
 

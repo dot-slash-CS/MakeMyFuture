@@ -375,7 +375,8 @@ async function fetch_major_colleges(req, res) {
  * Fetch all schedules in batch
  * @param {*} req A JS object with a body of the following:
  * {
- *      input: [STRING],
+ *      queries: [JSON],
+ *      dateRange: [ARRAY OF NUMBERS]
  *      sortOption: [STRING],
  *      matching: [BOOLEAN],
  *      page: [NUMBER],
@@ -388,7 +389,7 @@ async function fetch_schedules_batch(req, res) {
     try {
         let verify_response = await accounts.verify_session(req.cookies["session"]);
         if (verify_response["valid"]) {
-            res.send(await accounts.fetch_schedules_batch(req.body.input, req.body.sortOption, req.body.matching, req.body.majors, req.body.universities, req.body.page));
+            res.send(await accounts.fetch_schedules_batch(req.body.queries, req.body.dateRange, req.body.sortOption, req.body.matching, req.body.majors, req.body.universities, req.body.page));
             return;
         } else {
             res.send({"info": "THE USER IS NOT SIGNED IN."});

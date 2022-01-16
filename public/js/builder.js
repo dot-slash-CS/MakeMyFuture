@@ -287,7 +287,7 @@ async function displayDatabase(schedules, formDIV) {
         let databaseSchedule = document.createElement("div");
         databaseSchedule.classList.add("database-schedule");
 
-        // ADD Schedule Profile Div
+        // Add Schedule Profile Div
         let databaseScheduleProfile = document.createElement("div");
         databaseScheduleProfile.classList.add("database-schedule-profile");
 
@@ -379,22 +379,119 @@ async function displayDatabase(schedules, formDIV) {
 }
 
 /**
+ * Initialize the search dropdowns to change the placeholders
+ * of their respective text inputs.
+ * @param divID the ID of the div holding all the search queries
+ */
+function initializeQuerySelects(divID = "database-search-queries") {
+    let queryDiv = document.getElementById(divID);
+    let selects = queryDiv.getElementsByTagName("select");
+    let inputs = queryDiv.getElementsByTagName("input");
+
+    for (let i = 0; i < selects.length; i++) {
+        try {
+            selects[i].removeEventListener("change", getEventListeners(selects[i])["change"][0]["listener"]);
+        } catch (error) {}
+        selects[i].addEventListener("change", (evt)=> {
+            inputs[i].placeholder = selects[i].value;
+        });
+    }
+}
+
+/**
+ * Retrieve all of the inputted search queries from the user
+ * @param {String} divID the ID of the div holding all the search queries
+ * @returns {JSON} An object containing all the queries provided
+ */
+function getSearchQueries(divID = "database-search-queries") {
+    let queryDiv = document.getElementById(divID);
+    let inputs = queryDiv.getElementsByTagName("input");
+    let queries = {};
+
+    for (let input of inputs) {
+        if (Object.keys(queries).includes(input.placeholder)) {
+            queries[input.placeholder].push(input.value);
+        } else {
+            queries[input.placeholder] = [input.value];
+        }
+    }
+    return queries;
+}
+
+/**
+ * Initialize the search query add and remove buttons.
+ * IDS: database-search-add, database-search-remove, database-search-queries
+ */
+function initializeAddRemoveButtons(divID = "database-search-queries") {
+    let queryDIV = document.getElementById(divID);
+    let addButton = document.getElementById("database-search-add");
+    let removeButton = document.getElementById("database-search-remove");
+
+    addButton.addEventListener("click", (evt) => {
+        let htmlCode = "<label>Search by</label><select>\n" +
+                       "<option>Author</option>\n" +
+                       "<option>Major</option>\n" +
+                       "<option>University</option>\n" +
+                       "<option>Schedule Name</option>\n" +
+                       "</select><br><br>\n" +
+                       "<input type=\"text\" style=\"width:100%\" placeholder=\"Author\"><br><br>\n";
+        queryDIV.insertAdjacentHTML('beforeend', htmlCode);
+        initializeQuerySelects();
+    });
+
+    removeButton.addEventListener("click", (evt) => {
+        // Remove 7 children at the end of the query div
+        try {
+            for (let i = 0; i < 7; i++) {
+                queryDIV.children[queryDIV.children.length - 1].remove();
+            }
+        } catch (error) {}
+    });
+}
+
+/**
+ * Returns the date range specified by the user in a 2 element array.
+ * IDS: database-search-date-start, database-search-date-end
+ * @returns {Array} A two element array with the given milliseconds.
+ */
+function getDateRange() {
+    let startInput = document.getElementById("database-search-date-start");
+    let endInput = document.getElementById("database-search-date-end");
+    function inputToMilli (elem, appendage=" 00:00:00") {
+        return new Date(Date.parse(elem.value + appendage)).getTime();
+    }
+    return [inputToMilli(startInput), inputToMilli(endInput, " 24:00:00")];
+}
+
+/**
  * Initialize the search, sorting and matching events by tying
  * each to their respective helper functions.
  */
 async function initializeDatabase() {
     // Variables for DOM
     let formDIVID = "database-schedules";
-    let searchInput = document.getElementById("database-search-input");
     let searchButton = document.getElementById("database-search");
     let sortInput = document.getElementById("database-sort");
     let checkbox = document.getElementById("database-matching");
 
+    initializeQuerySelects("database-search-queries");
+    initializeAddRemoveButtons();
+
     searchButton.addEventListener("click", async (evt) => {
-        let input = searchInput.value;
+        let queries = getSearchQueries();
+        let dateRange = getDateRange();
         let sortOption = sortInput.value;
         let matching = checkbox.checked;
-        let schedules = await makeRequest('/fetch-schedules-batch', {input: input, sortOption: sortOption, matching: matching, majors: CatalogManager.currentSchedule["MAJORS"], universities: CatalogManager.currentSchedule["UNIVERSITIES"], page: 1});
+
+        let schedules = await makeRequest('/fetch-schedules-batch', {
+            queries: queries, 
+            dateRange: dateRange,
+            sortOption: sortOption, 
+            matching: matching, 
+            majors: CatalogManager.currentSchedule["MAJORS"], 
+            universities: CatalogManager.currentSchedule["UNIVERSITIES"], 
+            page: 1
+        });
         // TODO: Handle pagination at the bottom
         displayDatabase(schedules, formDIVID);
     });

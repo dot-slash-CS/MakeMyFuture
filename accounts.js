@@ -432,6 +432,8 @@ async function edit_schedule(user_id, type, name, acr, season, year) {
     }
     schedule["CREDITS"] = credits;
     
+    // TODO SORT THE SEMESTERS BY SEASON AND YEAR
+
     // Update the Semesters and Credits Fields
     await mongo.update_docs({
         user_id: user_id,
@@ -443,17 +445,19 @@ async function edit_schedule(user_id, type, name, acr, season, year) {
 
 /**
  * Fetch schedules using the provided options. Sorts, skips and limits.
- * @param {*} input 
+ * @param {*} queries 
+ * @param {*} dateRange
  * @param {*} sortOption 
  * @param {*} matching 
  * @param {*} majors
  * @param {*} universities
  * @param {*} page 
  */
-async function fetch_schedules_batch(input, sortOption, matching, majors, universities, page) {
-    // console.log(input, sortOption, matching, majors, universities, page);
+async function fetch_schedules_batch(queries, dateRange, sortOption, matching, majors, universities, page) {
     let sort = {};
     let schedules = [];
+
+    //Build Sort Object
     if (sortOption == "Author") {
         sort = {"USERNAME": 1};
     } else if (sortOption == "Major") {
@@ -466,12 +470,86 @@ async function fetch_schedules_batch(input, sortOption, matching, majors, univer
         sort = {"created": 1};
     }
 
-    if (input == "") {
-        schedules = await mongo.get_data_paged({}, sort, "Accounts", "schedules", (page - 1) * 50, 50);
-    } else {
-        schedules = await mongo.get_data_paged({"USERNAME": RegExp(".*" + input + ".*", "i")}, sort, "Accounts", "schedules", (page - 1) * 50, 50);
+    // Build Author and Name String for regex
+    let authorString = "";
+    let nameString = "";
+
+    for (let queryItem of Object.keys(queries)) {
+        if (queryItem == "Author" && queries[queryItem] != '') {
+            for (let author of queries[queryItem]) {
+                if (author != '') {
+                    authorString += "(?=.*" + author + ")";
+                }
+            }
+        } else if (queryItem == "Schedule Name") {
+            for (let name of queries[queryItem]) {
+                if (name != '') {
+                    nameString += "(?=.*" + name + ")";
+                }
+            }
+        }
     }
 
+    let query = {"USERNAME": RegExp(authorString, "i"), "NAME": RegExp(nameString, "i")};
+
+    // Apply Date Range
+    query["created"] = {$gte: dateRange[0], $lte: dateRange[1]};
+
+    schedules = await mongo.get_data_paged(query, sort, "Accounts", "schedules", (page - 1) * 50, 50);
+
+    // Limit by majors and universities inputted by user
+    let i = 0;
+    while (i < schedules.length) {
+        let scheduleMajors = schedules[i]["MAJORS"].map((str) => str.toLowerCase());
+        let scheduleUniversities = schedules[i]["UNIVERSITIES"].map((str) => str.toLowerCase());
+        let cutThisSchedule = false;
+        for (let queryItem of Object.keys(queries)) {
+            if (queryItem == "Major") {
+                for (let major of queries[queryItem]) {
+                    let substringOfOne = false;
+                    if (major != '') {
+                        for (let scheduleMajor of scheduleMajors) {
+                            if (scheduleMajor.includes(major.toLowerCase())) {
+                                substringOfOne = true;
+                                break;
+                            }
+                        }
+                        if (!substringOfOne) {
+                            cutThisSchedule = true;
+                            break;
+                        }
+                    }
+                }
+            } else if (queryItem == "University") {
+                for (let university of queries[queryItem]) {
+                    let substringOfOne = false;
+                    if (university != '') {
+                        for (let scheduleUni of scheduleUniversities) {
+                            if (scheduleUni.includes(university.toLowerCase())) {
+                                substringOfOne = true;
+                                break;
+                            }
+                        }
+                        if (!substringOfOne) {
+                            cutThisSchedule = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (cutThisSchedule) {
+                break;
+            }
+        }
+        if (cutThisSchedule) {
+            schedules.splice(i, 1);
+        } else {
+            i++;
+        }
+    }
+
+
+    // Limit by matching majors and universities
     if (matching) {
         let i = 0;
         while (i < schedules.length) {
