@@ -25,6 +25,11 @@ console.log("Welcome to ./MakeMyFuture! Setting up the server...");
 const express = require('express');
 const app = express();
 
+// SERVE FAVICON TO USER
+const favicon = require('serve-favicon');
+const path = require('path');
+app.use(favicon(path.join(__dirname, 'public', 'favicon', 'favicon.ico')));
+
 //Import Environment Variables into the process
 require('dotenv').config();
 

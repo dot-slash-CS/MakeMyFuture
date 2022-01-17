@@ -9,10 +9,10 @@
 */
 
 #schedule_grid {
-    background-color: blueviolet;
-
     display: flex;
     flex-flow: row wrap;
+    border: 3px solid black;
+    padding: 10px;
 }
 
 .schedule_item {
@@ -49,7 +49,7 @@
 }
 
 #menu_area {
-    padding: 50px;
+    padding: 25px 50px;
 }
 
 #no_schedule_message {

@@ -8,23 +8,33 @@
     @version 10/24/2021
 */
 
+a {
+    text-decoration: none;
+}
+
 /* START BUILDER (the root element) */
 #builder {
     display: grid;
     grid-template-columns: 60% 40%;
 
-    background-color: bisque;
-    border: 30px solid magenta;
+    background-color: #137665;
 }
 /* END BUILDER */
+
+/* Small Width Screen Query */
+@media (max-width: 768px){
+    #builder {
+        grid-template-columns:none;
+    }
+}
 
 /* START TOOLS (located in the left section of the builder) */
 .tools {
     margin: 20px;
     padding: 5px;
 
-    background-color: cornflowerblue;
-    border: 5px solid red;
+    border: 3px black solid;
+    background-color: #25b39b;
 }
 
 .tools-menu {
@@ -36,7 +46,7 @@
     max-height: 60px;
     padding: 5px 3px;
     margin-bottom: 10px;
-    background-color: salmon;
+    border: 3px black solid;
 }
 
 #catalog, #database {
@@ -58,12 +68,13 @@
 }
 
 #catalog-classes {
-    background-color: blueviolet;
     height: 350px;
     width: 97%;
     margin: 20px auto;
-    padding: 5px;
+    padding: 10px;
+
     overflow-y: scroll;
+    border: 3px black solid;
 }
 
 #catalog-classes-table {
@@ -78,6 +89,7 @@
 #catalog-classes-table * {
     border: 1px black solid;
     background-color: white;
+    margin-top: 8px;
 }
 
 #catalog-classes-table a {
@@ -87,24 +99,40 @@
 
 /* START DATABASE TOOL */
 
+#database {
+    max-height: 600px;
+    overflow-y: scroll;
+}
+
+#database-search-sort {
+    background-color:#2ccfb4;
+    padding:10px;
+    border: 3px black solid;
+}
+
 #database-schedules {
     padding:10px; 
-    background-color:red
+    background-color:#267683;
 }
 
 .database-schedule {
-    margin-bottom: 10px
+    margin-bottom: 10px;
 }
 
 .database-schedule-profile {
     display:flex;
     flex-direction:row;
     padding:10px; 
-    background-color:yellow
+    background-color: #2ccfb4;
 }
 
 .database-schedule-profile div p {
-    margin: 3px;
+    margin: 10px 5px;
+}
+
+/* Select the icon and change the hover to click */
+.database-schedule-profile div i:hover {
+    cursor:pointer;
 }
 
 .database-schedule-dropdown {
@@ -113,6 +141,8 @@
     overflow: hidden;
     transition: height 1s ease-in-out,
                 padding 1s ease-in-out;
+    max-height: 300px;
+    overflow-y: scroll;
 }
 
 /* END DATABASE TOOL */
@@ -122,16 +152,22 @@
     margin: 20px;
     padding: 5px;
 
-    background-color: darkgoldenrod;
-    border: 5px solid blue;
+    background-color: #25b39b;
+    border: 3px solid black;
+
+    max-height: 700px;
+    overflow-y: scroll;
+}
+
+#schedule-title {
+    margin-left: 10px;
+    margin-bottom: 0px;
 }
 
 .semester {
     padding-top: 5px;
     padding-bottom: 20px;
-    margin: 0 3%;
-    background-color: darkcyan;
-    border: 5px solid purple;
+    margin: 0 5px;
 }
 
 .semester-title {
@@ -143,7 +179,8 @@
     padding-left: 3px;
     margin: 10px 10px;
     margin-bottom: 0px;
-    background-color: blue;
+    background-color: #2ccfb4;
+    border: 3px solid black;
 }
 
 .semester-classes {
@@ -153,7 +190,7 @@
 
     margin: 0 10px;
     color: white;
-    background-color: yellow;
+    background-color: white;
     transition: 3s;
     /* To hide the classes for this semester, set max-height = 0 and ensure that overflow is on hidden */
     overflow: hidden;
@@ -175,6 +212,11 @@
 
 .semester-class p {
     margin-left: 0;
+}
+
+.semester-class a {
+    color: red;
+    font-size: 18px;
 }
 
 /* END SCHEDULE */

@@ -70,7 +70,7 @@ class CatalogManager {
      * classes based on the currentSchedule.
      */
     static async updateDisplay() {
-        CatalogManager.scheduleDiv.innerHTML = "Schedule";
+        CatalogManager.scheduleDiv.innerHTML = "<h4 id=\"schedule-title\">Schedule</h4>";
         for (let semester of CatalogManager.currentSchedule["SEMESTERS"]) {
             let semesterDiv = document.createElement("div");
             semesterDiv.classList.add("semester");
@@ -276,12 +276,20 @@ function initializeToolsMenu(buttonIDS, divIDS) {
 /**
  * Display the database to the user based on the parameters
  * they have selected.
- * @param {*} state 
+ * @param {Array} schedules
+ * @param {String} formDIV
  */
-async function displayDatabase(schedules, formDIV) {
+async function displayDatabase(schedules, formDIV="database-schedules") {
     // Get the form, clear it
     formDIV = document.getElementById(formDIV);
     formDIV.innerHTML = "";
+    if (schedules.length == 0) {
+        let newHeader = document.createElement("h2");
+        newHeader.textContent = "No Schedules were found for that query.";
+        formDIV.appendChild(newHeader);
+        return;
+    }
+
     // Iterate through the schedules and fill the form
     for (let schedule of schedules) {
         let databaseSchedule = document.createElement("div");
@@ -325,7 +333,7 @@ async function displayDatabase(schedules, formDIV) {
         iconDiv.style.margin = "auto";
         let icon = document.createElement("i");
         icon.classList.add("fa", "fa-angle-double-down", "fa-3x");
-        // TODO: Program collapsable
+        
         iconDiv.appendChild(icon);
 
         databaseScheduleProfile.appendChild(profileFields);
@@ -359,7 +367,7 @@ async function displayDatabase(schedules, formDIV) {
         let status = true;
         iconDiv.addEventListener("click", (evt) => {
             if (status) {
-                databaseScheduleDropdown.style.height = databaseScheduleDropdown.scrollHeight + "px";
+                databaseScheduleDropdown.style.height = (databaseScheduleDropdown.scrollHeight + 15) + "px";
                 databaseScheduleDropdown.style.padding = "10px";
                 status = !status;
                 icon.classList.remove("fa-angle-double-down");

@@ -285,13 +285,13 @@ async function verify_session(hash) {
                 info = "VALID";
                 valid = true;
             }
-        } catch (error) {console.log("ERROR OCCURRED IN SESSION VERIFICATION " + error.message);}
+        } catch (error) {} // console.log("ERROR OCCURRED IN SESSION VERIFICATION " + error.message);
         return {
             info: info,
             valid: valid,
             user_id: user_id
         };
-    } catch(error) {console.log("ERROR OCCURRED IN SESSION VERIFICATION " + error.message);}
+    } catch(error) {} // console.log("ERROR OCCURRED IN SESSION VERIFICATION " + error.message);
     return {
         valid: false
     };
@@ -432,7 +432,29 @@ async function edit_schedule(user_id, type, name, acr, season, year) {
     }
     schedule["CREDITS"] = credits;
     
-    // TODO SORT THE SEMESTERS BY SEASON AND YEAR
+    /**
+     * A callback function for the Array sort function.
+     * Sorts the semesters in descending order.
+     * @param {JSON} sem1 
+     * @param {JSON} sem2 
+     * @returns 1 if the sem1 is after sem2, else -1
+     */
+    function sortSemesters (sem1, sem2) {
+        if (sem1["YEAR"] > sem2["YEAR"]) {
+            return -1;
+        }
+        if (sem1["YEAR"] == sem2["YEAR"]) {
+            if (sem1["SEASON"] == "Spring") {
+                return 1;
+            } else if (sem1["SEASON"] == "Fall") {
+                return -1;
+            } else if (sem2["SEASON"] == "Spring") {
+                return -1;
+            }
+        }
+        return 1;
+    }
+    schedule["SEMESTERS"].sort(sortSemesters);
 
     // Update the Semesters and Credits Fields
     await mongo.update_docs({
@@ -454,6 +476,7 @@ async function edit_schedule(user_id, type, name, acr, season, year) {
  * @param {*} page 
  */
 async function fetch_schedules_batch(queries, dateRange, sortOption, matching, majors, universities, page) {
+    //TODO: Add more documentation
     let sort = {};
     let schedules = [];
 
