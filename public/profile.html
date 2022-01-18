@@ -1,10 +1,13 @@
-<!-- ./MakeMyFuture ___ PAGE
-    DESCRIPTION
-    Use this template for any new static pages that are added to the website.
+<!-- ./MakeMyFuture Profile PAGE
+    The profile page is a place for the user to view their user data,
+    for other people to view the user data of other users, and
+    a place for users to set the settings of their profile / perform
+    actions pertinent to their account status such as account deletion / 
+    changing their username or email, etc.
 
-    File: FILE.html
-    Contributors: 
-    Version: ??/??/????
+    File: profile.html
+    Contributors: Pirjot Atwal
+    Version: 01/17/2022
 -->
 <!DOCTYPE html>
 <html>
@@ -43,8 +46,54 @@
         </header>
         <!-- END NAV -->
 
-        
-
+        <div id="profile-area" style="display: grid; grid-template-columns: 3fr 7fr; grid-gap:30px; height:600px; background-color:aqua; padding: 20px;">
+            <div id="profile-info" style="background-color:red; padding: 10px">
+                <h2><span class="username_span"></span></h2>
+                <h4>DESCRIPTION</h4>
+            </div>
+            <div id="profile-tools" style="background-color:yellow; padding: 10px;">
+                <div id="profile-buttons" style="display: flex; flex-direction: row; flex-wrap: wrap; border: 3px solid black; margin-bottom: 10px; background-color: gray">
+                    <button>My Schedules</button>
+                    <button>Profile Settings</button>
+                </div>
+                <div id="schedule-grid" style="display: flex; flex-direction: column">
+                    <div class="schedule" style="display:flex; flex-direction: row; justify-content: space-around; align-items: center; padding: 20px; margin: 10px 0px; border: 3px solid black; background-color:goldenrod">
+                        <div style="display:flex;flex-direction:column">
+                            <h4 style="margin: 0px">NAME</h4>
+                            <p style="margin: 0px">Majors: Major 1</p>
+                            <p style="margin: 0px">Universities: University 1</p>
+                        </div>
+                        <h4>??/??/????</h4>
+                        <div style="float:right;position:relative;">
+                            <button>Edit</button>
+                            <button>▾</button>
+                            <div id="myDropdown" class="dropdown-content" style="display:none; flex-direction:column; right:0; position: absolute; background-color:gray; width: 100px">
+                                <a href="#" style="padding: 5px 20px;">Link 1</a>
+                                <a href="#" style="padding: 20px;">Link 2</a>
+                                <a href="#" style="padding: 20px;">Link 3</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="schedule" style="display:flex; flex-direction: row; justify-content: space-around; align-items: center; padding: 20px; margin: 10px 0px; border: 3px solid black; background-color:goldenrod">
+                        <div style="display:flex;flex-direction:column">
+                            <h4 style="margin: 0px">NAME</h4>
+                            <p style="margin: 0px">Majors: Major 1</p>
+                            <p style="margin: 0px">Universities: University 1</p>
+                        </div>
+                        <h4>??/??/????</h4>
+                        <div style="float:right;position:relative;">
+                            <button>Edit</button>
+                            <button>▾</button>
+                            <div id="myDropdown" class="dropdown-content" style="display:none; flex-direction:column; right:0; position: absolute; background-color:gray; width: 100px">
+                                <a href="#" style="padding: 5px 20px;">Link 1</a>
+                                <a href="#" style="padding: 20px;">Link 2</a>
+                                <a href="#" style="padding: 20px;">Link 3</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <!-- START FOOTER-->
         <footer class="page-footer dark">
