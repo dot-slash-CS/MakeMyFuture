@@ -401,6 +401,19 @@ async function fetch_schedules_batch(req, res) {
     res.send({"info": "AN ERROR OCCURRED IN SCHEDULE BATCH FETCHING. " + error.message});
 }
 
+/**
+ * Fetch a user profile (public information, their schedules, their description, etc.)
+ * @param {*} req A request with a body of the following type:
+ * {
+ *      username: [STRING]
+ * }
+ * @param {*} res 
+ */
+async function fetch_user_profile(req, res) {
+    let profile = await accounts.fetch_user_profile(req.body.username);
+    res.send(profile);
+}
+
 module.exports = {
     sign_up,
     login,
@@ -414,5 +427,6 @@ module.exports = {
     fetch_schedule,
     edit_schedule,
     fetch_major_colleges,
-    fetch_schedules_batch
+    fetch_schedules_batch,
+    fetch_user_profile
 }

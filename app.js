@@ -35,7 +35,7 @@ require('dotenv').config();
 
 //Import local modules
 const routes = require('./routes.js');
-const mongo = require('./mongodb-library.js')
+const mongo = require('./mongodb-library.js');
 const cookieParser = require('cookie-parser');
 
 //MIDDLEWARE FUNCTIONS
@@ -99,6 +99,9 @@ app.post('/delete-schedule', (req, res) => routes.delete_schedule(req, res));
 
 // Fetch schedules in batch using a query
 app.post('/fetch-schedules-batch', (req, res) => routes.fetch_schedules_batch(req, res));
+
+// Fetch user profile using their username
+app.post('/fetch-user-profile', (req, res) => routes.fetch_user_profile(req, res));
 
 //On server/process closing, perform cleanup functions
 process.on('SIGINT', () => {

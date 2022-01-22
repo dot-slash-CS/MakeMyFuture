@@ -1,24 +1,23 @@
-<!-- ./MakeMyFuture Builderd Entry PAGE
-    The page for users to select and create new schedules from a list of majors and
-    universities
+<!-- ./MakeMyFuture Learn More About MakeMyFuture PAGE
+    A basic informational HTML page giving students the rundown
+    of all the ins and outs on the creation of MakeMyFuture and
+    how it works through a server and client side interaction.
 
-    File: builder_entry.html
+    File: about.html
     Contributors: Pirjot Atwal
-    Version: 01/06/2022
+    Version: 01/20/2021
 -->
 <!DOCTYPE html>
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>./MakeMyFuture Builder Entry</title>
+        <title>./MakeMyFuture About Page</title>
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/header.css">
         <link rel="stylesheet" href="css/section.css">
         <link rel="stylesheet" href="css/bootstrap.css">
-        <link rel="stylesheet" href="css/builder_entry.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="js/builder_entry.js"></script>
         <script src="js/signed_in.js"></script>
     </head>
     <body>
@@ -45,85 +44,42 @@
         </header>
         <!-- END NAV -->
 
-        <!-- Message if user is not signed in -->
-        <h1 id="not_signed_in_message">Please Sign In first by using the Sign up or Login Buttons above...</h1>
-        
-        <!-- If not, display current schedules. -->
-        <div id="menu_area">
-            <h1>Your Schedules:</h1><br>
-            <h1 id="no_schedule_message">You have no schedules made so far... Create a new one below!</h1>
-            <div id="schedule-grid">
-                <div class="schedule-item">
-                    <div class="schedule-fields">
-                        <div class="schedule-field">
-                            <p>Majors: </p>
-                            <div class="schedule-field-exp">
-                                <p>COMPUTER SCIENCE</p>
-                                <p>COMPUTER SCIENCE</p>
-                                <p>COMPUTER SCIENCE</p>
-                            </div>
-                        </div>
-                        <div class="schedule-field">
-                            <p>Universities: </p>
-                            <div class="schedule-field-exp">
-                                <p>UC DAVIS</p>
-                                <p>UC DAVIS</p>
-                                <p>UC DAVIS</p>
-                            </div>
-                        </div>
-                        <div class="schedule-field">
-                            <p>Name: </p>
-                            <p>NAME</p>
-                        </div>
-                    </div>
-                    <button>Edit this Schedule</button>
-                    <button>Delete this Schedule</button>
-                </div>
-            </div>
-        </div>
-        <div id="creation-menu">
-            <h1 style="text-align:center">Create a new schedule</h1>
-            <h3 style="text-align: initial;">Choose your Majors</h3>
-            <div class="outer-menu">
-                <div id="major-categories">
-                    <button>CATEGORY</button>
-                    <button>CATEGORY</button>
-                </div>
-                <div class="search-div">
-                    <input id="major-search" type="text" placeholder="SEARCH">
-                    <div id="major-form" style="text-align:initial">
-                        <input type="checkbox">
-                        <label>MAJOR</label><br>
-                        <input type="checkbox">
-                        <label>MAJOR</label>
-                    </div>
-                </div>
-            </div>
-            <h3 style="text-align: initial;">Choose your Universities</h3>
-            <div class="outer-menu">
-                <div id="university-categories">
-                    <button>CATEGORY</button>
-                    <button>CATEGORY</button>
-                </div>
-                <div class="search-div">
-                    <input id="university-search" type="text" placeholder="SEARCH">
-                    <div id="university-form" style="text-align:initial">
-                        <input type="checkbox">
-                        <label>MAJOR</label><br>
-                        <input type="checkbox">
-                        <label>MAJOR</label>
-                    </div>
-                </div>
-            </div>
-            <label>Give your schedule a name:</label>
-            <input id="schedule-name" type="text"><br>
-            <span style="display:none" id="no-majors-schedules">You need to provide atleast 1 major and 1 university!</span><br>
-            <span style="display:none" id="no-name">You must provide a name!</span><br>
-            <span style="display:none" id="existing-schedule">You already have a schedule with that name!</span><br>
-            <button id="schedule_create">Create</button>
+        <!-- All styling performed inline -->
+        <style>
+            #content {
+                padding:40px 70px;
+            }
+            
+            #content p {
+                font-size: 16px;
+            }
+
+            
+        </style>
+        <div id="content">
+            <h1 style="text-align:center">Behind ./MakeMyFuture</h1>
+            <h4 style="text-align:center">Peer behind the machine and find out how MakeMyFuture works!</h4>
+            <p style>Welcome to Behind ./MakeMyFuture! Here, we'll cover all the behind the scenes on how the
+                website works and supply you enough information to start a tool like ./MakeMyFuture on your own!
+                If you're looking to work on ./MakeMyFuture and join the amazing people behind the website,
+                feel free to join our <a href="https://discord.com/invite/QcPfCeQgJA">Discord</a> and come to any of the developer meetings!
+            </p>
+
+            <h3>Table Of Contents</h3>
+            <ol>
+                <li><a>Why ./MakeMyFuture!</a></li>
+                <li><a>Server and Client Side Builds</a></li>
+                <li><a>Starting off with ExpressJS</a></li>
+                <li><a>Database Basics</a></li>
+            </ol>
+            <br>
+            <br>
+            <h3 style="text-align:center">This page is still under development. Thank you for your patience!</h3>
+
         </div>
 
-        <!-- START FOOTER -->
+        
+        <!-- START FOOTER-->
         <footer class="page-footer dark">
             <div class="container">
                 <div class="row">
@@ -157,6 +113,5 @@
             </div>
         </footer>
         <!-- END FOOTER -->
-
     </body>
 </html>

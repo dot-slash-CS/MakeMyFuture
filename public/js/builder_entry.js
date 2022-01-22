@@ -57,27 +57,76 @@ async function displaySchedules() {
     // Retrieve the user's schedules from the server
     let user_schedules = (await makeRequest('/get-user-schedules')).data;
     if (user_schedules.length == 0) {
-        document.getElementById("schedule_grid").style.display = "none";
+        document.getElementById("schedule-grid").style.display = "none";
     } else {
         document.getElementById("no_schedule_message").style.display = "none";
         
-        let grid = document.getElementById("schedule_grid");
+        let grid = document.getElementById("schedule-grid");
         // Clear the current grid
         grid.innerHTML = "";
         // Fill grid with schedule information
         for (let schedule of user_schedules) {
             let item_div = document.createElement("div");
-            item_div.classList.add("schedule_item");
-            
+            item_div.classList.add("schedule-item");
+
             let fields_div = document.createElement("div");
-            fields_div.classList.add("schedule_fields");
-            
-            let information = ["Majors: " + schedule["MAJORS"][0], "Universities: " + schedule["UNIVERSITIES"][0], "Name: " + schedule["NAME"]];
-            for (let info of information) {
-                let new_field = document.createElement("p");
-                new_field.textContent = info;
+            fields_div.classList.add("schedule-fields");
+
+            /**
+             * Builds and appends a new schedule field element
+             * to the fields_div using the data from a schedule.
+             * @param {*} title 
+             * @param {*} items 
+             */
+            function appendNewScheduleField(title, items) {
+                let new_field = document.createElement("div");
+                new_field.classList.add("schedule-field");
+
+                let title_par = document.createElement("p");
+                title_par.textContent = title;
+
+                let new_expandable = document.createElement("div");
+                new_expandable.classList.add("schedule-field-exp");
+
+                // Assume that the array has atleast one element
+                let first_elem = document.createElement("p");
+                first_elem.textContent = items[0];
+
+                let see_more = document.createElement("a");
+                see_more.textContent = "Click to see more";
+
+                new_expandable.appendChild(first_elem);
+                new_expandable.appendChild(see_more);
+
+                see_more.addEventListener("click", (evt) => {
+                    // Clear the expandable, fill it with all of the items
+                    new_expandable.innerHTML = "";
+                    for (let item of items) {
+                        let item_par = document.createElement("p");
+                        item_par.textContent = item;
+
+                        new_expandable.appendChild(item_par);
+                    }
+                });
+
+                new_field.appendChild(title_par);
+                new_field.appendChild(new_expandable);
                 fields_div.appendChild(new_field);
             }
+
+            appendNewScheduleField("Major(s): ", schedule["MAJORS"]);
+            appendNewScheduleField("University(ies): ", schedule["UNIVERSITIES"]);
+
+            // Add the name
+            let new_field = document.createElement("div");
+            new_field.classList.add("schedule-field");
+            let name_title = document.createElement("p");
+            name_title.textContent = "Name: ";
+            let name_value = document.createElement("p");
+            name_value.textContent = schedule["NAME"];
+            new_field.appendChild(name_title);
+            new_field.appendChild(name_value);
+            fields_div.appendChild(new_field);
 
             let new_button = document.createElement("button");
             new_button.schedule = schedule["NAME"];
@@ -95,6 +144,8 @@ async function displaySchedules() {
             item_div.appendChild(new_button2);
             grid.appendChild(item_div);
         }
+
+        
     }
 }
 

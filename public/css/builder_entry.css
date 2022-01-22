@@ -8,14 +8,14 @@
     @version 01/03/2022
 */
 
-#schedule_grid {
+#schedule-grid {
     display: flex;
     flex-flow: row wrap;
     border: 3px solid black;
     padding: 10px;
 }
 
-.schedule_item {
+.schedule-item {
     padding: 10px 20px;
     border: 3px solid black;
     border-radius: 20%;
@@ -23,8 +23,31 @@
     text-align: center;
 }
 
-.schedule_fields {
-    text-align: initial;
+.schedule-fields {
+    display:flex; 
+    flex-direction: column; 
+    padding:10px;
+    grid-gap:10px;
+}
+
+.schedule-field {
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+    grid-gap:20px;
+}
+
+.schedule-field p {
+    margin: 0px;
+}
+
+.schedule-field-exp {
+    display:flex; 
+    flex-direction:column;
+}
+
+.schedule-field-exp p {
+    margin: 0px;
 }
 
 #create_schedule_form {

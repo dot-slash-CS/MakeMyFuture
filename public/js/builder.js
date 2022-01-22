@@ -87,7 +87,7 @@ class CatalogManager {
             let semesterClasses = document.createElement("div");
             semesterClasses.classList.add("semester-classes");
             for (let course of semester["CLASSES"]) {
-                let classInfo = await makeRequest('query-data', {query: "CLASS", acr: course});
+                let classInfo = await makeRequest('/query-data', {query: "CLASS", acr: course});
                 if (classInfo == null) {
                     continue;
                 }
@@ -253,9 +253,11 @@ function checkSignInStatus() {
  */
 function initializeToolsMenu(buttonIDS, divIDS) {
     // Convert all to elements, display only the first one initially
+    let initStyles = [];
     for (let i = 0; i < buttonIDS.length; i++) {
         buttonIDS[i] = document.getElementById(buttonIDS[i]);
         divIDS[i] = document.getElementById(divIDS[i]);
+        initStyles.push(divIDS[i].style.display);
         if (i != 0) {
             divIDS[i].style.display = "none";
         }
@@ -263,7 +265,7 @@ function initializeToolsMenu(buttonIDS, divIDS) {
 
     for (let i = 0; i < buttonIDS.length; i++) {
         buttonIDS[i].addEventListener("click", (evt) => {
-            divIDS[i].style.display = "block";
+            divIDS[i].style.display = initStyles[i];
             for (let j = 0; j < buttonIDS.length; j++) {
                 if (i != j) {
                     divIDS[j].style.display = "none";
@@ -336,8 +338,7 @@ async function displayDatabase(schedules, formDIV="database-schedules") {
         
         iconDiv.appendChild(icon);
 
-        databaseScheduleProfile.appendChild(profileFields);
-        databaseScheduleProfile.appendChild(iconDiv);
+        databaseScheduleProfile.append(profileFields, iconDiv);
         
         // Build Dropdown
         let databaseScheduleDropdown = document.createElement("div");
@@ -355,8 +356,7 @@ async function displayDatabase(schedules, formDIV="database-schedules") {
                 newParagraph.textContent = classInfo["AREA-ACR"] + ": " + classInfo["NAME"];
                 classDiv.appendChild(newParagraph);
             }
-            databaseScheduleDropdown.appendChild(header);
-            databaseScheduleDropdown.appendChild(classDiv);
+            databaseScheduleDropdown.append(header, classDiv);
         }
         if (schedule["SEMESTERS"].length == 0) {
             let newHeader = document.createElement("h2");
@@ -380,8 +380,7 @@ async function displayDatabase(schedules, formDIV="database-schedules") {
                 icon.classList.add("fa-angle-double-down");
             }
         });
-        databaseSchedule.appendChild(databaseScheduleProfile);
-        databaseSchedule.appendChild(databaseScheduleDropdown);
+        databaseSchedule.appendChild(databaseScheduleProfile, databaseScheduleDropdown);
         formDIV.appendChild(databaseSchedule);
     }
 }

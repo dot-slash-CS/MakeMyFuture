@@ -55,6 +55,29 @@ function genPassword(password) {
 }
 
 /**
+ * Determine if a provided email is in valid format.
+ * @param {*} email 
+ */
+function validateEmail(email) 
+{
+    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+}
+
+/**
+ * Determine if a password meets complexity requirements.
+ * i) at least one upper case letter (A – Z)
+ * ii) at least one lower case letter (a - z)
+ * iii) At least one digit (0 – 9)
+ * iv) at least one special characters of !@#$%&*()
+ * @param {*} password 
+ */
+function validatePassword(password) {
+    return /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*()]).{8,}/.test(password);
+}
+
+
+
+/**
  * Determine if a username already exists in the Accounts/accounts database.
  * @param {String} username 
  * @returns {Boolean} true if the username already exists, false otherwise.
@@ -132,6 +155,14 @@ async function sign_up(username, password, email) {
         //Send the data to the database (Accounts/accounts collection)
         new_account = await mongo.add_data(saveMe, "Accounts", "accounts");
         user_id = new_account["insertedId"].toString();
+        // Save a new profile for the user
+        saveMe = {
+            "TIME": (new Date()).getTime(),
+            "USERNAME": username,
+            "DESCRIPTION": "Description not yet set.",
+            "USER_ID": user_id
+        };
+        await mongo.add_data(saveMe, "Accounts", "profiles");
     }
 
     return {
@@ -611,9 +642,31 @@ async function fetch_schedules_batch(queries, dateRange, sortOption, matching, m
     return schedules;
 }
 
+/**
+ * Fetch a user profile using their username.
+ * @param {*} username 
+ * @returns 
+ */
+async function fetch_user_profile(username) {
+    let profiles = await mongo.get_data({"USERNAME": username}, "Accounts", "profiles");
+    let profile = {exists: false};
+    if (profiles.length > 0) {
+        profile = profiles[0];
+        let schedules = await mongo.get_data({"USERNAME": username}, "Accounts", "schedules");
+        profile["SCHEDULES"] = schedules;
+    }
+
+    try { //Delete unaccessable items
+        delete profile["_id"];
+        delete profile["USER_ID"];
+    }
+    catch (error) {}
+    return profile;
+}
+
 module.exports = {
     sign_up, login, get_account_username, get_id_username,
     issue_session, verify_session, upload_schedule, get_user_schedules,
     create_schedule, delete_schedule, fetch_schedule, edit_schedule,
-    fetch_schedules_batch
+    fetch_schedules_batch, fetch_user_profile
 }
