@@ -414,6 +414,31 @@ async function fetch_user_profile(req, res) {
     res.send(profile);
 }
 
+/**
+ * Update a user's account for a certain field in the following categories:
+ * USERNAME
+ * EMAIL
+ * DESCRIPTION
+ * DELETE
+ * @param {*} req 
+ * @param {*} res 
+ */
+async function update_account(req, res) {
+    try {
+        let verify_response = await accounts.verify_session(req.cookies["session"]);
+        if (verify_response["valid"]) {
+            res.send(await accounts.update_account(verify_response["user_id"], req.body.type, req.body));
+            return;
+        } else {
+            res.send({"info": "THE USER IS NOT SIGNED IN."});
+            return;
+        }
+    } catch (error) {
+        console.log("AN ERROR OCCURRED IN UPDATING THE ACCOUNT. " + error.message);
+    }
+    res.send({"info": "AN ERROR OCCURRED IN UPDATING THE ACCOUNT. " + error.message});
+}
+
 module.exports = {
     sign_up,
     login,
@@ -428,5 +453,6 @@ module.exports = {
     edit_schedule,
     fetch_major_colleges,
     fetch_schedules_batch,
-    fetch_user_profile
+    fetch_user_profile,
+    update_account
 }

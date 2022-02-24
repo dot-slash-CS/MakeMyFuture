@@ -44,12 +44,10 @@ function attachButtonScript() {
         // TODO: Include More Complexity Requirements
         if (username == "" || password == "" || confirm == "" || email ==  "") {
             setMessage("All fields must be filled.");
+            return;
         } else if (password != confirm) {
             setMessage("The passwords do not match.");
-        } else if (!email.includes(".") || !email.includes("@")) {
-            setMessage("Please provide a valid email.");
-        } else if (username.length < 5 || password.length < 6) {
-            setMessage("Username > 5, Password > 6.");
+            return;
         } else {
             setMessage("Attempting to create account...");
         }

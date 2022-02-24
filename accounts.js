@@ -15,15 +15,13 @@
  * @author Pirjot Atwal
  */
 
-//First import the mongo library
-//Assume that the client has already been connected and that disconnect is handled by caller
+// First import the mongo library
+// Assume that the client has already been connected and that disconnect is handled by caller
 const mongo = require('./mongodb-library.js');
-//Import the crypto module, used for encrypting a given username and password
+// Import the crypto module, used for encrypting a given username and password
 const crypto = require('crypto');
-const fs = require('fs');
-const { ObjectId } = require('bson');
-const { match } = require('assert');
-const e = require('express');
+const fs = require('fs');;
+var ObjectID = require('mongodb').ObjectID;
 
 /**
  * Decrypt the hash/salt using a password and return true if the password is correct.
@@ -57,6 +55,7 @@ function genPassword(password) {
 /**
  * Determine if a provided email is in valid format.
  * @param {*} email 
+ * @returns True if valid, false otherwise
  */
 function validateEmail(email) 
 {
@@ -70,47 +69,45 @@ function validateEmail(email)
  * iii) At least one digit (0 – 9)
  * iv) at least one special characters of !@#$%&*()
  * @param {*} password 
+ * @returns
  */
 function validatePassword(password) {
     return /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*()]).{8,}/.test(password);
 }
 
-
+/**
+ * Determine if a username is of valid structure.
+ * A valid structure is defined as follows:
+ * i) Any Alphanumerical characters between the length of 6 to 20
+ * ii) No underscore or periods in conjuction
+ * 
+ * @param {*} username 
+ * @returns 
+ */
+function validateUsername(username) {
+    return /^(?=[a-zA-Z0-9._]{6,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/.test(username);
+}
 
 /**
- * Determine if a username already exists in the Accounts/accounts database.
+ * Determine if a username already exists in the Accounts/accounts database. (Not case sensitive)
  * @param {String} username 
  * @returns {Boolean} true if the username already exists, false otherwise.
  */
 async function username_exists(username) {
     try {
-        return (await mongo.get_data({"username": username}, "Accounts", "accounts")).length > 0;
+        return (await mongo.get_data({"username": RegExp("^"+username+"$", "i")}, "Accounts", "accounts")).length > 0;
     } catch (error) {}
 }
 
 /**
- * Determine if an account with the given email already exists.
+ * Determine if an account with the given email already exists. (Not case sensitive)
  * @param {String} email 
  * @returns {Boolean}
  */
 async function email_exists(email) {
     try {
-        return (await mongo.get_data({"email": email}, "Accounts", "accounts")).length > 0;
+        return (await mongo.get_data({"email": RegExp("^"+email+"$", "i")}, "Accounts", "accounts")).length > 0;
     } catch (error) {}
-}
-
-/**
- * Determine if a username and password combination meets security standards.
- * 
- * Security Standards to satisfy:
- * Username and Password must be of sufficient length
- * 
- * @param {String} username 
- * @param {String} password 
- * @returns {Boolean} true if meets security standards, false otherwise
- */
-function valid_user_pass_combo(username, password) {
-    return username.length > 5 && password.length > 5;
 }
 
 /**
@@ -118,26 +115,28 @@ function valid_user_pass_combo(username, password) {
  * Return an object that symbolizes that status of whether the account was
  * created successfully or not.
  * 
- * @param {String} username TODO: ADD REQUIREMENTS
- * @param {String} password TODO: ADD REQUIREMENTS
+ * @param {String} username A username's requirements is defined by its corresponding function
+ * @param {String} password A password's requirements is defined by its corresponding function
  * @return A JSON Object TODO: ADD INFO THAT GETS SENT BACK IN JSON
  */
 async function sign_up(username, password, email) {
-    let createAccount = true;
+    let createAccount = false;
     let message = "CREATE ACCOUNT FAILED";
     let user_id = 0;
 
     //CHECK REQUIREMENTS
     if (await username_exists(username)) { //No duplicate accounts
         message = "USERNAME ALREADY EXISTS";
-        createAccount = false;
-    }
-    else if (!valid_user_pass_combo(username, password)) { //Secure username and password needed
-        message = "BAD USERNAME PASSWORD";
-        createAccount = false;
-    } else if (await email_exists(email)) {
-        message = "EMAIL TAKEN";
-        createAccount = false;
+    } else if (await email_exists(email)) { //No duplicate email
+        message = "EMAIL ALREADY EXISTS";
+    } else if (!validatePassword(password)) {
+        message = "PASSWORD DOES NOT MEET SECURITY STANDARDS";
+    } else if (!validateEmail(email)) {
+        message = "EMAIL IS OF INVALID FORM";
+    } else if (!validateUsername(username)) {
+        message = "USERNAME IS OF INVALID FORM";
+    } else {
+        createAccount = true;
     }
     if (createAccount) {
         message = "ACCOUNT CREATED";
@@ -216,10 +215,10 @@ async function login(username, password) {
 async function get_account_username(user_id) {
     let username = null;
     try {
-        let matching_accounts = await mongo.get_data({"_id": ObjectId(user_id)}, "Accounts", "accounts");
+        let matching_accounts = await mongo.get_data({"_id": ObjectID(user_id)}, "Accounts", "accounts");
         let my_account = matching_accounts[0];
         username = my_account["username"];
-    } catch (error) {}
+    } catch (error) {console.log("ERROR OCCURRED IN RETRIEVING USERNAME: " + error.message)}
     return username;
 }
 
@@ -664,9 +663,58 @@ async function fetch_user_profile(username) {
     return profile;
 }
 
+/**
+ * Update an account's profile parameters based on a user selected option.
+ * 
+ * @param {String} user_id
+ * @param {String} type 
+ * @param {JSON} body 
+ */
+async function update_account(user_id, type, body) {
+    let account = (await mongo.get_data({"username": await get_account_username(user_id)}, "Accounts", "accounts"))[0];
+    if (type == "USERNAME") {
+        let username = body.username;
+        let password = body.password;
+        if (!validateUsername(username)) {
+            return {"info": "THE USERNAME PROVIDED IS INVALID.", success: false};
+        } else if (await username_exists(username)) {
+            return {"info": "THE USERNAME ALREADY EXISTS.", success: false};
+        } 
+        if (!validPassword(password, account["hash"], account["salt"])) { //If password isn't right
+            return {"info": "PASSWORD WAS INVALID", success: false};
+        }
+        // Perform change to all required databases
+        await mongo.update_docs({"username": account["username"]}, {$set: {"username": username}}, "Accounts", "accounts");
+        await mongo.update_docs({"USERNAME": account["username"]}, {$set: {"USERNAME": username}}, "Accounts", "profiles");
+        await mongo.update_docs({"USERNAME": account["username"]}, {$set: {"USERNAME": username}}, "Accounts", "schedules");
+        return {"info": "THE USERNAME WAS CHANGED SUCCESSFULLY.", success: true};
+    } else if (type == "EMAIL") {
+        let email = body.email;
+        if (!validateEmail(email)) {
+            return {"info": "THE EMAIL PROVIDED IS INVALID.", success: false};
+        } else if (await email_exists(email)) {
+            return {"info": "THE EMAIL ALREADY EXISTS.", success: false};
+        }
+        await mongo.update_docs({"username": account["username"]}, {$set: {"email": email}}, "Accounts", "accounts");
+        return {"info": "THE EMAIL WAS CHANGED SUCCESSFULLY.", success: true};
+    } else if (type == "DESCRIPTION") {
+        let description = body.description;
+        await mongo.update_docs({"USERNAME": account["username"]}, {$set: {"DESCRIPTION": description}}, "Accounts", "profiles");
+        return {"info": "THE DESCRIPTION WAS CHANGED SUCCESSFULLY.", success: true};
+    } else if (type == "DELETE") {
+        // TODO DELETE EVERYTHING
+        mongo.delete_docs_q({_id: ObjectID(user_id)}, "Accounts", "accounts");
+        mongo.delete_docs_q({"USER_ID": user_id}, "Accounts", "profiles");
+        mongo.delete_docs_q({"user_id": user_id}, "Accounts", "schedules");
+        mongo.delete_docs_q({"user_id": user_id}, "Accounts", "sessions");
+        return {"info": "THE ACCOUNT WAS DELETED SUCCESSFULLY.", success: true};
+    }
+    return {"info": "THE TYPE PROVIDED IS INVALID"};
+}
+
 module.exports = {
     sign_up, login, get_account_username, get_id_username,
     issue_session, verify_session, upload_schedule, get_user_schedules,
     create_schedule, delete_schedule, fetch_schedule, edit_schedule,
-    fetch_schedules_batch, fetch_user_profile
+    fetch_schedules_batch, fetch_user_profile, update_account
 }

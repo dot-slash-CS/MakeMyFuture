@@ -29,15 +29,15 @@
                         <ul class="navbar-nav">
                             <li class="nav-item"><a class="nav-link" href="builder_entry.html">Builder Entry</a></li>
                             <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">For Transfers</a>
-                                <div class="dropdown-menu"><a class="dropdown-item" href="in_development.html">About Transferring</a><a class="dropdown-item" href="in_development.html">Transfer Statistics</a><a class="dropdown-item" href="in_development.html">FAQ</a></div>
+                                <div class="dropdown-menu"><a class="dropdown-item" href="transfer.html">About Transferring</a><a class="dropdown-item" href="in_development.html">Transfer Statistics</a><a class="dropdown-item" href="in_development.html">FAQ</a></div>
                             </li>
                             <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="in_development.html">./MakeMyFuture Information</a>
-                                <div class="dropdown-menu"><a class="dropdown-item" href="in_development.html">See the Team</a><a class="dropdown-item" href="in_development.html">Join a Club</a><a class="dropdown-item" href="in_development.html">Learn about MakeMyFuture</a></div>
+                                <div class="dropdown-menu"><a class="dropdown-item" href="in_development.html">See the Team</a><a class="dropdown-item" href="in_development.html">Join a Club</a><a class="dropdown-item" href="about.html">Learn about MakeMyFuture</a></div>
                             </li>
                         </ul>
                         <form class="d-flex me-auto navbar-form" target="_self">
                             <div class="d-flex align-items-center"><label class="form-label d-flex mb-0" for="search-field"><i class="fa fa-search"></i></label><input class="form-control search-field" type="search" id="search-field" name="search"></div>
-                        </form><span class="navbar-text"> <a id="login_button" class="login" href="login.html">Log In</a></span><a id="signup_button" class="btn btn-light action-button" role="button" href="signup.html">Sign Up</a><a id="welcome_button" class="btn btn-light action-button" role="button" href="#"><i class="fa fa-address-card"></i>Welcome <span class="username_span">Username</span>!</a>
+                        </form><span class="navbar-text"> <a id="login_button" class="login" href="login.html">Log In</a></span><a id="signup_button" class="btn btn-light action-button" role="button" href="signup.html">Sign Up</a><a id="welcome_button" class="btn btn-light action-button" role="button" href="profile.html"><i class="fa fa-address-card"></i>Welcome <span class="username_span">Username</span>!</a>
                     </div>
                 </div>
             </nav>
@@ -48,13 +48,13 @@
         <style>
             #content {
                 padding:40px 70px;
+                overflow-y: hidden;
             }
             
-            #content p {
-                font-size: 16px;
+            #content p, #content a, #content li {
+                font-size: 20px;
             }
 
-            
         </style>
         <div id="content">
             <h1 style="text-align:center">Behind ./MakeMyFuture</h1>
@@ -67,14 +67,49 @@
 
             <h3>Table Of Contents</h3>
             <ol>
-                <li><a>Why ./MakeMyFuture!</a></li>
-                <li><a>Server and Client Side Builds</a></li>
-                <li><a>Starting off with ExpressJS</a></li>
-                <li><a>Database Basics</a></li>
+                <li><a href="#wmmf">Why ./MakeMyFuture?</a></li>
+                <li><a href="#serverclient">Server and Client Side Builds</a></li>
+                <li><a href="#startexpress">Starting off with ExpressJS</a></li>
+                <li><a href="#datamanagement">Database Basics</a></li>
             </ol>
             <br>
             <br>
-            <h3 style="text-align:center">This page is still under development. Thank you for your patience!</h3>
+
+            <h4 id="wmmf">Why ./MakeMyFuture?</h4>
+            <p>
+                ./MakeMyFuture was an idea originating from a project brainstorming session during a Dot-Slash club meeting. As it is well known that the transferring process can be confusing, since having so many majors and universities as options can be overwhelming, we elected to begin the development of a tool that could assist students in transferring by calculating the courses they would need. Eventually, the idea led to being an online schedule builder.
+            </p>
+
+            <h4 id="serverclient">Server and Client Side Builds</h4>
+            <p>
+                <img src="img/clientserver.png" align="right" style="width:20%; min-width:300px">
+                The “internet” is simply a collection of computers connected to one another. In this connection, one computer is treated as the server, and one is the client. Information can travel both ways, but in general, the client requests information from the server. This “information” is the equivalent of text files which can take many forms: HTML pages, images, code, etc. The method in which the client can request or send information to a server is facilitated through the Hypertext Transfer Protocol or HTTP for short. That’s right when entering a URL into your browser, you are making a request to the server that the URL pertains to in order to request their home page (usually). 
+                <br><br>
+                <img src="img/htmljscss.png" align="left" style="width:20%; min-width:200px">
+                A “server” is thus simply a computer that has resources and a list of paths on which a client can either send or request data. The server can be configured using a multitude of programming languages; a list of such languages can be found with a Google search of “Server-Side Scripting” or “Server-Side Programming Languages.” For MakeMyFuture, we used Javascript and the ExpressJS framework to run our server.
+                <br><br>
+                A “client” facilitates their requests through Javascript only. Javascript is regarded as “the language of browsers” and can be run in a runtime environment using NodeJS. Javascript is also used to work with the Document Object Model, or DOM for short. The DOM is the interface through which HTML pages are constructed, how the elements that we view on webpages are organized on the page. To style these HTML elements in the DOM, we use Cascading Style Sheets (CSS) which allow us to choose stylistic elements such as font style, object alignment, and much, much more. Although we won’t cover a lot of the inner workings of HTML and CSS, they are still integral parts of how websites such as MakeMyFuture are displayed to the user.
+            </p>
+
+            <h4 id="startexpress">Starting off with ExpressJS</h4>
+            <p>
+                To get started with building your first server, follow the steps on the README on this <a href="https://github.com/dot-slash-CS/ServerTemplate">template Github repository</a>. Download the repository, install NodeJS, and run the server using “npm install” and then “node app.js.” Each line of Javascript code is explained with the associated comment.
+                <br><br>
+                Afterward, launch up a browser and navigate to “localhost:3000” in your browser’s address bar. You should be able to access the index.html page.
+                <br><br>
+                And there you have it! If everything went well you are now running your very own server which is serving static HTML pages. You can take a step further and connect to the device on which you are running the server with that device’s IP address on a second device, including the port extension at the end. If you’d like to learn more about web development, be sure to join Dot-Slash CS meetings and search for information about it online!
+            </p>
+
+            <h4 id="datamanagement">Database Management in MongoDB</h4>
+            <p>
+                Nothing really makes the internet more special than its manipulation of data! At its simplest level, data is equivalent to text and numbers, organized into databases. Databases are provided through many online services, such as AWS, Google Cloud, and MongoDB. All of these services essentially do the same thing, providing you an API to interact with data that is stored securely somewhere in a server. 
+                <br><br>
+                We use databases for a lot of information on MakeMyFuture, specifically profile information (your username and encrypted password), user data (all the schedules you create), and user settings. For our choice of database provider, we chose MongoDB, which works nicely within NodeJS with its MongoDB library.
+                <br>
+                <div style="text-align:center"><img src="img/databasescrnshot.png" style="margin: 0px auto; min-width: 500px; max-width: 75%"></div>
+                <br><br>
+                <p>To help work with Mongo's API, we have a translation library stored locally on the server which helps convert complex functions into easier and smaller functional versions. Check out the <a href="https://github.com/dot-slash-CS/MakeMyFuture/blob/main/mongodb-library.js">file here</a>. Remember, when using code written by others, you should credit them for it.
+            </p>
 
         </div>
 
@@ -95,15 +130,15 @@
                         <h5>About us</h5>
                         <ul>
                             <li><a href="in_development.html">Join The Team</a></li>
-                            <li><a href="in_development.html">See Behind the Machine</a></li>
-                            <li><a href="in_development.html">Transfer Information</a></li>
+                            <li><a href="about.html">See Behind the Machine</a></li>
+                            <li><a href="transfer.html">Transfer Information</a></li>
                         </ul>
                     </div>
                     <div class="col-sm-3">
                         <h5>Support</h5>
                         <ul>
                             <li><a href="in_development.html">FAQ</a></li>
-                            <li><a href="in_development.html">Feedback</a></li>
+                            <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSecA7QIJj3ZeOdoyRiDHR30afNpOZz4mGM5CUw5jCNAWGCSxA/viewform?usp=sf_link">Feedback</a></li>
                         </ul>
                     </div>
                 </div>

@@ -103,6 +103,9 @@ app.post('/fetch-schedules-batch', (req, res) => routes.fetch_schedules_batch(re
 // Fetch user profile using their username
 app.post('/fetch-user-profile', (req, res) => routes.fetch_user_profile(req, res));
 
+// Update the account's profile using a provided field and value.
+app.post('/update-account', (req, res) => routes.update_account(req, res));
+
 //On server/process closing, perform cleanup functions
 process.on('SIGINT', () => {
     mongo.closeClient();

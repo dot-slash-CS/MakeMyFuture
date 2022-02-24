@@ -26,6 +26,66 @@ async function makeRequest(route, body = null) {
 }
 
 /**
+ * 
+ * 
+ * Credits: https://stackoverflow.com/questions/9554987/how-can-i-hide-the-password-entered-via-a-javascript-dialog-prompt
+ * @param {*} text 
+ * @returns 
+ */
+function passwordPrompt(text) {
+    /*creates a password-prompt instead of a normal prompt*/
+    var width = 200;
+    var pwprompt = document.createElement("div"); //creates the div to be used as a prompt
+    pwprompt.style.position = "fixed"; //make it fixed as we do not want to move it around
+    pwprompt.style.left = ((window.innerWidth / 2) - (width / 2)) + "px"; //let it appear in the middle of the page
+    pwprompt.style.top = document.body.children[0].clientHeight + "px"; //Let it appear after the header
+    pwprompt.style.border = "1px solid black"; //give it a border
+    pwprompt.style.padding = "16px"; //give it some space
+    pwprompt.style.background = "white"; //give it some background so its not transparent
+    pwprompt.style.zIndex = 99999; //put it above everything else - just in case
+
+    var pwtext = document.createElement("div"); //create the div for the password-text
+    pwtext.innerHTML = text; //put inside the text
+    pwprompt.appendChild(pwtext); //append the text-div to the password-prompt
+    var pwinput = document.createElement("input"); //creates the password-input
+    pwinput.type = "password"; // makes the input of type password to not show plain-text
+    pwprompt.appendChild(pwinput); //append it to password-prompt
+    var pwokbutton = document.createElement("button"); //the ok button
+    pwokbutton.innerHTML = "ok";
+    var pwcancelb = document.createElement("button"); //the cancel-button
+    pwcancelb.innerHTML = "cancel";
+    pwprompt.appendChild(pwcancelb); //append cancel-button first
+    pwprompt.appendChild(pwokbutton); //append the ok-button
+    document.body.appendChild(pwprompt); //append the password-prompt so it gets visible
+    pwinput.focus(); //focus on the password-input-field so user does not need to click 
+
+    return new Promise(function (resolve, reject) {
+        pwprompt.addEventListener('click', function handleButtonClicks(e) { //lets handle the buttons
+            if (e.target.tagName !== 'BUTTON') {
+                return;
+            } //nothing to do - user clicked somewhere else
+            pwprompt.removeEventListener('click', handleButtonClicks); //removes eventhandler on cancel or ok
+            if (e.target === pwokbutton) { //click on ok-button
+                resolve(pwinput.value); //return the value of the password
+            } else {
+                reject(new Error('User cancelled')); //return an error
+            }
+            document.body.removeChild(pwprompt); //as we are done clean up by removing the password-prompt
+
+        });
+        pwinput.addEventListener('keyup', function handleEnter(e) { //users dont like to click on buttons
+            if (e.keyCode == 13) { //if user enters "enter"-key on password-field
+                resolve(pwinput.value); //return password-value
+                document.body.removeChild(pwprompt); //clean up by removing the password-prompt
+            } else if (e.keyCode == 27) { //user enters "Escape" on password-field
+                document.body.removeChild(pwprompt); //clean up the password-prompt
+                reject(new Error("User cancelled")); //return an error
+            }
+        });
+    });
+}
+
+/**
  * Display the schedules in the schedules grid and setup all
  * buttons and icons to work with dropdowns.
  * @param {Array} schedules 
@@ -219,8 +279,10 @@ function configureMyProfile(profile) {
         // Perform request, error checking / complexity checking server side
         let response = await makeRequest('/update-account', {
             type: "USERNAME",
-            username: username
+            username: username,
+            password: await passwordPrompt("Please provide your account's password for authentication.")
         });
+        alert(response["info"]);
     });
     document.getElementById("email-save").addEventListener("click", async (evt) => {
         let email = document.getElementById("email-input").value;
@@ -228,6 +290,7 @@ function configureMyProfile(profile) {
             type: "EMAIL",
             email: email
         });
+        alert(response["info"]);
     });
     document.getElementById("description-save").addEventListener("click", async (evt) => {
         let description = document.getElementById("description-input").value;
@@ -235,12 +298,15 @@ function configureMyProfile(profile) {
             type: "DESCRIPTION",
             description: description
         });
+        alert(response["info"]);
     });
     document.getElementById("delete-account").addEventListener("click", async (evt) => {
-        let email = document.getElementById("email-input").value;
-        let response = await makeRequest('/update-account', {
-            type: "DELETE"
-        });
+        if (confirm("Are you sure you want to delete your account ?\nPress OK if yes, cancel otherwise.")) {
+            let response = await makeRequest('/update-account', {
+                type: "DELETE"
+            });
+            alert(response["info"]);
+        }
     });
 }
 
