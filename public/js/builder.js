@@ -380,7 +380,7 @@ async function displayDatabase(schedules, formDIV="database-schedules") {
                 icon.classList.add("fa-angle-double-down");
             }
         });
-        databaseSchedule.appendChild(databaseScheduleProfile, databaseScheduleDropdown);
+        databaseSchedule.append(databaseScheduleProfile, databaseScheduleDropdown);
         formDIV.appendChild(databaseSchedule);
     }
 }
